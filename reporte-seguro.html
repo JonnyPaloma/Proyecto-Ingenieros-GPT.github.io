@@ -18,154 +18,6 @@
       trust: { cyan: "#dff7ff", indigo: "#3730a3", navy: "#0f1f46", gray: "#64748b" }
     } } } };
   </script>
-  <script>
-"use strict";
-
-let csrfToken = null;
-
-function setupModals() {
-    document.querySelectorAll("[data-modal-open]").forEach((button) => {
-        button.addEventListener("click", () => {
-            document.getElementById(button.dataset.modalOpen)?.showModal();
-        });
-    });
-
-    document.querySelectorAll("[data-modal-close]").forEach((button) => {
-        button.addEventListener("click", () => button.closest("dialog")?.close());
-    });
-
-    document.querySelectorAll("dialog").forEach((dialog) => {
-        dialog.addEventListener("click", (event) => {
-            if (event.target === dialog) dialog.close();
-        });
-    });
-}
-
-function setError(id, message) {
-    const element = document.getElementById(id);
-    if (element) element.textContent = message;
-}
-
-function setAlert(id, message, success) {
-    const element = document.getElementById(id);
-    if (!element) return;
-    element.hidden = false;
-    element.textContent = message;
-    element.classList.toggle("ok", success);
-}
-
-function setBusy(button, busy) {
-    if (!button) return;
-    if (!button.dataset.defaultText) button.dataset.defaultText = button.textContent.trim();
-    button.disabled = busy;
-    button.setAttribute("aria-busy", String(busy));
-    button.textContent = busy ? button.dataset.loadingText : button.dataset.defaultText;
-}
-
-async function getCsrfToken(force = false) {
-    if (csrfToken && !force) return csrfToken;
-    const response = await fetch("api/csrf.php", {
-        method: "GET",
-        credentials: "same-origin",
-        headers: { Accept: "application/json" }
-    });
-    const payload = await response.json();
-    if (!response.ok || !payload.token) throw new Error("No se pudo iniciar la sesion segura.");
-    csrfToken = payload.token;
-    return csrfToken;
-}
-
-/* Centraliza Fetch para mantener CSRF, cookies y errores con el mismo contrato. */
-async function apiFetch(url, options = {}, retryCsrf = true) {
-    const request = { credentials: "same-origin", ...options };
-    request.headers = new Headers(options.headers || {});
-    request.headers.set("Accept", "application/json");
-
-    if ((request.method || "GET").toUpperCase() !== "GET") {
-        request.headers.set("X-CSRF-Token", await getCsrfToken());
-    }
-
-    const response = await fetch(url, request);
-    let payload;
-    try {
-        payload = await response.json();
-    } catch {
-        payload = { ok: false, message: "El servidor devolvio una respuesta no valida." };
-    }
-
-    if (response.status === 419 && retryCsrf) {
-        await getCsrfToken(true);
-        return apiFetch(url, options, false);
-    }
-    if (!response.ok || payload.ok === false) {
-        const error = new Error(payload.message || "No fue posible completar la solicitud.");
-        error.fields = payload.errors || {};
-        throw error;
-    }
-    return payload;
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-    setupModals();
-
-    const form = document.getElementById("reportForm");
-    const description = document.getElementById("description");
-    if (!form || !description) return;
-
-    description.addEventListener("input", () => {
-        const normalized = description.value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-        const critical = /suicid|arma|abuso|violacion|matar|peligro inmediato/.test(normalized);
-        const serious = /acoso|bullying|amenaza|violencia|chantaje|golpe/.test(normalized);
-        const panel = document.getElementById("triage");
-        panel.querySelector("strong").textContent = critical ? "Posible situacion critica" : serious ? "Atencion prioritaria" : "Orientacion escolar";
-        panel.querySelector("p").textContent = critical
-            ? "Busca ahora a un adulto de confianza cercano y las lineas de emergencia de tu localidad."
-            : serious ? "Esta situacion puede requerir acompanamiento institucional prioritario."
-                : "Continua cuando te sientas preparado o preparada.";
-    });
-
-    form.addEventListener("submit", async (event) => {
-        event.preventDefault();
-        const button = document.getElementById("reportSubmit");
-        ["routeError", "descriptionError", "locationError", "dateError", "evidenceError", "confirmReportError"]
-            .forEach((id) => setError(id, ""));
-
-        const evidence = document.getElementById("evidence").files[0];
-        const confirmed = document.getElementById("confirmReport").checked;
-        let valid = true;
-        if (description.value.trim().length < 10) { setError("descriptionError", "Escribe al menos una frase."); valid = false; }
-        if (evidence && evidence.size > 15728640) { setError("evidenceError", "El archivo supera 15 MB."); valid = false; }
-        if (!confirmed) { setError("confirmReportError", "Debes confirmar la informacion."); valid = false; }
-        if (!valid) { setAlert("reportAlert", "Revisa los campos senalados.", false); return; }
-
-        const formData = new FormData(form);
-        formData.set("confirmed", String(confirmed));
-        setBusy(button, true);
-
-        try {
-            const payload = await apiFetch("api/reports.php", { method: "POST", body: formData });
-            const report = payload.report;
-            const evidenceText = report.evidence_saved ? " La evidencia quedo almacenada de forma protegida." : "";
-            document.getElementById("reportDoneText").textContent =
-                `Tu codigo es ${report.ticket}. Nivel de orientacion: ${report.risk}.${evidenceText}`;
-            form.reset();
-            document.getElementById("reportDone").showModal();
-            setAlert("reportAlert", payload.message, true);
-        } catch (error) {
-            setError("routeError", error.fields?.route || "");
-            setError("descriptionError", error.fields?.description || "");
-            setError("locationError", error.fields?.location || "");
-            setError("dateError", error.fields?.date || "");
-            setError("evidenceError", error.fields?.evidence || "");
-            setError("confirmReportError", error.fields?.confirmed || "");
-            setAlert("reportAlert", error.message, false);
-        } finally {
-            setBusy(button, false);
-        }
-    });
-});
-
-  </script>
   <style>
 :root{--navy:#0b1f4a;--blue:#1d5eb8;--pale:#eff7ff;--cyan:#dff5fb;--ink:#263852;--muted:#61718a;--line:#dbe4ee;--white:#fff;--soft:#f7f9fb}
 *{box-sizing:border-box}
@@ -179,14 +31,11 @@ header{position:sticky;top:0;z-index:10;border-bottom:1px solid var(--line);back
 .brand strong,.brand small{display:block}
 .brand strong{color:var(--navy)}
 .brand small{color:var(--muted);font-size:11px}
-.shield,.center,.large{display:grid;place-items:center;color:#fff;background:var(--blue);font-size:20px}
-.shield{width:38px;height:44px;clip-path:polygon(50% 0,93% 17%,86% 66%,50% 100%,14% 66%,7% 17%);background:linear-gradient(150deg,#3b82f6 0%,var(--blue) 55%,var(--navy) 100%);box-shadow:0 6px 14px rgba(11,31,74,.35)}
-.nav nav,.foot nav{display:flex;align-items:center;gap:20px;font-size:14px;font-weight:bold}
-.button{display:inline-flex;align-items:center;justify-content:center;min-height:43px;margin:4px 7px 4px 0;padding:10px 16px;border:1px solid var(--blue);border-radius:8px;color:#fff;background:var(--blue);font-size:14px;font-weight:bold}
+.shield{display:grid;place-items:center;color:#fff;background:var(--blue);font-size:20px;width:38px;height:44px;clip-path:polygon(50% 0,93% 17%,86% 66%,50% 100%,14% 66%,7% 17%);background:linear-gradient(150deg,#3b82f6 0%,var(--blue) 55%,var(--navy) 100%);box-shadow:0 6px 14px rgba(11,31,74,.35)}
+.button{display:inline-flex;align-items:center;justify-content:center;min-height:43px;margin:4px 7px 4px 0;padding:10px 16px;border:1px solid var(--blue);border-radius:8px;color:#fff;background:var(--blue);font-size:14px;font-weight:bold;cursor:pointer}
 .button:hover{background:#164a91}
 .eyebrow{margin:0 0 12px;color:var(--blue);font-size:12px;font-weight:bold;letter-spacing:.04em}
 .text{color:var(--blue);font-weight:bold}
-footer{padding:38px 0;color:#c8d5e9;background:#172033}
 .form-page{min-height:100vh;background:var(--soft)}
 .form-head{padding:55px 0 35px;background:var(--pale)}
 .form-head h1{margin:0 0 8px;color:var(--navy);font-size:42px}
@@ -212,9 +61,7 @@ footer{padding:38px 0;color:#c8d5e9;background:#172033}
 .modal h2{margin:0;color:var(--navy)}
 .modal main{max-height:55vh;padding:22px;overflow:auto}
 .modal footer{padding:14px 22px;text-align:right;background:var(--soft)}
-.modal p{color:var(--muted);font-size:14px}
-@media(max-width:800px){.nav nav{display:none}.grid,.split,.form-wrap{grid-template-columns:1fr}.form-wrap{max-width:580px}.side{display:none}}
-@media(max-width:520px){.container{width:min(100% - 28px,1120px)}}
+@media(max-width:800px){.form-wrap{grid-template-columns:1fr}.side{display:none}}
   </style>
 </head>
 <body class="form-page">
@@ -229,10 +76,13 @@ footer{padding:38px 0;color:#c8d5e9;background:#172033}
   </header>
 
   <main>
-    <section class="form-head"><div class="container">
-      <p class="eyebrow">REPORTE SEGURO</p><h1>Cuentanos lo que esta pasando.</h1>
-      <p>Avanza a tu ritmo. Puedes usar una ruta anonima.</p>
-    </div></section>
+    <section class="form-head">
+      <div class="container">
+        <p class="eyebrow">REPORTE SEGURO</p>
+        <h1>Cuéntanos lo que está pasando.</h1>
+        <p>Avanza a tu ritmo. Puedes usar una ruta anónima.</p>
+      </div>
+    </section>
 
     <section class="form-wrap">
       <aside class="side">
@@ -241,60 +91,182 @@ footer{padding:38px 0;color:#c8d5e9;background:#172033}
         <a class="text" href="chat.html">Hablar con alguien ahora &gt;</a>
       </aside>
 
-      <form class="formcard" id="reportForm" enctype="multipart/form-data" novalidate>
+      <form class="formcard" id="reportForm" novalidate>
         <h2>Crear reporte</h2>
         <div id="reportAlert" class="alert" role="status" aria-live="polite" hidden></div>
 
         <div class="field">
           <label for="route">Ruta</label>
           <select id="route" name="route">
-            <option value="anonymous">Reporte anonimo</option>
+            <option value="anonymous">Reporte anónimo</option>
             <option value="identified">Reporte con seguimiento</option>
           </select>
           <small id="routeError" class="error"></small>
         </div>
 
         <div class="field">
-          <label for="description">Que esta ocurriendo?</label>
+          <label for="description">¿Qué está ocurriendo?</label>
           <textarea id="description" name="description" required maxlength="2500" placeholder="Describe lo que recuerdes con tus propias palabras..."></textarea>
           <small id="descriptionError" class="error"></small>
         </div>
 
         <div id="triage" class="side">
-          <strong>Orientacion inicial pendiente.</strong>
-          <p>Al escribir, el sistema identifica una ruta orientativa. No reemplaza una evaluacion profesional.</p>
+          <strong>Orientación inicial pendiente.</strong>
+          <p>Al escribir, el sistema identifica una ruta orientativa. No reemplaza una evaluación profesional.</p>
         </div>
 
         <div class="field">
-          <label for="location">Donde ocurrio? Opcional</label>
-          <input id="location" name="location" maxlength="190" placeholder="Salon, patio, redes sociales...">
+          <label for="location">¿Dónde ocurrió? (Opcional)</label>
+          <input id="location" name="location" maxlength="190" placeholder="Salón, patio, redes sociales...">
           <small id="locationError" class="error"></small>
         </div>
 
         <div class="field">
-          <label for="date">Cuando ocurrio? Opcional</label>
+          <label for="date">¿Cuándo ocurrió? (Opcional)</label>
           <input id="date" name="date" type="date">
           <small id="dateError" class="error"></small>
         </div>
 
-        <div class="field">
-          <label for="evidence">Evidencia opcional</label>
-          <input id="evidence" name="evidence" type="file" accept="image/jpeg,image/png,image/webp,application/pdf,audio/mpeg,audio/mp4,audio/ogg,video/mp4,video/webm">
-          <small class="muted">Imagen, PDF, audio o video compatible. Maximo 15 MB.</small>
-          <small id="evidenceError" class="error"></small>
-        </div>
-
-        <label class="check"><input id="confirmReport" name="confirmed" type="checkbox"> Confirmo que la informacion corresponde a lo que conozco.</label>
+        <label class="check">
+          <input id="confirmReport" name="confirmed" type="checkbox"> Confirmo que la información corresponde a lo que conozco.
+        </label>
         <small id="confirmReportError" class="error"></small>
+
         <button class="button" id="reportSubmit" type="submit" data-loading-text="Enviando reporte...">Enviar reporte seguro</button>
       </form>
     </section>
   </main>
 
   <dialog class="modal" id="reportDone">
-    <header><h2>Reporte recibido</h2><button type="button" data-modal-close>Cerrar</button></header>
+    <header>
+      <h2>Reporte recibido</h2>
+      <button type="button" data-modal-close>Cerrar</button>
+    </header>
     <main><p id="reportDoneText"></p></main>
     <footer><button class="button" type="button" data-modal-close>Entendido</button></footer>
   </dialog>
+
+  <!-- Integración con Supabase -->
+  <script type="module">
+    import { supabase } from "./conexion.js";
+
+    function setupModals() {
+      document.querySelectorAll("[data-modal-close]").forEach((btn) => {
+        btn.addEventListener("click", () => btn.closest("dialog")?.close());
+      });
+    }
+
+    function setError(id, message) {
+      const element = document.getElementById(id);
+      if (element) element.textContent = message;
+    }
+
+    function setAlert(id, message, success) {
+      const element = document.getElementById(id);
+      if (!element) return;
+      element.hidden = false;
+      element.textContent = message;
+      element.classList.toggle("ok", success);
+    }
+
+    function setBusy(button, busy) {
+      if (!button) return;
+      if (!button.dataset.defaultText) button.dataset.defaultText = button.textContent.trim();
+      button.disabled = busy;
+      button.textContent = busy ? button.dataset.loadingText : button.dataset.defaultText;
+    }
+
+    function generateTicket() {
+      return 'TK-' + Math.floor(100000 + Math.random() * 900000);
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      setupModals();
+
+      const form = document.getElementById("reportForm");
+      const description = document.getElementById("description");
+      if (!form || !description) return;
+
+      description.addEventListener("input", () => {
+        const normalized = description.value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        const critical = /suicid|arma|abuso|violacion|matar|peligro inmediato/.test(normalized);
+        const serious = /acoso|bullying|amenaza|violencia|chantaje|golpe/.test(normalized);
+        const panel = document.getElementById("triage");
+        panel.querySelector("strong").textContent = critical ? "Posible situación crítica" : serious ? "Atención prioritaria" : "Orientación escolar";
+        panel.querySelector("p").textContent = critical
+          ? "Busca ahora a un adulto de confianza cercano y las líneas de emergencia de tu localidad."
+          : serious ? "Esta situación puede requerir acompañamiento institucional prioritario."
+          : "Continúa cuando te sientas preparado o preparada.";
+      });
+
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const button = document.getElementById("reportSubmit");
+        ["routeError", "descriptionError", "locationError", "dateError", "confirmReportError"].forEach((id) => setError(id, ""));
+
+        const confirmed = document.getElementById("confirmReport").checked;
+        const textVal = description.value.trim();
+        let valid = true;
+
+        if (textVal.length < 10) { setError("descriptionError", "Escribe al menos una frase significativa (mínimo 10 caracteres)."); valid = false; }
+        if (!confirmed) { setError("confirmReportError", "Debes confirmar la información."); valid = false; }
+        if (!valid) { setAlert("reportAlert", "Revisa los campos señalados.", false); return; }
+
+        setBusy(button, true);
+
+        try {
+          const routeVal = document.getElementById("route").value;
+          const locationVal = document.getElementById("location").value.trim();
+          const dateVal = document.getElementById("date").value;
+
+          const ticketCode = generateTicket();
+          const normalized = textVal.toLowerCase();
+          const riskLevel = /suicid|arma|abuso|violacion|matar/.test(normalized) ? "Crítico" : /acoso|bullying|amenaza|golpe/.test(normalized) ? "Alto" : "Medio";
+
+          // Determinar usuario autenticado
+          let userId = null;
+          const localUser = localStorage.getItem("usuario") || sessionStorage.getItem("usuario");
+          if (localUser && routeVal === "identified") {
+            try { userId = JSON.parse(localUser).id; } catch(e){}
+          }
+
+          if (!userId && routeVal === "identified") {
+            const { data: sessionData } = await supabase.auth.getSession();
+            if (sessionData?.session?.user) {
+              userId = sessionData.session.user.id;
+            }
+          }
+
+          const { data, error } = await supabase.from('reportes').insert([
+            {
+              ticket: ticketCode,
+              ruta: routeVal,
+              descripcion: textVal,
+              ubicacion: locationVal || null,
+              fecha_suceso: dateVal || null,
+              riesgo: riskLevel,
+              usuario_id: userId,
+              creado_en: new Date().toISOString()
+            }
+          ]);
+
+          if (error) throw error;
+
+          document.getElementById("reportDoneText").textContent =
+            `Tu código de seguimiento es ${ticketCode}. Nivel de riesgo detectado: ${riskLevel}. El reporte ha sido guardado con éxito.`;
+          
+          form.reset();
+          document.getElementById("reportDone").showModal();
+          setAlert("reportAlert", "Reporte enviado correctamente.", true);
+
+        } catch (err) {
+          console.error("Error al guardar en Supabase:", err);
+          setAlert("reportAlert", "Ocurrió un error al enviar el reporte: " + (err.message || "Error de conexión"), false);
+        } finally {
+          setBusy(button, false);
+        }
+      });
+    });
+  </script>
 </body>
 </html>
