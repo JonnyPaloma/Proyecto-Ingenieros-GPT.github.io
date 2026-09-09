@@ -32,6 +32,7 @@ header{position:sticky;top:0;z-index:10;border-bottom:1px solid var(--line);back
 .brand strong{color:var(--navy);font-size:20px;line-height:1.2}
 .brand small{color:var(--muted);font-size:13px;line-height:1.2}
 
+/* Botones */
 .button{display:inline-flex;align-items:center;justify-content:center;min-height:45px;padding:10px 24px;border:none;border-radius:10px;color:#fff;background:linear-gradient(135deg, #1d5eb8 0%, #0b1f4a 100%);font-size:15px;font-weight:bold;cursor:pointer;transition:all 0.3s ease;box-shadow:0 4px 12px rgba(29,94,184,0.25)}
 .button:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(29,94,184,0.38);background:linear-gradient(135deg, #2563eb 0%, #1e40af 100%)}
 .button-outline{background:transparent;color:var(--blue);border:2px solid var(--blue);box-shadow:none}
@@ -41,6 +42,7 @@ header{position:sticky;top:0;z-index:10;border-bottom:1px solid var(--line);back
 .text{color:var(--blue);font-weight:bold;background:none;border:none;padding:0;cursor:pointer}
 .text:hover{color:var(--navy);text-decoration:underline}
 
+/* Estructura Split */
 .form-page{flex:1;display:flex;align-items:center;padding:40px 0}
 .split-card{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--line);border-radius:18px;background:#fff;overflow:hidden;box-shadow: 0 20px 40px rgba(11,31,74,0.07)}
 
@@ -94,6 +96,7 @@ header{position:sticky;top:0;z-index:10;border-bottom:1px solid var(--line);back
     <div class="container">
       <div class="split-card">
         
+        <!-- Lateral Visual -->
         <div class="visual-side">
           <div>
             <span class="eyebrow" style="color: var(--cyan);">ÚNETE A LA RED</span>
@@ -117,6 +120,7 @@ header{position:sticky;top:0;z-index:10;border-bottom:1px solid var(--line);back
           </div>
         </div>
 
+        <!-- Formulario -->
         <form class="formcard" id="registerForm" novalidate>
           <h2>Crea tu cuenta</h2>
           <p class="sub">Completa los datos para acceder a tu plataforma escolar.</p>
@@ -188,6 +192,7 @@ header{position:sticky;top:0;z-index:10;border-bottom:1px solid var(--line);back
     </footer>
   </dialog>
 
+  <!-- Lógica modular conectada a Supabase Auth -->
   <script type="module">
     import { supabase } from './conexion.js';
 
@@ -268,25 +273,30 @@ header{position:sticky;top:0;z-index:10;border-bottom:1px solid var(--line);back
             setBusy(button, true);
 
             try {
-                // Registro usando Supabase Auth nativo
+                // 1. Crear el usuario en el módulo seguro de Supabase Auth
                 const { data: authData, error: authError } = await supabase.auth.signUp({
                     email: data.email,
                     password: data.password,
                     options: {
                         data: {
                             full_name: data.name,
-                            school: data.school
+                            institucion: data.school
                         }
                     }
                 });
 
                 if (authError) {
-                    setAlert("registerAlert", authError.message, false);
+                    let mensajeError = authError.message;
+                    if (authError.message.includes("User already registered")) {
+                        mensajeError = "Este correo electrónico ya se encuentra registrado.";
+                        setError("registerEmailError", mensajeError);
+                    }
+                    setAlert("registerAlert", mensajeError, false);
                     setBusy(button, false);
                     return;
                 }
 
-                // Guardar la información pública asociada al ID de Auth
+                // 2. Guardar información adicional en la tabla 'perfiles' si el usuario fue creado
                 if (authData.user) {
                     const { error: profileError } = await supabase
                         .from('perfiles')
@@ -294,17 +304,23 @@ header{position:sticky;top:0;z-index:10;border-bottom:1px solid var(--line);back
                             {
                                 id: authData.user.id,
                                 nombre: data.name,
-                                escuela: data.school
+                                institucion: data.school
                             }
                         ]);
 
                     if (profileError) {
-                        console.error('Error al guardar el perfil:', profileError);
+                        console.warn("Aviso al guardar perfil suplementario:", profileError.message);
                     }
                 }
 
+                // 3. Guardar datos en el almacenamiento local para sincronización fluida
+                localStorage.setItem("etv_session", JSON.stringify({
+                    name: data.name,
+                    email: data.email
+                }));
+
                 form.reset();
-                setAlert("registerAlert", "¡Cuenta creada con éxito! Redirigiendo...", true);
+                setAlert("registerAlert", "¡Cuenta creada con éxito! Redirigiendo al inicio de sesión...", true);
 
                 setTimeout(() => {
                     window.location.href = "login.html";
@@ -312,7 +328,7 @@ header{position:sticky;top:0;z-index:10;border-bottom:1px solid var(--line);back
 
             } catch (err) {
                 console.error("Excepción inesperada:", err);
-                setAlert("registerAlert", "Error inesperado en la aplicación.", false);
+                setAlert("registerAlert", "Error inesperado al conectar con el servidor.", false);
                 setBusy(button, false);
             }
         });
