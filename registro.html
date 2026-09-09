@@ -303,5 +303,11 @@ header{position:sticky;top:0;z-index:10;border-bottom:1px solid var(--line);back
       <button class="button" type="button" data-modal-close>Entendido</button>
     </footer>
   </dialog>
+  <script type="module">
+    // Aquí llamamos al "puente" que creamos en el Paso 1
+    import { supabase } from './conexion.js';
+
+    console.log("¡Listo, este HTML ya está conectado!");
+</script>
 </body>
 </html>
