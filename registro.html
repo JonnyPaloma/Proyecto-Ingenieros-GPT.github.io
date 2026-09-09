@@ -183,7 +183,7 @@ header{position:sticky;top:0;z-index:10;border-bottom:1px solid var(--line);back
       <h3>Uso responsable</h3>
       <p>Elige Tu Vida orienta rutas de apoyo escolar. No reemplaza servicios de emergencia, atención médica o protocolos institucionales.</p>
       <h3>Datos personales</h3>
-      <p>El tratamiento institucional debe respetar la Ley 1581 de 2012 de Colombia y la protección reinforced de menores.</p>
+      <p>El tratamiento institucional debe respetar la Ley 1581 de 2012 de Colombia y la protección reforzada de menores.</p>
       <h3>Ruta anónima</h3>
       <p>Puedes usar chat y reporte sin crear cuenta. Evita incluir datos identificables si deseas permanecer anónimo.</p>
     </main>
@@ -273,14 +273,15 @@ header{position:sticky;top:0;z-index:10;border-bottom:1px solid var(--line);back
             setBusy(button, true);
 
             try {
-                // 1. Crear el usuario en el módulo seguro de Supabase Auth
+                // 1. Crear el usuario en Supabase Auth
+                // Enviamos 'nombre' y 'colegio' para que el disparador SQL los capture
                 const { data: authData, error: authError } = await supabase.auth.signUp({
                     email: data.email,
                     password: data.password,
                     options: {
                         data: {
-                            full_name: data.name,
-                            institucion: data.school
+                            nombre: data.name,
+                            colegio: data.school
                         }
                     }
                 });
@@ -296,27 +297,14 @@ header{position:sticky;top:0;z-index:10;border-bottom:1px solid var(--line);back
                     return;
                 }
 
-                // 2. Guardar información adicional en la tabla 'perfiles' si el usuario fue creado
-                if (authData.user) {
-                    const { error: profileError } = await supabase
-                        .from('perfiles')
-                        .insert([
-                            {
-                                id: authData.user.id,
-                                nombre: data.name,
-                                institucion: data.school
-                            }
-                        ]);
-
-                    if (profileError) {
-                        console.warn("Aviso al guardar perfil suplementario:", profileError.message);
-                    }
-                }
+                // (Se omitió el paso 2 de inserción manual porque el disparador en SQL ya lo hace de fondo)
 
                 // 3. Guardar datos en el almacenamiento local para sincronización fluida
-                localStorage.setItem("etv_session", JSON.stringify({
-                    name: data.name,
-                    email: data.email
+                localStorage.setItem("usuario", JSON.stringify({
+                    id: authData.user?.id,
+                    nombre: data.name,
+                    colegio: data.school,
+                    correo: data.email
                 }));
 
                 form.reset();
