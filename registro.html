@@ -32,7 +32,6 @@ header{position:sticky;top:0;z-index:10;border-bottom:1px solid var(--line);back
 .brand strong{color:var(--navy);font-size:20px;line-height:1.2}
 .brand small{color:var(--muted);font-size:13px;line-height:1.2}
 
-/* Botones */
 .button{display:inline-flex;align-items:center;justify-content:center;min-height:45px;padding:10px 24px;border:none;border-radius:10px;color:#fff;background:linear-gradient(135deg, #1d5eb8 0%, #0b1f4a 100%);font-size:15px;font-weight:bold;cursor:pointer;transition:all 0.3s ease;box-shadow:0 4px 12px rgba(29,94,184,0.25)}
 .button:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(29,94,184,0.38);background:linear-gradient(135deg, #2563eb 0%, #1e40af 100%)}
 .button-outline{background:transparent;color:var(--blue);border:2px solid var(--blue);box-shadow:none}
@@ -42,7 +41,6 @@ header{position:sticky;top:0;z-index:10;border-bottom:1px solid var(--line);back
 .text{color:var(--blue);font-weight:bold;background:none;border:none;padding:0;cursor:pointer}
 .text:hover{color:var(--navy);text-decoration:underline}
 
-/* Estructura Split */
 .form-page{flex:1;display:flex;align-items:center;padding:40px 0}
 .split-card{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--line);border-radius:18px;background:#fff;overflow:hidden;box-shadow: 0 20px 40px rgba(11,31,74,0.07)}
 
@@ -96,7 +94,6 @@ header{position:sticky;top:0;z-index:10;border-bottom:1px solid var(--line);back
     <div class="container">
       <div class="split-card">
         
-        <!-- Lateral Visual -->
         <div class="visual-side">
           <div>
             <span class="eyebrow" style="color: var(--cyan);">ÚNETE A LA RED</span>
@@ -120,7 +117,6 @@ header{position:sticky;top:0;z-index:10;border-bottom:1px solid var(--line);back
           </div>
         </div>
 
-        <!-- Formulario -->
         <form class="formcard" id="registerForm" novalidate>
           <h2>Crea tu cuenta</h2>
           <p class="sub">Completa los datos para acceder a tu plataforma escolar.</p>
@@ -183,7 +179,7 @@ header{position:sticky;top:0;z-index:10;border-bottom:1px solid var(--line);back
       <h3>Uso responsable</h3>
       <p>Elige Tu Vida orienta rutas de apoyo escolar. No reemplaza servicios de emergencia, atención médica o protocolos institucionales.</p>
       <h3>Datos personales</h3>
-      <p>El tratamiento institucional debe respetar la Ley 1581 de 2012 de Colombia y la protección reforzada de menores.</p>
+      <p>El tratamiento institucional debe respetar la Ley 1581 de 2012 de Colombia y la protección reinforced de menores.</p>
       <h3>Ruta anónima</h3>
       <p>Puedes usar chat y reporte sin crear cuenta. Evita incluir datos identificables si deseas permanecer anónimo.</p>
     </main>
@@ -192,7 +188,6 @@ header{position:sticky;top:0;z-index:10;border-bottom:1px solid var(--line);back
     </footer>
   </dialog>
 
-  <!-- Lógica modular conectada a Supabase -->
   <script type="module">
     import { supabase } from './conexion.js';
 
@@ -273,47 +268,43 @@ header{position:sticky;top:0;z-index:10;border-bottom:1px solid var(--line);back
             setBusy(button, true);
 
             try {
-                // Verificar primero si el correo ya existe en Supabase
-                const { data: existingUsers, error: checkError } = await supabase
-                    .from('usuarios')
-                    .select('email')
-                    .eq('email', data.email);
-
-                if (checkError) {
-                    console.error('Error verificando usuario:', checkError);
-                    setAlert("registerAlert", "Error al validar los datos con el servidor.", false);
-                    setBusy(button, false);
-                    return;
-                }
-
-                if (existingUsers && existingUsers.length > 0) {
-                    setError("registerEmailError", "Este correo electrónico ya se encuentra registrado.");
-                    setAlert("registerAlert", "El correo ya está registrado.", false);
-                    setBusy(button, false);
-                    return;
-                }
-
-                // Insertar el nuevo registro en Supabase
-                const { error: insertError } = await supabase
-                    .from('usuarios')
-                    .insert([
-                        {
-                            name: data.name,
-                            email: data.email,
-                            school: data.school,
-                            password: data.password
+                // Registro usando Supabase Auth nativo
+                const { data: authData, error: authError } = await supabase.auth.signUp({
+                    email: data.email,
+                    password: data.password,
+                    options: {
+                        data: {
+                            full_name: data.name,
+                            school: data.school
                         }
-                    ]);
+                    }
+                });
 
-                if (insertError) {
-                    console.error('Error insertando usuario:', insertError);
-                    setAlert("registerAlert", "Ocurrió un error al guardar el registro.", false);
+                if (authError) {
+                    setAlert("registerAlert", authError.message, false);
                     setBusy(button, false);
                     return;
+                }
+
+                // Guardar la información pública asociada al ID de Auth
+                if (authData.user) {
+                    const { error: profileError } = await supabase
+                        .from('perfiles')
+                        .insert([
+                            {
+                                id: authData.user.id,
+                                nombre: data.name,
+                                escuela: data.school
+                            }
+                        ]);
+
+                    if (profileError) {
+                        console.error('Error al guardar el perfil:', profileError);
+                    }
                 }
 
                 form.reset();
-                setAlert("registerAlert", "¡Cuenta creada con éxito en Supabase! Redirigiendo al inicio de sesión...", true);
+                setAlert("registerAlert", "¡Cuenta creada con éxito! Redirigiendo...", true);
 
                 setTimeout(() => {
                     window.location.href = "login.html";
