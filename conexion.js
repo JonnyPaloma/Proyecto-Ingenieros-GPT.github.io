@@ -1,11 +1,7 @@
-// Importamos el cliente oficial de Supabase desde internet
-import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+// conexion.js
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 
-// Tu URL fija de Supabase
-const supabaseUrl = 'https://rwhpkuobljjolyjxgvgh.supabase.co'
+const SUPABASE_URL = 'https://elige-tu-vida.vercel.app/';
+const SUPABASE_ANON_KEY = 'sb_publishable_pyxeGlvqoy3LLneDqQRxKw_hJbU077N';
 
-// Tu Clave publicable que copiaste de Supabase (reemplaza lo de adentro de las comillas)
-const supabaseKey = 'sb_publishable_pyxeGlvqoy3LLneDqQRxKw_hJbU077N'
-
-// Creamos y exportamos la conexión para que tus otros archivos la usen
-export const supabase = createClient(supabaseUrl, supabaseKey)
+export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
