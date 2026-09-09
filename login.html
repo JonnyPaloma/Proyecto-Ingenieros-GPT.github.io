@@ -18,84 +18,6 @@
       trust: { cyan: "#dff7ff", indigo: "#3730a3", navy: "#0f1f46", gray: "#64748b" }
     } } } };
   </script>
-  <script>
-"use strict";
-
-function validEmail(value) {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
-}
-
-function setError(id, message) {
-    const element = document.getElementById(id);
-    if (element) element.textContent = message;
-}
-
-function setAlert(id, message, success) {
-    const element = document.getElementById(id);
-    if (!element) return;
-    element.hidden = false;
-    element.textContent = message;
-    element.classList.toggle("ok", success);
-}
-
-function setBusy(button, busy) {
-    if (!button) return;
-    if (!button.dataset.defaultText) button.dataset.defaultText = button.textContent.trim();
-    button.disabled = busy;
-    button.setAttribute("aria-busy", String(busy));
-    button.textContent = busy ? button.dataset.loadingText : button.dataset.defaultText;
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-    const form = document.getElementById("loginForm");
-    if (!form) return;
-
-    form.addEventListener("submit", (event) => {
-        event.preventDefault();
-        const button = document.getElementById("loginSubmit");
-        const emailInput = document.getElementById("email");
-        const passwordInput = document.getElementById("password");
-        const email = emailInput.value.trim().toLowerCase();
-        const password = passwordInput.value;
-
-        setError("emailError", "");
-        setError("passwordError", "");
-        setAlert("loginAlert", "", false);
-
-        let valid = true;
-        if (!validEmail(email)) { setError("emailError", "Escribe un correo válido."); valid = false; }
-        if (!password) { setError("passwordError", "Escribe tu contraseña."); valid = false; }
-        if (!valid) { setAlert("loginAlert", "Revisa tus credenciales.", false); return; }
-
-        setBusy(button, true);
-
-        setTimeout(() => {
-            const users = JSON.parse(localStorage.getItem("etv_users")) || [];
-            const user = users.find(u => u.email === email && u.password === password);
-
-            if (user) {
-                localStorage.setItem("etv_session", JSON.stringify({
-                    id: user.id,
-                    name: user.name,
-                    email: user.email,
-                    school: user.school,
-                    role: "estudiante",
-                    loginTime: new Date().toISOString()
-                }));
-
-                setAlert("loginAlert", `¡Bienvenido/a de nuevo, ${user.name}! Redirigiendo...`, true);
-                
-                setTimeout(() => {
-                    window.location.href = "chat.html";
-                }, 1200);
-            } else {
-                setAlert("loginAlert", "Correo o contraseña incorrectos. Por favor verifica tus datos.", false);
-                setBusy(button, false);
-            }
-        }, 500);
-    });
-});
-  </script>
   <style>
 :root{--navy:#0b1f4a;--blue:#1d5eb8;--pale:#eff7ff;--cyan:#dff5fb;--ink:#263852;--muted:#61718a;--line:#dbe4ee;--white:#fff;--soft:#f7f9fb}
 *{box-sizing:border-box}
@@ -110,7 +32,7 @@ header{position:sticky;top:0;z-index:10;border-bottom:1px solid var(--line);back
 .brand strong{color:var(--navy);font-size:20px;line-height:1.2}
 .brand small{color:var(--muted);font-size:13px;line-height:1.2}
 
-/* Botones con nueva visibilidad y animación */
+/* Botones */
 .button{display:inline-flex;align-items:center;justify-content:center;min-height:45px;padding:10px 24px;border:none;border-radius:10px;color:#fff;background:linear-gradient(135deg, #1d5eb8 0%, #0b1f4a 100%);font-size:15px;font-weight:bold;cursor:pointer;transition:all 0.3s ease;box-shadow:0 4px 12px rgba(29,94,184,0.25)}
 .button:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(29,94,184,0.38);background:linear-gradient(135deg, #2563eb 0%, #1e40af 100%)}
 .button-outline{background:transparent;color:var(--blue);border:2px solid var(--blue);box-shadow:none}
@@ -120,7 +42,7 @@ header{position:sticky;top:0;z-index:10;border-bottom:1px solid var(--line);back
 .text{color:var(--blue);font-weight:bold;transition:color 0.2s}
 .text:hover{color:var(--navy);text-decoration:underline}
 
-/* Estructura Dinámica Split */
+/* Estructura Split */
 .form-page{flex:1;display:flex;align-items:center;padding:40px 0}
 .split-card{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--line);border-radius:18px;background:#fff;overflow:hidden;box-shadow: 0 20px 40px rgba(11,31,74,0.07)}
 
@@ -167,7 +89,7 @@ header{position:sticky;top:0;z-index:10;border-bottom:1px solid var(--line);back
     <div class="container">
       <div class="split-card">
         
-        <!-- Lateral Visual e Ilustrativo Dinámico -->
+        <!-- Lateral Visual -->
         <div class="visual-side">
           <div class="visual-content">
             <span class="eyebrow" style="color: var(--cyan);">ACCESO SEGURO</span>
@@ -175,7 +97,6 @@ header{position:sticky;top:0;z-index:10;border-bottom:1px solid var(--line);back
             <p>Conéctate con tu comunidad educativa en un entorno totalmente confidencial y diseñado para tu tranquilidad.</p>
           </div>
 
-          <!-- SVG Ilutración Vectorial Interactiva -->
           <svg viewBox="0 0 400 280" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:auto; max-height:220px;">
             <circle cx="200" cy="140" r="110" fill="white" fill-opacity="0.08"/>
             <rect x="80" y="60" width="240" height="160" rx="16" fill="white" fill-opacity="0.15" backdrop-filter="blur(10px)"/>
@@ -229,11 +150,103 @@ header{position:sticky;top:0;z-index:10;border-bottom:1px solid var(--line);back
       </div>
     </div>
   </main>
+
+  <!-- Lógica modular conectada a Supabase -->
   <script type="module">
-    // Aquí llamamos al "puente" que creamos en el Paso 1
     import { supabase } from './conexion.js';
 
-    console.log("¡Listo, este HTML ya está conectado!");
-</script>
+    function validEmail(value) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
+    }
+
+    function setError(id, message) {
+        const element = document.getElementById(id);
+        if (element) element.textContent = message;
+    }
+
+    function setAlert(id, message, success) {
+        const element = document.getElementById(id);
+        if (!element) return;
+        element.hidden = false;
+        element.textContent = message;
+        element.classList.toggle("ok", success);
+    }
+
+    function setBusy(button, busy) {
+        if (!button) return;
+        if (!button.dataset.defaultText) button.dataset.defaultText = button.textContent.trim();
+        button.disabled = busy;
+        button.setAttribute("aria-busy", String(busy));
+        button.textContent = busy ? button.dataset.loadingText : button.dataset.defaultText;
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const form = document.getElementById("loginForm");
+        if (!form) return;
+
+        form.addEventListener("submit", async (event) => {
+            event.preventDefault();
+            const button = document.getElementById("loginSubmit");
+            const emailInput = document.getElementById("email");
+            const passwordInput = document.getElementById("password");
+            const email = emailInput.value.trim().toLowerCase();
+            const password = passwordInput.value;
+
+            setError("emailError", "");
+            setError("passwordError", "");
+            setAlert("loginAlert", "", false);
+
+            let valid = true;
+            if (!validEmail(email)) { setError("emailError", "Escribe un correo válido."); valid = false; }
+            if (!password) { setError("passwordError", "Escribe tu contraseña."); valid = false; }
+            if (!valid) { setAlert("loginAlert", "Revisa tus credenciales.", false); return; }
+
+            setBusy(button, true);
+
+            try {
+                // Consulta directa a Supabase en la tabla 'usuarios'
+                const { data: users, error } = await supabase
+                    .from('usuarios')
+                    .select('*')
+                    .eq('email', email)
+                    .eq('password', password);
+
+                if (error) {
+                    console.error('Error Supabase:', error);
+                    setAlert("loginAlert", "Error al conectar con la base de datos.", false);
+                    setBusy(button, false);
+                    return;
+                }
+
+                if (users && users.length > 0) {
+                    const user = users[0];
+
+                    // Guardamos la sesión en el almacenamiento local
+                    localStorage.setItem("etv_session", JSON.stringify({
+                        id: user.id,
+                        name: user.name,
+                        email: user.email,
+                        school: user.school,
+                        role: "estudiante",
+                        loginTime: new Date().toISOString()
+                    }));
+
+                    setAlert("loginAlert", `¡Bienvenido/a de nuevo, ${user.name}! Redirigiendo...`, true);
+
+                    setTimeout(() => {
+                        window.location.href = "chat.html";
+                    }, 1200);
+                } else {
+                    setAlert("loginAlert", "Correo o contraseña incorrectos. Por favor verifica tus datos.", false);
+                    setBusy(button, false);
+                }
+            } catch (err) {
+                console.error("Excepción inesperada:", err);
+                setAlert("loginAlert", "Ocurrió un error inesperado al procesar la solicitud.", false);
+                setBusy(button, false);
+            }
+        });
+    });
+  </script>
 </body>
 </html>
