@@ -32,7 +32,6 @@ header{position:sticky;top:0;z-index:10;border-bottom:1px solid var(--line);back
 .brand strong{color:var(--navy);font-size:20px;line-height:1.2}
 .brand small{color:var(--muted);font-size:13px;line-height:1.2}
 
-/* Botones */
 .button{display:inline-flex;align-items:center;justify-content:center;min-height:45px;padding:10px 24px;border:none;border-radius:10px;color:#fff;background:linear-gradient(135deg, #1d5eb8 0%, #0b1f4a 100%);font-size:15px;font-weight:bold;cursor:pointer;transition:all 0.3s ease;box-shadow:0 4px 12px rgba(29,94,184,0.25)}
 .button:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(29,94,184,0.38);background:linear-gradient(135deg, #2563eb 0%, #1e40af 100%)}
 .button-outline{background:transparent;color:var(--blue);border:2px solid var(--blue);box-shadow:none}
@@ -42,7 +41,6 @@ header{position:sticky;top:0;z-index:10;border-bottom:1px solid var(--line);back
 .text{color:var(--blue);font-weight:bold;transition:color 0.2s}
 .text:hover{color:var(--navy);text-decoration:underline}
 
-/* Estructura Split */
 .form-page{flex:1;display:flex;align-items:center;padding:40px 0}
 .split-card{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--line);border-radius:18px;background:#fff;overflow:hidden;box-shadow: 0 20px 40px rgba(11,31,74,0.07)}
 
@@ -89,7 +87,6 @@ header{position:sticky;top:0;z-index:10;border-bottom:1px solid var(--line);back
     <div class="container">
       <div class="split-card">
         
-        <!-- Lateral Visual -->
         <div class="visual-side">
           <div class="visual-content">
             <span class="eyebrow" style="color: var(--cyan);">ACCESO SEGURO</span>
@@ -116,7 +113,6 @@ header{position:sticky;top:0;z-index:10;border-bottom:1px solid var(--line);back
           </div>
         </div>
 
-        <!-- Formulario -->
         <form class="formcard" id="loginForm" novalidate>
           <h2>Iniciar sesión</h2>
           <p class="sub">Ingresa las credenciales asociadas a tu cuenta escolar.</p>
@@ -151,7 +147,6 @@ header{position:sticky;top:0;z-index:10;border-bottom:1px solid var(--line);back
     </div>
   </main>
 
-  <!-- Lógica modular conectada a Supabase -->
   <script type="module">
     import { supabase } from './conexion.js';
 
@@ -204,41 +199,44 @@ header{position:sticky;top:0;z-index:10;border-bottom:1px solid var(--line);back
             setBusy(button, true);
 
             try {
-                // Consulta directa a Supabase en la tabla 'usuarios'
-                const { data: users, error } = await supabase
-                    .from('usuarios')
-                    .select('*')
-                    .eq('email', email)
-                    .eq('password', password);
+                // Iniciar sesión con Supabase Auth
+                const { data, error } = await supabase.auth.signInWithPassword({
+                    email: email,
+                    password: password,
+                });
 
                 if (error) {
-                    console.error('Error Supabase:', error);
-                    setAlert("loginAlert", "Error al conectar con la base de datos.", false);
+                    setAlert("loginAlert", "Correo o contraseña incorrectos.", false);
                     setBusy(button, false);
                     return;
                 }
 
-                if (users && users.length > 0) {
-                    const user = users[0];
+                if (data.user) {
+                    // Obtener datos del perfil guardado
+                    const { data: perfil } = await supabase
+                        .from('perfiles')
+                        .select('nombre, escuela')
+                        .eq('id', data.user.id)
+                        .single();
 
-                    // Guardamos la sesión en el almacenamiento local
+                    const nombreUsuario = perfil?.nombre || data.user.user_metadata?.full_name || 'Usuario';
+                    const escuelaUsuario = perfil?.escuela || data.user.user_metadata?.school || '';
+
+                    // Almacenar caché local para renderizado rápido
                     localStorage.setItem("etv_session", JSON.stringify({
-                        id: user.id,
-                        name: user.name,
-                        email: user.email,
-                        school: user.school,
+                        id: data.user.id,
+                        name: nombreUsuario,
+                        email: data.user.email,
+                        school: escuelaUsuario,
                         role: "estudiante",
                         loginTime: new Date().toISOString()
                     }));
 
-                    setAlert("loginAlert", `¡Bienvenido/a de nuevo, ${user.name}! Redirigiendo...`, true);
+                    setAlert("loginAlert", `¡Bienvenido/a de nuevo, ${nombreUsuario}! Redirigiendo...`, true);
 
                     setTimeout(() => {
-                        window.location.href = "chat.html";
+                        window.location.href = "index.html";
                     }, 1200);
-                } else {
-                    setAlert("loginAlert", "Correo o contraseña incorrectos. Por favor verifica tus datos.", false);
-                    setBusy(button, false);
                 }
             } catch (err) {
                 console.error("Excepción inesperada:", err);
