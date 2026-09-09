@@ -76,8 +76,12 @@ footer{padding:38px 0;color:#c8d5e9;background:#172033}
         <a href="#acompanamiento">Acompañamiento</a>
         <a href="#rutas">Rutas de apoyo</a>
         <a href="#instituciones">Para instituciones</a>
-        <a href="login.html">Ingresar</a>
-        <a class="button button-small" href="registro.html">Crear cuenta</a>
+        
+        <!-- Área dinámica para mostrar la sesión del usuario -->
+        <div id="authArea" style="display: inline-flex; align-items: center; gap: 10px;">
+          <a href="login.html">Ingresar</a>
+          <a class="button button-small" href="registro.html">Crear cuenta</a>
+        </div>
       </nav>
     </div>
   </header>
@@ -181,5 +185,37 @@ footer{padding:38px 0;color:#c8d5e9;background:#172033}
     <div class="container footer-main"><div class="footer-brand"><a class="brand" href="index.html"><img src="assets/images/Escudo Elige Tu Vida Hack.png" alt="Logo Elige Tu Vida" width="45" height="45" style="object-fit: contain;"><span><strong>Elige Tu Vida</strong><small>Bienestar y protección escolar</small></span></a><p>Una plataforma para escuchar, orientar y proteger a estudiantes y comunidades educativas.</p></div><div><strong>Plataforma</strong><a href="chat.html">Orientación guiada</a><a href="reporte-seguro.html">Reporte seguro</a><a href="login.html">Acceso institucional</a></div><div><strong>Información</strong><a href="terminos.html">Términos de uso</a><a href="privacidad.html">Política de privacidad</a><a href="contacto.html">Contacto</a></div></div>
     <div class="container footer-bottom"><span>© 2026 Elige Tu Vida</span><span>Proyecto de convivencia escolar y prevención integral</span></div>
   </footer>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const authArea = document.getElementById("authArea");
+      const userRaw = localStorage.getItem("usuario") || sessionStorage.getItem("usuario");
+
+      if (userRaw && authArea) {
+        try {
+          const user = JSON.parse(userRaw);
+          const name = user.nombre || user.name || "Usuario";
+          
+          authArea.innerHTML = `
+            <span style="font-size: 13px; font-weight: 700; color: var(--etv-navy); display: flex; align-items: center; gap: 5px;">
+              <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+              ${name}
+            </span>
+            <button id="logoutBtn" style="background: none; border: 1px solid #fee2e2; border-radius: 6px; color: #dc2626; font-size: 12px; font-weight: 700; cursor: pointer; padding: 5px 10px;">
+              Cerrar sesión
+            </button>
+          `;
+
+          document.getElementById("logoutBtn").addEventListener("click", () => {
+            localStorage.removeItem("usuario");
+            sessionStorage.removeItem("usuario");
+            window.location.reload();
+          });
+        } catch(e) {
+          console.error("Error al obtener la sesión de usuario", e);
+        }
+      }
+    });
+  </script>
 </body>
 </html>
