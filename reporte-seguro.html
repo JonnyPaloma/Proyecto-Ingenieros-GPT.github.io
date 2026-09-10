@@ -4,74 +4,107 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Reporte seguro | Elige Tu Vida</title>
+  
+  <!-- Favicons optimizados -->
   <link rel="icon" href="assets/images/favicon.svg" type="image/svg+xml">
   <link rel="icon" href="assets/images/favicon-32.png" sizes="32x32" type="image/png">
   <link rel="icon" href="assets/images/favicon-16.png" sizes="16x16" type="image/png">
   <link rel="shortcut icon" href="assets/images/favicon.ico">
   <link rel="apple-touch-icon" href="assets/images/apple-touch-icon.png">
   <meta name="theme-color" content="#0f1f46">
-  <script src="https://cdn.tailwindcss.com" defer></script>
-  <script>
-    window.tailwind = window.tailwind || {};
-    tailwind.config = { theme: { extend: { colors: {
-      primary: { 50: "#eff6ff", 100: "#dbeafe", 500: "#3b82f6", 600: "#2563eb", 800: "#1e40af", 950: "#172554" },
-      trust: { cyan: "#dff7ff", indigo: "#3730a3", navy: "#0f1f46", gray: "#64748b" }
-    } } } };
-  </script>
+
+  <!-- Tailwind CSS optimizado sin bloqueos -->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
   <style>
-:root{--navy:#0b1f4a;--blue:#1d5eb8;--pale:#eff7ff;--cyan:#dff5fb;--ink:#263852;--muted:#61718a;--line:#dbe4ee;--white:#fff;--soft:#f7f9fb}
-*{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{margin:0;color:var(--ink);background:var(--white);font:16px/1.55 Arial,Helvetica,sans-serif}
-a{color:inherit;text-decoration:none}
-.container{width:min(1120px,calc(100% - 40px));margin:auto}
-header{position:sticky;top:0;z-index:10;border-bottom:1px solid var(--line);background:#fff}
-.nav{display:flex;align-items:center;justify-content:space-between;min-height:74px;gap:20px}
-.brand{display:flex;align-items:center;gap:10px}
-.brand strong,.brand small{display:block}
-.brand strong{color:var(--navy)}
-.brand small{color:var(--muted);font-size:11px}
-.shield{display:grid;place-items:center;color:#fff;background:var(--blue);font-size:20px;width:38px;height:44px;clip-path:polygon(50% 0,93% 17%,86% 66%,50% 100%,14% 66%,7% 17%);background:linear-gradient(150deg,#3b82f6 0%,var(--blue) 55%,var(--navy) 100%);box-shadow:0 6px 14px rgba(11,31,74,.35)}
-.button{display:inline-flex;align-items:center;justify-content:center;min-height:43px;margin:4px 7px 4px 0;padding:10px 16px;border:1px solid var(--blue);border-radius:8px;color:#fff;background:var(--blue);font-size:14px;font-weight:bold;cursor:pointer}
-.button:hover{background:#164a91}
-.eyebrow{margin:0 0 12px;color:var(--blue);font-size:12px;font-weight:bold;letter-spacing:.04em}
-.text{color:var(--blue);font-weight:bold}
-.form-page{min-height:100vh;background:var(--soft)}
-.form-head{padding:55px 0 35px;background:var(--pale)}
-.form-head h1{margin:0 0 8px;color:var(--navy);font-size:42px}
-.form-head p{margin:0;color:var(--muted)}
-.form-wrap{display:grid;grid-template-columns:270px minmax(0,570px);justify-content:center;gap:35px;padding:50px 0 75px}
-.side,.formcard{padding:25px;border:1px solid var(--line);border-radius:10px;background:#fff}
-.side{height:max-content;background:var(--pale)}
-.side h2,.formcard h2{margin-top:0;color:var(--navy);font-size:20px}
-.side p{color:var(--muted);font-size:14px}
-.field{margin-bottom:17px}
-.field label{display:block;margin-bottom:6px;font-size:13px;font-weight:bold}
-.field input,.field textarea,.field select{width:100%;min-height:45px;padding:10px;border:1px solid #c7d0dc;border-radius:7px;background:#fff}
-.field textarea{min-height:130px;resize:vertical}
-.field input:focus,.field textarea:focus,.field select:focus{outline:3px solid #2875d133;border-color:var(--blue)}
-.error{display:block;min-height:16px;color:#a22626;font-size:12px;font-weight:bold}
-.alert{margin-bottom:15px;padding:10px;border:1px solid #f0aaaa;border-radius:7px;color:#8b1f1f;background:#fff3f3;font-size:13px}
-.alert.ok{border-color:#9ad9b5;color:#17683a;background:#effbf4}
-.check{display:flex;gap:8px;align-items:flex-start;margin:18px 0;font-size:13px}
-.muted{color:var(--muted);font-size:13px}
-.modal{width:min(700px,calc(100% - 28px));max-height:calc(100vh - 28px);padding:0;border:1px solid var(--line);border-radius:10px}
-.modal::backdrop{background:#0b1f4ab8}
-.modal header{display:flex;justify-content:space-between;padding:20px;border-bottom:1px solid var(--line);background:var(--pale)}
-.modal h2{margin:0;color:var(--navy)}
-.modal main{max-height:55vh;padding:22px;overflow:auto}
-.modal footer{padding:14px 22px;text-align:right;background:var(--soft)}
-@media(max-width:800px){.form-wrap{grid-template-columns:1fr}.side{display:none}}
+    :root {
+      --navy: #0b1f4a;
+      --blue: #1d5eb8;
+      --pale: #eff7ff;
+      --cyan: #dff5fb;
+      --ink: #263852;
+      --muted: #61718a;
+      --line: #dbe4ee;
+      --white: #fff;
+      --soft: #f7f9fb;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; color: var(--ink); background: var(--white); font: 16px/1.55 Arial, Helvetica, sans-serif; }
+    a { color: inherit; text-decoration: none; }
+    .container { width: min(1120px, calc(100% - 40px)); margin: auto; }
+    
+    header { position: sticky; top: 0; z-index: 10; border-bottom: 1px solid var(--line); background: #fff; }
+    .nav { display: flex; align-items: center; justify-content: space-between; min-height: 74px; gap: 20px; }
+    .brand { display: flex; align-items: center; gap: 12px; }
+    .brand strong, .brand small { display: block; }
+    .brand strong { color: var(--navy); }
+    .brand small { color: var(--muted); font-size: 11px; }
+    
+    .shield { display: grid; place-items: center; color: #fff; width: 40px; height: 46px; clip-path: polygon(50% 0, 93% 17%, 86% 66%, 50% 100%, 14% 66%, 7% 17%); background: linear-gradient(150deg, #3b82f6 0%, var(--blue) 55%, var(--navy) 100%); box-shadow: 0 6px 14px rgba(11,31,74,.35); font-weight: bold; }
+    
+    .button { display: inline-flex; align-items: center; justify-content: center; min-height: 43px; margin: 4px 7px 4px 0; padding: 10px 18px; border: 1px solid var(--blue); border-radius: 8px; color: #fff; background: var(--blue); font-size: 14px; font-weight: bold; cursor: pointer; transition: background .2s; }
+    .button:hover { background: #164a91; }
+    .button.outline { background: transparent; color: var(--blue); }
+    .button.outline:hover { background: var(--pale); }
+
+    .eyebrow { margin: 0 0 12px; color: var(--blue); font-size: 12px; font-weight: bold; letter-spacing: .04em; }
+    .text { color: var(--blue); font-weight: bold; }
+    .form-page { min-height: 100vh; background: var(--soft); }
+    .form-head { padding: 55px 0 35px; background: var(--pale); }
+    .form-head h1 { margin: 0 0 8px; color: var(--navy); font-size: 42px; }
+    .form-head p { margin: 0; color: var(--muted); }
+    .form-wrap { display: grid; grid-template-columns: 270px minmax(0, 570px); justify-content: center; gap: 35px; padding: 50px 0 75px; }
+    .side, .formcard { padding: 25px; border: 1px solid var(--line); border-radius: 10px; background: #fff; }
+    .side { height: max-content; background: var(--pale); }
+    .side h2, .formcard h2 { margin-top: 0; color: var(--navy); font-size: 20px; }
+    .side p { color: var(--muted); font-size: 14px; }
+    
+    .field { margin-bottom: 17px; }
+    .field label { display: block; margin-bottom: 6px; font-size: 13px; font-weight: bold; }
+    .field input, .field textarea, .field select { width: 100%; min-height: 45px; padding: 10px; border: 1px solid #c7d0dc; border-radius: 7px; background: #fff; font-family: inherit; }
+    .field textarea { min-height: 130px; resize: vertical; }
+    .field input:focus, .field textarea:focus, .field select:focus { outline: 3px solid #2875d133; border-color: var(--blue); }
+    
+    .error { display: block; min-height: 16px; color: #a22626; font-size: 12px; font-weight: bold; }
+    .alert { margin-bottom: 15px; padding: 12px; border: 1px solid #f0aaaa; border-radius: 7px; color: #8b1f1f; background: #fff3f3; font-size: 13px; }
+    .alert.ok { border-color: #9ad9b5; color: #17683a; background: #effbf4; }
+    .check { display: flex; gap: 10px; align-items: flex-start; margin: 18px 0; font-size: 13px; cursor: pointer; }
+    
+    .modal { width: min(700px, calc(100% - 28px)); max-height: calc(100vh - 28px); padding: 0; border: 1px solid var(--line); border-radius: 10px; }
+    .modal::backdrop { background: #0b1f4ab8; }
+    .modal header { display: flex; justify-content: space-between; align-items: center; padding: 20px; border-bottom: 1px solid var(--line); background: var(--pale); }
+    .modal h2 { margin: 0; color: var(--navy); }
+    .modal main { max-height: 55vh; padding: 22px; overflow: auto; }
+    .modal footer { padding: 14px 22px; text-align: right; background: var(--soft); }
+
+    .nav-user { display: flex; align-items: center; gap: 12px; }
+    .user-badge { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: bold; color: var(--navy); background: var(--pale); padding: 6px 12px; border-radius: 20px; border: 1px solid var(--line); }
+
+    @media(max-width: 800px) {
+      .form-wrap { grid-template-columns: 1fr; }
+      .side { display: none; }
+      .form-head h1 { font-size: 32px; }
+    }
   </style>
 </head>
 <body class="form-page">
   <header>
     <div class="container nav">
       <a class="brand" href="index.html">
-        <b class="shield"><svg viewBox="0 0 24 24" width="46%" height="46%" aria-hidden="true" focusable="false"><rect x="9" y="2" width="6" height="20" rx="2" fill="#fff"/><rect x="2" y="9" width="20" height="6" rx="2" fill="#fff"/></svg></b>
+        <span class="shield">
+          <svg viewBox="0 0 24 24" width="46%" height="46%" aria-hidden="true" focusable="false">
+            <rect x="9" y="2" width="6" height="20" rx="2" fill="#fff"/>
+            <rect x="2" y="9" width="20" height="6" rx="2" fill="#fff"/>
+          </svg>
+        </span>
         <span><strong>Elige Tu Vida</strong><small>Reporte protegido</small></span>
       </a>
-      <a href="index.html">Salir</a>
+      
+      <div class="nav-user" id="navUserSection">
+        <!-- Dinámico con JavaScript según sesión -->
+        <a href="index.html" class="button outline" style="margin: 0; min-height: 36px; padding: 6px 14px; font-size: 13px;">Volver al inicio</a>
+      </div>
     </div>
   </header>
 
@@ -110,7 +143,7 @@ header{position:sticky;top:0;z-index:10;border-bottom:1px solid var(--line);back
           <small id="descriptionError" class="error"></small>
         </div>
 
-        <div id="triage" class="side">
+        <div id="triage" class="side" style="margin-bottom: 17px;">
           <strong>Orientación inicial pendiente.</strong>
           <p>Al escribir, el sistema identifica una ruta orientativa. No reemplaza una evaluación profesional.</p>
         </div>
@@ -128,7 +161,8 @@ header{position:sticky;top:0;z-index:10;border-bottom:1px solid var(--line);back
         </div>
 
         <label class="check">
-          <input id="confirmReport" name="confirmed" type="checkbox"> Confirmo que la información corresponde a lo que conozco.
+          <input id="confirmReport" name="confirmed" type="checkbox"> 
+          <span>Confirmo que la información corresponde a lo que conozco.</span>
         </label>
         <small id="confirmReportError" class="error"></small>
 
@@ -140,13 +174,13 @@ header{position:sticky;top:0;z-index:10;border-bottom:1px solid var(--line);back
   <dialog class="modal" id="reportDone">
     <header>
       <h2>Reporte recibido</h2>
-      <button type="button" data-modal-close>Cerrar</button>
+      <button type="button" class="button outline" data-modal-close style="min-height: 32px; padding: 4px 10px; font-size: 12px;">Cerrar</button>
     </header>
     <main><p id="reportDoneText"></p></main>
     <footer><button class="button" type="button" data-modal-close>Entendido</button></footer>
   </dialog>
 
-  <!-- Integración con Supabase -->
+  <!-- Integración con Supabase y Lógica de Sesión -->
   <script type="module">
     import { supabase } from "./conexion.js";
 
@@ -180,8 +214,34 @@ header{position:sticky;top:0;z-index:10;border-bottom:1px solid var(--line);back
       return 'TK-' + Math.floor(100000 + Math.random() * 900000);
     }
 
-    document.addEventListener("DOMContentLoaded", () => {
+    // Comprobar estado de autenticación para mostrar la cuenta en el header
+    async function checkUserSession() {
+      const navUserSection = document.getElementById("navUserSection");
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        const localUser = localStorage.getItem("usuario") || sessionStorage.getItem("usuario");
+
+        if (session?.user || localUser) {
+          let email = session?.user?.email;
+          if (!email && localUser) {
+            try { email = JSON.parse(localUser).correo || JSON.parse(localUser).email; } catch(e){}
+          }
+          
+          navUserSection.innerHTML = `
+            <div class="user-badge">
+              <span>👤 ${email ? email.split('@')[0] : 'Cuenta Activa'}</span>
+            </div>
+            <a href="index.html" class="button outline" style="margin: 0; min-height: 36px; padding: 6px 14px; font-size: 13px;">Inicio</a>
+          `;
+        }
+      } catch (e) {
+        console.error("Error verificando sesión:", e);
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", async () => {
       setupModals();
+      await checkUserSession();
 
       const form = document.getElementById("reportForm");
       const description = document.getElementById("description");
@@ -223,7 +283,6 @@ header{position:sticky;top:0;z-index:10;border-bottom:1px solid var(--line);back
           const normalized = textVal.toLowerCase();
           const riskLevel = /suicid|arma|abuso|violacion|matar/.test(normalized) ? "Crítico" : /acoso|bullying|amenaza|golpe/.test(normalized) ? "Alto" : "Medio";
 
-          // Determinar usuario autenticado
           let userId = null;
           const localUser = localStorage.getItem("usuario") || sessionStorage.getItem("usuario");
           if (localUser && routeVal === "identified") {
