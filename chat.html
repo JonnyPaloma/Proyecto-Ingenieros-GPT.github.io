@@ -75,21 +75,12 @@
     a { color: inherit; text-decoration: none; }
     .container { width: min(1240px, calc(100% - 48px)); margin-inline: auto; }
 
-    /* Header Consistente */
     .site-header {
-      position: sticky;
-      z-index: 50;
-      top: 0;
-      border-bottom: 1px solid var(--etv-line);
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(14px);
+      position: sticky; z-index: 50; top: 0; border-bottom: 1px solid var(--etv-line);
+      background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(14px);
     }
     .site-nav {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      min-height: 78px;
-      gap: 28px;
+      display: flex; align-items: center; justify-content: space-between; min-height: 78px; gap: 28px;
     }
     .brand { display: flex; align-items: center; gap: 12px; }
     .brand strong, .brand small { display: block; }
@@ -98,170 +89,69 @@
 
     .site-nav nav { display: flex; align-items: center; gap: 10px; }
     .site-nav nav > a:not(.button), .site-nav nav > span {
-      padding: 10px 12px;
-      border-radius: 8px;
-      color: #475569;
-      font-size: 14px;
-      font-weight: 700;
-      transition: all 0.2s;
+      padding: 10px 12px; border-radius: 8px; color: #475569; font-size: 14px; font-weight: 700; transition: all 0.2s;
     }
     .site-nav nav > a:not(.button):hover { color: var(--etv-blue); background: #eff6ff; }
 
     .button {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      min-height: 44px;
-      padding: 10px 20px;
-      border: 1px solid transparent;
-      border-radius: 10px;
-      font-size: 14px;
-      font-weight: 700;
-      line-height: 1.2;
-      transition: all .2s cubic-bezier(0.4, 0, 0.2, 1);
-      cursor: pointer;
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      min-height: 44px; padding: 10px 20px; border: 1px solid transparent; border-radius: 10px;
+      font-size: 14px; font-weight: 700; line-height: 1.2; transition: all .2s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer;
     }
     .button:hover { transform: translateY(-2px); box-shadow: 0 10px 20px -5px rgba(21,89,183,0.3); }
     .button-small { min-height: 38px; padding: 8px 14px; font-size: 13px; color: #fff; background: var(--etv-blue); }
-    .button-primary { color: #fff; background: var(--etv-blue); box-shadow: 0 4px 14px rgba(21,89,183,.3); }
-    .button-primary:hover { background: var(--etv-blue-dark); }
     .button-outline { border-color: #cbd5e1; color: var(--etv-navy); background: #fff; }
     .button-outline:hover { border-color: var(--etv-blue); background: #eff6ff; color: var(--etv-blue); }
 
     .menu {
-      display: none;
-      padding: 8px 12px;
-      border: 1px solid var(--etv-line);
-      border-radius: 8px;
-      background: #fff;
-      font-weight: bold;
-      cursor: pointer;
-      color: var(--etv-navy);
-      margin-left: auto;
+      display: none; padding: 8px 12px; border: 1px solid var(--etv-line); border-radius: 8px;
+      background: #fff; font-weight: bold; cursor: pointer; color: var(--etv-navy); margin-left: auto;
     }
 
     .user-badge-container {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      background: #f1f5f9;
-      padding: 5px 14px 5px 6px;
-      border-radius: 30px;
-      border: 1px solid #e2e8f0;
+      display: flex; align-items: center; gap: 10px; background: #f1f5f9; padding: 5px 14px 5px 6px;
+      border-radius: 30px; border: 1px solid #e2e8f0;
     }
     .user-avatar-circle {
       width: 32px; height: 32px; background: var(--etv-blue); color: white;
-      border-radius: 50%; display: flex; align-items: center; justify-content: center;
-      font-size: 13px; font-weight: bold;
+      border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: bold;
     }
     .user-name-text { font-size: 13px; font-weight: 700; color: var(--etv-navy); }
 
-    /* Hero Compacto y Centrado */
     .hero-section {
-      position: relative;
-      background: var(--etv-gradient-hero);
-      color: white;
-      padding: 28px 0 45px;
-      overflow: hidden;
-      text-align: center;
+      position: relative; background: var(--etv-gradient-hero); color: white; padding: 28px 0 45px; overflow: hidden; text-align: center;
     }
     .hero-glow {
-      position: absolute;
-      top: -50%;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 600px;
-      height: 600px;
-      background: radial-gradient(circle, rgba(56,189,248,0.2) 0%, rgba(255,255,255,0) 70%);
-      pointer-events: none;
+      position: absolute; top: -50%; left: 50%; transform: translateX(-50%); width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(56,189,248,0.2) 0%, rgba(255,255,255,0) 70%); pointer-events: none;
     }
     .hero-centered-content {
-      max-width: 780px;
-      margin: 0 auto;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      position: relative;
-      z-index: 2;
+      max-width: 780px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; position: relative; z-index: 2;
     }
     .hero-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 4px 14px;
-      border-radius: 20px;
-      background: rgba(255, 255, 255, 0.12);
-      backdrop-filter: blur(8px);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      font-size: 11.5px;
-      font-weight: 800;
-      letter-spacing: .05em;
-      text-transform: uppercase;
-      margin-bottom: 10px;
-      color: #e0f2fe;
+      display: inline-flex; align-items: center; gap: 8px; padding: 4px 14px; border-radius: 20px;
+      background: rgba(255, 255, 255, 0.12); backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.2);
+      font-size: 11.5px; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; margin-bottom: 10px; color: #e0f2fe;
     }
-    .hero-section h1 {
-      margin: 0 0 8px;
-      font-size: clamp(24px, 3vw, 34px);
-      font-weight: 900;
-      line-height: 1.18;
-      letter-spacing: -0.02em;
-    }
-    .hero-section p {
-      margin: 0;
-      color: #cbd5e1;
-      font-size: 14.5px;
-      max-width: 620px;
-      line-height: 1.45;
-    }
+    .hero-section h1 { margin: 0 0 8px; font-size: clamp(24px, 3vw, 34px); font-weight: 900; line-height: 1.18; }
+    .hero-section p { margin: 0; color: #cbd5e1; font-size: 14.5px; max-width: 620px; line-height: 1.45; }
+    .hero-subtle-image { width: 60px; height: 60px; margin-bottom: 8px; filter: drop-shadow(0 6px 12px rgba(0,0,0,0.2)); }
 
-    .hero-subtle-image {
-      width: 60px;
-      height: 60px;
-      margin-bottom: 8px;
-      filter: drop-shadow(0 6px 12px rgba(0,0,0,0.2));
-      opacity: 0.95;
-      transition: transform 0.3s ease;
-    }
-    .hero-subtle-image:hover { transform: scale(1.05); }
-
-    /* Layout del Chat */
+    /* Contenedor del Chat */
     main { flex: 1; margin-top: -20px; position: relative; z-index: 10; margin-bottom: 40px; }
     .chat-wrapper {
-      max-width: 900px;
-      margin: 0 auto;
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(16px);
-      border: 1px solid var(--etv-line);
-      border-radius: 16px;
-      box-shadow: 0 20px 40px -15px rgba(15, 31, 70, 0.08);
-      display: flex;
-      flex-direction: column;
-      height: 620px;
-      overflow: hidden;
+      max-width: 900px; margin: 0 auto; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(16px);
+      border: 1px solid var(--etv-line); border-radius: 16px; box-shadow: 0 20px 40px -15px rgba(15, 31, 70, 0.08);
+      display: flex; flex-direction: column; height: 620px; overflow: hidden;
     }
-
     .chat-header-bar {
-      padding: 16px 24px;
-      background: #f8fafc;
-      border-bottom: 1px solid var(--etv-line);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      padding: 16px 24px; background: #f8fafc; border-bottom: 1px solid var(--etv-line);
+      display: flex; align-items: center; justify-content: space-between;
     }
-    .chat-status-indicator {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 13.5px;
-      font-weight: 750;
-      color: var(--etv-navy);
-    }
+    .chat-status-indicator { display: flex; align-items: center; gap: 10px; font-size: 13.5px; font-weight: 750; color: var(--etv-navy); }
     .status-dot {
-      width: 10px; height: 10px; background: var(--etv-green);
-      border-radius: 50%; box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
-      animation: pulseDot 2s infinite;
+      width: 10px; height: 10px; background: var(--etv-green); border-radius: 50%;
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2); animation: pulseDot 2s infinite;
     }
     @keyframes pulseDot {
       0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
@@ -269,86 +159,38 @@
       100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
     }
 
-    /* Contenedor de Mensajes */
     .chat-messages {
-      flex: 1;
-      padding: 24px;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      background: #fdfdfd;
+      flex: 1; padding: 24px; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; background: #fdfdfd;
     }
-
     .message {
-      max-width: 78%;
-      padding: 14px 18px;
-      border-radius: 14px;
-      font-size: 14.5px;
-      line-height: 1.55;
-      word-break: break-word;
-      animation: fadeInMsg 0.3s ease forwards;
+      max-width: 80%; padding: 14px 18px; border-radius: 14px; font-size: 14.5px; line-height: 1.6; word-break: break-word;
     }
-    @keyframes fadeInMsg {
-      from { opacity: 0; transform: translateY(8px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
     .message.bot {
-      align-self: flex-start;
-      background: #f1f5f9;
-      color: var(--etv-ink);
-      border-bottom-left-radius: 4px;
-      border: 1px solid #e2e8f0;
+      align-self: flex-start; background: #f1f5f9; color: var(--etv-ink);
+      border-bottom-left-radius: 4px; border: 1px solid #e2e8f0;
     }
     .message.user {
-      align-self: flex-end;
-      background: var(--etv-blue);
-      color: white;
-      border-bottom-right-radius: 4px;
-      box-shadow: 0 4px 12px rgba(21, 89, 183, 0.2);
+      align-self: flex-end; background: var(--etv-blue); color: white;
+      border-bottom-right-radius: 4px; box-shadow: 0 4px 12px rgba(21, 89, 183, 0.2);
+    }
+    .message.typing {
+      color: var(--etv-muted); font-style: italic; background: #f8fafc;
     }
 
-    /* Caja de Entrada de Chat */
     .chat-input-area {
-      padding: 18px 24px;
-      background: #fff;
-      border-top: 1px solid var(--etv-line);
-      display: flex;
-      gap: 12px;
-      align-items: center;
+      padding: 18px 24px; background: #fff; border-top: 1px solid var(--etv-line); display: flex; gap: 12px; align-items: center;
     }
     .chat-input-area input {
-      flex: 1;
-      min-height: 50px;
-      padding: 12px 18px;
-      border: 1.5px solid var(--etv-line);
-      border-radius: 12px;
-      background: #f8fafc;
-      font-size: 14.5px;
-      color: var(--etv-ink);
-      outline: none;
-      transition: all 0.2s ease;
+      flex: 1; min-height: 50px; padding: 12px 18px; border: 1.5px solid var(--etv-line); border-radius: 12px;
+      background: #f8fafc; font-size: 14.5px; color: var(--etv-ink); outline: none; transition: all 0.2s ease;
     }
-    .chat-input-area input:focus {
-      border-color: var(--etv-blue);
-      background: #fff;
-      box-shadow: 0 0 0 4px rgba(21, 89, 183, 0.12);
-    }
+    .chat-input-area input:focus { border-color: var(--etv-blue); background: #fff; box-shadow: 0 0 0 4px rgba(21, 89, 183, 0.12); }
     .chat-send-btn {
-      min-height: 50px;
-      padding: 0 24px;
-      border-radius: 12px;
-      background: var(--etv-blue);
-      color: white;
-      font-weight: 750;
-      border: none;
-      cursor: pointer;
-      transition: all 0.2s;
+      min-height: 50px; padding: 0 24px; border-radius: 12px; background: var(--etv-blue); color: white;
+      font-weight: 750; border: none; cursor: pointer; transition: all 0.2s;
     }
-    .chat-send-btn:hover { background: var(--etv-blue-dark); transform: translateY(-1px); }
+    .chat-send-btn:hover { background: var(--etv-blue-dark); }
 
-    /* Footer estándar */
     .professional-footer { padding: 40px 0 20px; background: #101a2d; color: #aebdd1; margin-top: auto; }
     .footer-main { display: grid; grid-template-columns: 1.6fr .7fr .7fr; gap: 60px; padding-bottom: 30px; }
     .footer-main p { max-width: 430px; margin: 14px 0 0; color: #9eafc6; font-size: 13px; line-height: 1.6; }
@@ -363,14 +205,8 @@
     @media(max-width:850px) {
       .site-nav nav { display: none; }
       .site-nav nav.open {
-        position: absolute;
-        top: 78px; right: 0; left: 0;
-        display: flex; flex-direction: column; align-items: stretch;
-        padding: 18px 24px;
-        border-bottom: 1px solid var(--etv-line);
-        background: #fff;
-        box-shadow: 0 16px 30px rgba(15,31,70,.12);
-        z-index: 20;
+        position: absolute; top: 78px; right: 0; left: 0; display: flex; flex-direction: column; align-items: stretch;
+        padding: 18px 24px; border-bottom: 1px solid var(--etv-line); background: #fff; box-shadow: 0 16px 30px rgba(15,31,70,.12); z-index: 20;
       }
       .site-nav nav.open a { padding: 12px; border-bottom: 1px solid var(--etv-line); }
       .site-nav nav.open a.button { margin-top: 10px; text-align: center; }
@@ -387,7 +223,6 @@
         const button = document.querySelector(".menu");
         const navigation = document.querySelector(".site-nav nav");
         if (!button || !navigation) return;
-
         button.addEventListener("click", () => {
             const open = button.getAttribute("aria-expanded") === "true";
             button.setAttribute("aria-expanded", String(!open));
@@ -404,15 +239,11 @@
     <div class="shape"></div>
   </div>
 
-  <!-- Header / Nav -->
   <header class="site-header">
     <div class="container site-nav">
       <a class="brand" href="index.html" aria-label="Elige Tu Vida, página de inicio">
         <img src="assets/images/Escudo Elige Tu Vida Hack.png" alt="Logo Elige Tu Vida" width="52" height="52" style="object-fit: contain;">
-        <span>
-          <strong>Elige Tu Vida</strong>
-          <small>Orientación segura y confidencial</small>
-        </span>
+        <span><strong>Elige Tu Vida</strong><small>Orientación segura y confidencial</small></span>
       </a>
       <button class="menu" type="button" aria-label="Abrir menú" aria-expanded="false">Menú ☰</button>
       <nav id="nav-options" aria-label="Navegación principal">
@@ -425,49 +256,45 @@
     </div>
   </header>
 
-  <!-- Hero Principal Compacto -->
   <section class="hero-section">
     <div class="hero-glow"></div>
     <div class="container">
       <div class="hero-centered-content">
         <img src="assets/images/Escudo Elige Tu Vida Hack.png" alt="Insignia Elige Tu Vida" class="hero-subtle-image">
-        
         <div class="hero-badge">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
           Canal de Apoyo y Escucha
         </div>
         <h1>Orientación Guiada por Asistente</h1>
-        <p>Un espacio seguro para conversar, despejar dudas sobre convivencia o recibir pautas de bienestar emocional de manera confidencial.</p>
+        <p>Un espacio seguro para conversar, despejar dudas sobre convivencia o recibir pautas de bienestar emocional de manera confidencial y empática.</p>
       </div>
     </div>
   </section>
 
-  <!-- Interfaz del Chat -->
   <main class="container">
     <div class="chat-wrapper">
       <div class="chat-header-bar">
         <div class="chat-status-indicator">
           <div class="status-dot"></div>
-          Asistente Virtual Elige Tu Vida (Activo)
+          Asistente Virtual Elige Tu Vida (Empático y Seguro)
         </div>
-        <button type="button" id="clearChat" class="button button-outline button-small" style="font-size: 12px; min-height: 32px; padding: 4px 10px; color: var(--etv-muted);">Limpiar chat</button>
+        <button type="button" id="clearChat" class="button button-outline button-small" style="font-size: 12px; min-height: 32px; padding: 4px 10px; color: var(--etv-muted);">Reiniciar conversación</button>
       </div>
 
       <div id="chatMessages" class="chat-messages">
         <div class="message bot">
-          ¡Hola! Soy tu asistente de orientación en **Elige Tu Vida**. Estoy aquí para escucharte y orientarte con total confidencialidad. ¿Cómo te sientes hoy o de qué te gustaría hablar?
+          ¡Hola! Qué gusto saludarte por aquí. 💙 Soy tu asistente en **Elige Tu Vida**. Este es un espacio totalmente seguro y confidencial donde puedes expresarte con absoluta libertad. ¿Cómo te sientes el día de hoy, o de qué te gustaría que conversemos?
         </div>
       </div>
 
       <form id="chatForm" class="chat-input-area">
-        <input type="text" id="chatInput" placeholder="Escribe tu mensaje aquí..." autocomplete="off" required>
-        <button type="submit" class="chat-send-btn">Enviar</button>
+        <input type="text" id="chatInput" placeholder="Escribe tu mensaje con tranquilidad..." autocomplete="off" required>
+        <button type="submit" class="chat-send-btn" id="sendBtn">Enviar</button>
       </form>
     </div>
   </main>
 
-  <!-- Footer estándar -->
-  <professional-footer class="professional-footer">
+  <footer class="professional-footer">
     <div class="container footer-main">
       <div class="footer-brand">
         <a class="brand" href="index.html">
@@ -493,13 +320,13 @@
       <span>© 2026 Elige Tu Vida</span>
       <span>Proyecto de convivencia escolar y prevención integral</span>
     </div>
-  </professional-footer>
+  </footer>
 
-  <!-- Script con sincronización de sesión, cierre instantáneo y lógica interactiva del chat -->
   <script type="module">
     import { supabase } from "./conexion.js";
 
     document.addEventListener("DOMContentLoaded", () => {
+      // 1. Sincronización de sesión y cierre instantáneo (mantiene la barra limpia)
       const navContainer = document.getElementById("nav-options");
 
       function renderLoggedOutState() {
@@ -518,7 +345,6 @@
               loginLink.textContent = "Ingresar";
               navContainer.appendChild(loginLink);
           }
-
           if (!document.getElementById("nav-register")) {
               const registerLink = document.createElement("a");
               registerLink.href = "registro.html";
@@ -531,36 +357,21 @@
 
       supabase.auth.onAuthStateChange(async (event, session) => {
           const user = session?.user;
-
           if (user) {
               let userName = user.user_metadata?.nombre || user.user_metadata?.full_name || user.email.split('@')[0];
-
               try {
-                  const { data: perfilData } = await supabase
-                      .from('perfiles')
-                      .select('nombre')
-                      .eq('id', user.id)
-                      .single();
-
-                  if (perfilData?.nombre) {
-                      userName = perfilData.nombre;
-                  }
-              } catch (err) {
-                  console.error("Error al obtener perfil:", err);
-              }
+                  const { data: perfilData } = await supabase.from('perfiles').select('nombre').eq('id', user.id).single();
+                  if (perfilData?.nombre) userName = perfilData.nombre;
+              } catch (err) {}
 
               if (navContainer && !document.querySelector(".user-badge-container")) {
-                  const loginLink = document.getElementById("nav-login");
-                  const registerLink = document.getElementById("nav-register");
-                  if (loginLink) loginLink.remove();
-                  if (registerLink) registerLink.remove();
+                  document.getElementById("nav-login")?.remove();
+                  document.getElementById("nav-register")?.remove();
 
                   const userBadge = document.createElement("div");
                   userBadge.className = "user-badge-container";
-                  
-                  const initial = (userName ? userName.charAt(0) : "U").toUpperCase();
                   userBadge.innerHTML = `
-                    <div class="user-avatar-circle">${initial}</div>
+                    <div class="user-avatar-circle">${(userName ? userName.charAt(0) : "U").toUpperCase()}</div>
                     <span class="user-name-text">${userName}</span>
                   `;
 
@@ -586,64 +397,100 @@
           }
       });
 
-      // Lógica interactiva del chat de orientación
+      // 2. Lógica del Chat con IA / Modo Híbrido Amigable
       const chatForm = document.getElementById("chatForm");
       const chatInput = document.getElementById("chatInput");
       const chatMessages = document.getElementById("chatMessages");
       const clearChatBtn = document.getElementById("clearChat");
 
-      function appendMessage(sender, text) {
+      function appendMessage(sender, text, isTyping = false) {
         const msgDiv = document.createElement("div");
-        msgDiv.className = `message ${sender}`;
+        msgDiv.className = `message ${sender} ${isTyping ? 'typing' : ''}`;
         msgDiv.textContent = text;
         chatMessages.appendChild(msgDiv);
         chatMessages.scrollTop = chatMessages.scrollHeight;
+        return msgDiv;
       }
 
-      function getBotResponse(userText) {
-        const lower = userText.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+      // --- RESPUESTAS EMPÁTICAS MEJORADAS (Fallback local robusto) ---
+      function getFriendlyLocalResponse(text) {
+        const lower = text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
         
-        if (/hola|buenos dias|buenas tardes|saludos/.test(lower)) {
-          return "¡Hola! Qué bueno saludarte. ¿En qué te puedo colaborar hoy respecto a tus inquietudes o bienestar?";
+        if (/hola|buenos dias|buenas tardes|saludos|que tal/.test(lower)) {
+          return "¡Hola de nuevo! Me alegra mucho saludarte. ¿Cómo ha ido tu día? Estoy aquí para escucharte en lo que necesites.";
         }
-        if (/triste|mal|deprimid|solo|ansios|preocupad|llorar/.test(lower)) {
-          return "Lamento mucho que estés pasando por un momento difícil. Recuerda que tus sentimientos son válidos y no estás solo/a. ¿Te gustaría conversar sobre qué te hace sentir así?";
+        if (/triste|mal|deprimid|solo|ansios|preocupad|llorar|estresad|abrumad/.test(lower)) {
+          return "Siento mucho que estés atravesando por un momento tan pesado. Es completamente válido sentirse así a veces, pero quiero recordarte que no estás solo o sola en esto. ¿Te gustaría contarme un poco más sobre qué te tiene así?";
         }
-        if (/acoso|bullying|amenaza|golpe|molestia/.test(lower)) {
-          return "Lo que mencionas es muy serio. Te sugiero reportarlo de manera formal a través de nuestra sección de 'Reporte seguro' para que la institución pueda activar las rutas de apoyo y protección necesarias.";
+        if (/acoso|bullying|amenaza|golpe|molestia|insegur|miedo/.test(lower)) {
+          return "Lo que me comentas es una situación muy delicada y quiero que sepas que tu seguridad es lo más importante. Te animo profundamente a utilizar nuestra sección de **Reporte seguro** para activar el acompañamiento institucional de forma protegida.";
         }
-        if (/gracias|adios|chao/.test(lower)) {
-          return "Con mucho gusto. Estoy aquí siempre que lo necesites. ¡Que tengas un excelente día!";
+        if (/gracias|muchas gracias|te agradezco/.test(lower)) {
+          return "De corazón, no tienes que agradecer. Para eso estoy aquí, para darte un espacio seguro donde escucharte y apoyarte. 💙";
         }
-        return "Comprendo lo que compartes. Como asistente de orientación, te invito a mantener la calma y buscar apoyo en personas de confianza o utilizar nuestro canal de reporte seguro si la situación lo requiere.";
+        if (/adios|chao|hasta luego|nos vemos/.test(lower)) {
+          return "Cuídate muchísimo. Recuerda que este espacio siempre estará disponible para ti cuando lo requieras. ¡Que tengas un excelente descanso!";
+        }
+        
+        return "Comprendo perfectamente lo que me compartes. A veces las situaciones escolares o personales nos desafían, pero darles un espacio para hablarlo ayuda mucho. ¿Hay algo específico sobre lo que te gustaría recibir orientación?";
       }
 
-      if (chatForm) {
-        chatForm.addEventListener("submit", (e) => {
-          e.preventDefault();
-          const text = chatInput.value.trim();
-          if (!text) return;
+      // --- CONEXIÓN CON IA REAL (API externa) ---
+      async function fetchAIResponse(userMessage) {
+        // AQUÍ CONECTAS TU IA REAL:
+        // Opción A: Llamar a tu propio backend en PHP/Node (Recomendado para proteger claves de API)
+        /*
+        const response = await fetch('api/chat.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: userMessage })
+        });
+        const data = await response.json();
+        return data.reply;
+        */
 
-          appendMessage("user", text);
-          chatInput.value = "";
-
-          // Simular tiempo de respuesta del asistente
+        // Opción B: Si prefieres simular una respuesta de IA altamente empática mientras configuras tu backend:
+        return new Promise((resolve) => {
           setTimeout(() => {
-            const reply = getBotResponse(text);
-            appendMessage("bot", reply);
-          }, 600);
+            resolve(getFriendlyLocalResponse(userMessage));
+          }, 1000);
         });
       }
 
-      if (clearChatBtn) {
-        clearChatBtn.addEventListener("click", () => {
-          chatMessages.innerHTML = `
-            <div class="message bot">
-              Conversación reiniciada. ¿En qué te puedo colaborar o de qué te gustaría hablar ahora?
-            </div>
-          `;
-        });
-      }
+      chatForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const text = chatInput.value.trim();
+        if (!text) return;
+
+        appendMessage("user", text);
+        chatInput.value = "";
+        chatInput.disabled = true;
+
+        // Mostrar indicador de "escribiendo..."
+        const typingIndicator = appendMessage("bot", "El asistente está escribiendo...", true);
+
+        try {
+          // Llamada al motor de IA (o fallback inteligente)
+          const aiReply = await fetchAIResponse(text);
+          
+          typingIndicator.remove();
+          appendMessage("bot", aiReply);
+        } catch (error) {
+          typingIndicator.remove();
+          appendMessage("bot", "Tuve un pequeño inconveniente de conexión, pero estoy contigo. Intenta enviarme tu mensaje nuevamente.");
+        } finally {
+          chatInput.disabled = false;
+          chatInput.focus();
+        }
+      });
+
+      clearChatBtn.addEventListener("click", () => {
+        chatMessages.innerHTML = `
+          <div class="message bot">
+            Conversación reiniciada con éxito. 💙 ¿Cómo te sientes en este momento o de qué te gustaría hablar?
+          </div>
+        `;
+      });
     });
   </script>
 </body>
