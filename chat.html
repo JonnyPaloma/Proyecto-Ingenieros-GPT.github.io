@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Orientación guiada y confidencial en Elige Tu Vida: acompañamiento y apoyo escolar protegido.">
+  <meta name="description" content="Orientación guiada en Elige Tu Vida: asistente de apoyo y convivencia escolar segura.">
   <title>Orientación Guiada | Elige Tu Vida</title>
   
   <link rel="icon" href="assets/images/Favicon Hack.png" type="image/svg+xml">
@@ -28,20 +28,20 @@
       --etv-soft: #f8fafc;
       --etv-white: #ffffff;
       --etv-green: #10b981;
-      --etv-amber: #f59e0b;
-      --etv-red: #ef4444;
-      --shadow-lg: 0 10px 25px -5px rgba(15, 31, 70, 0.12);
+      --etv-gradient-hero: linear-gradient(135deg, #0b1f48 0%, #1559b7 55%, #1d4ed8 100%);
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
     
     body {
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
       color: var(--etv-ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      font-size: 16px;
+      line-height: 1.55;
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
-      min-height: 100vh;
       background: linear-gradient(-45deg, #eff6ff, #e0e7ff, #f8fafc, #dbeafe);
       background-size: 400% 400%;
       animation: gradientBG 15s ease infinite;
@@ -72,7 +72,7 @@
       50% { transform: translateY(-30px) scale(1.05); }
     }
 
-    a { text-decoration: none; color: inherit; }
+    a { color: inherit; text-decoration: none; }
     .container { width: min(1240px, calc(100% - 48px)); margin-inline: auto; }
 
     /* Header Consistente */
@@ -123,7 +123,7 @@
       cursor: pointer;
     }
     .button:hover { transform: translateY(-2px); box-shadow: 0 10px 20px -5px rgba(21,89,183,0.3); }
-    .button-small { min-height: 38px; padding: 8px 14px; font-size: 13px; }
+    .button-small { min-height: 38px; padding: 8px 14px; font-size: 13px; color: #fff; background: var(--etv-blue); }
     .button-primary { color: #fff; background: var(--etv-blue); box-shadow: 0 4px 14px rgba(21,89,183,.3); }
     .button-primary:hover { background: var(--etv-blue-dark); }
     .button-outline { border-color: #cbd5e1; color: var(--etv-navy); background: #fff; }
@@ -157,66 +157,207 @@
     }
     .user-name-text { font-size: 13px; font-weight: 700; color: var(--etv-navy); }
 
+    /* Hero Compacto y Centrado */
+    .hero-section {
+      position: relative;
+      background: var(--etv-gradient-hero);
+      color: white;
+      padding: 28px 0 45px;
+      overflow: hidden;
+      text-align: center;
+    }
+    .hero-glow {
+      position: absolute;
+      top: -50%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(56,189,248,0.2) 0%, rgba(255,255,255,0) 70%);
+      pointer-events: none;
+    }
+    .hero-centered-content {
+      max-width: 780px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      z-index: 2;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 14px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      font-size: 11.5px;
+      font-weight: 800;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      color: #e0f2fe;
+    }
+    .hero-section h1 {
+      margin: 0 0 8px;
+      font-size: clamp(24px, 3vw, 34px);
+      font-weight: 900;
+      line-height: 1.18;
+      letter-spacing: -0.02em;
+    }
+    .hero-section p {
+      margin: 0;
+      color: #cbd5e1;
+      font-size: 14.5px;
+      max-width: 620px;
+      line-height: 1.45;
+    }
+
+    .hero-subtle-image {
+      width: 60px;
+      height: 60px;
+      margin-bottom: 8px;
+      filter: drop-shadow(0 6px 12px rgba(0,0,0,0.2));
+      opacity: 0.95;
+      transition: transform 0.3s ease;
+    }
+    .hero-subtle-image:hover { transform: scale(1.05); }
+
     /* Layout del Chat */
-    main { flex: 1; display: flex; justify-content: center; padding: 30px 20px; }
-    .chat-box {
-      width: 100%; max-width: 780px;
+    main { flex: 1; margin-top: -20px; position: relative; z-index: 10; margin-bottom: 40px; }
+    .chat-wrapper {
+      max-width: 900px;
+      margin: 0 auto;
       background: rgba(255, 255, 255, 0.95);
       backdrop-filter: blur(16px);
       border: 1px solid var(--etv-line);
-      border-radius: 20px; box-shadow: var(--shadow-lg);
-      display: flex; flex-direction: column; height: calc(100vh - 140px); min-height: 550px; overflow: hidden;
+      border-radius: 16px;
+      box-shadow: 0 20px 40px -15px rgba(15, 31, 70, 0.08);
+      display: flex;
+      flex-direction: column;
+      height: 620px;
+      overflow: hidden;
     }
 
-    .chat-header { background: var(--etv-navy); padding: 18px 24px; display: flex; align-items: center; gap: 15px; color: white; }
-    .chat-header-icon { width: 42px; height: 42px; background: rgba(255,255,255,0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; }
-    .chat-header-text h1 { font-size: 1.05rem; margin-bottom: 2px; font-weight: 800; }
-    .chat-header-text p { font-size: 0.78rem; color: #cbd5e1; }
+    .chat-header-bar {
+      padding: 16px 24px;
+      background: #f8fafc;
+      border-bottom: 1px solid var(--etv-line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .chat-status-indicator {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13.5px;
+      font-weight: 750;
+      color: var(--etv-navy);
+    }
+    .status-dot {
+      width: 10px; height: 10px; background: var(--etv-green);
+      border-radius: 50%; box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+      animation: pulseDot 2s infinite;
+    }
+    @keyframes pulseDot {
+      0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
+      70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+      100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+    }
 
-    .messages-area { flex: 1; padding: 24px; overflow-y: auto; display: flex; flex-direction: column; gap: 18px; }
-    .message-row { display: flex; width: 100%; animation: fadeIn 0.4s ease-out; }
-    .row-ai { justify-content: flex-start; }
-    .row-user { justify-content: flex-end; }
-    
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
+    /* Contenedor de Mensajes */
+    .chat-messages {
+      flex: 1;
+      padding: 24px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      background: #fdfdfd;
+    }
+
+    .message {
+      max-width: 78%;
+      padding: 14px 18px;
+      border-radius: 14px;
+      font-size: 14.5px;
+      line-height: 1.55;
+      word-break: break-word;
+      animation: fadeInMsg 0.3s ease forwards;
+    }
+    @keyframes fadeInMsg {
+      from { opacity: 0; transform: translateY(8px); }
       to { opacity: 1; transform: translateY(0); }
     }
-    
-    .bubble { max-width: 82%; padding: 16px 20px; font-size: 0.95rem; line-height: 1.6; }
-    .bubble-user { background: linear-gradient(135deg, var(--etv-blue), var(--etv-blue-dark)); color: white; border-radius: 20px 20px 4px 20px; box-shadow: 0 4px 10px rgba(21, 89, 183, 0.2); }
-    .bubble-ai { background: white; color: var(--etv-ink); border: 1px solid var(--etv-line); border-radius: 20px 20px 20px 4px; display: flex; gap: 14px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03); }
-    .ai-avatar { width: 32px; height: 32px; background: #eff6ff; color: var(--etv-blue); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 
-    .choices-container { margin-top: 12px; display: grid; gap: 10px; grid-template-columns: 1fr; }
-    @media(min-width: 500px) { .choices-container { grid-template-columns: 1fr 1fr; } }
-    
-    .choice-btn {
-      padding: 14px; background: white; border: 1px solid #bfdbfe;
-      border-radius: 12px; color: var(--etv-blue-dark); font-size: 0.85rem; font-weight: 700;
-      text-align: left; cursor: pointer; transition: all 0.2s ease;
-      display: flex; align-items: center; gap: 10px;
+    .message.bot {
+      align-self: flex-start;
+      background: #f1f5f9;
+      color: var(--etv-ink);
+      border-bottom-left-radius: 4px;
+      border: 1px solid #e2e8f0;
     }
-    .choice-btn:hover:not(:disabled) { background: #f0fdf4; border-color: #86efac; color: #166534; transform: translateY(-2px); }
-    .choice-btn:disabled { opacity: 0.6; cursor: not-allowed; background: #f8fafc; border-color: var(--etv-line); color: var(--etv-muted); }
+    .message.user {
+      align-self: flex-end;
+      background: var(--etv-blue);
+      color: white;
+      border-bottom-right-radius: 4px;
+      box-shadow: 0 4px 12px rgba(21, 89, 183, 0.2);
+    }
 
-    .composer { padding: 16px 24px; background: rgba(255, 255, 255, 0.95); border-top: 1px solid var(--etv-line); display: flex; gap: 12px; align-items: flex-end; }
-    .composer textarea { flex: 1; padding: 14px 18px; border: 1.5px solid var(--etv-line); border-radius: 16px; resize: none; font-family: inherit; font-size: 0.95rem; background: #f8fafc; transition: all 0.3s; }
-    .composer textarea:focus { outline: none; border-color: var(--etv-blue); background: white; box-shadow: 0 0 0 4px rgba(21, 89, 183, 0.12); }
-    .composer button { height: 48px; width: 48px; border-radius: 14px; background: var(--etv-blue); color: white; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: transform 0.2s; }
-    .composer button:hover { background: var(--etv-blue-dark); transform: scale(1.05); }
-    .composer button svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    /* Caja de Entrada de Chat */
+    .chat-input-area {
+      padding: 18px 24px;
+      background: #fff;
+      border-top: 1px solid var(--etv-line);
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+    .chat-input-area input {
+      flex: 1;
+      min-height: 50px;
+      padding: 12px 18px;
+      border: 1.5px solid var(--etv-line);
+      border-radius: 12px;
+      background: #f8fafc;
+      font-size: 14.5px;
+      color: var(--etv-ink);
+      outline: none;
+      transition: all 0.2s ease;
+    }
+    .chat-input-area input:focus {
+      border-color: var(--etv-blue);
+      background: #fff;
+      box-shadow: 0 0 0 4px rgba(21, 89, 183, 0.12);
+    }
+    .chat-send-btn {
+      min-height: 50px;
+      padding: 0 24px;
+      border-radius: 12px;
+      background: var(--etv-blue);
+      color: white;
+      font-weight: 750;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .chat-send-btn:hover { background: var(--etv-blue-dark); transform: translateY(-1px); }
 
-    /* Footer */
-    .professional-footer { padding: 40px 0 20px; background: #101a2d; color: #aebdd1; }
+    /* Footer estándar */
+    .professional-footer { padding: 40px 0 20px; background: #101a2d; color: #aebdd1; margin-top: auto; }
     .footer-main { display: grid; grid-template-columns: 1.6fr .7fr .7fr; gap: 60px; padding-bottom: 30px; }
-    .footer-brand p { max-width: 430px; margin: 14px 0 0; color: #9eafc6; font-size: 13px; line-height: 1.6; }
+    .footer-main p { max-width: 430px; margin: 14px 0 0; color: #9eafc6; font-size: 13px; line-height: 1.6; }
     .professional-footer .brand strong { color: #fff; }
     .professional-footer .brand small { color: #91a5c0; }
     .footer-main > div:not(.footer-brand) { display: flex; flex-direction: column; gap: 10px; }
     .footer-main > div:not(.footer-brand) > strong { margin-bottom: 4px; color: #fff; font-size: 13px; }
-    .footer-main > div:not(.footer-brand) > a { color: #aebdd1; font-size: 13px; }
-    .footer-main a:hover { color: #fff; }
+    .footer-main a { color: #aebdd1; font-size: 13px; transition: color 0.2s; }
+    .footer-main a:hover { color: #ffffff; }
     .footer-bottom { display: flex; justify-content: space-between; gap: 20px; padding-top: 18px; border-top: 1px solid rgba(255,255,255,.12); color: #7e91ad; font-size: 11px; }
 
     @media(max-width:850px) {
@@ -236,6 +377,7 @@
       .menu { display: block; }
       .footer-main { grid-template-columns: 1fr; gap: 30px; }
       .footer-bottom { flex-direction: column; }
+      .chat-wrapper { height: 500px; }
     }
   </style>
 
@@ -262,7 +404,7 @@
     <div class="shape"></div>
   </div>
 
-  <!-- Header / Nav Consistente -->
+  <!-- Header / Nav -->
   <header class="site-header">
     <div class="container site-nav">
       <a class="brand" href="index.html" aria-label="Elige Tu Vida, página de inicio">
@@ -275,64 +417,57 @@
       <button class="menu" type="button" aria-label="Abrir menú" aria-expanded="false">Menú ☰</button>
       <nav id="nav-options" aria-label="Navegación principal">
         <a href="index.html">Inicio</a>
-        <a href="reporte-seguro.html">Reporte seguro</a>
-        <a href="login.html" id="nav-login" class="button button-outline button-small">Ingresar</a>
-        <a class="button button-small button-primary" href="registro.html" id="nav-register">Crear cuenta</a>
+        <a href="chat.html" style="color:var(--etv-blue); background:#eff6ff;">Orientación guiada</a>
+        <a href="contacto.html">Contacto</a>
+        <a href="login.html" id="nav-login" class="button button-outline button-small" style="color:var(--etv-navy);">Ingresar</a>
+        <a href="registro.html" id="nav-register" class="button button-small">Registrarse</a>
       </nav>
     </div>
   </header>
 
-  <main>
-    <div class="chat-box">
-      <div class="chat-header">
-        <div class="chat-header-icon">
-          <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+  <!-- Hero Principal Compacto -->
+  <section class="hero-section">
+    <div class="hero-glow"></div>
+    <div class="container">
+      <div class="hero-centered-content">
+        <img src="assets/images/Escudo Elige Tu Vida Hack.png" alt="Insignia Elige Tu Vida" class="hero-subtle-image">
+        
+        <div class="hero-badge">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          Canal de Apoyo y Escucha
         </div>
-        <div class="chat-header-text">
-          <h1>Espacio de Orientación Nacional</h1>
-          <p id="chatSubtext">Tus datos están protegidos. No estás obligado a dar tu nombre.</p>
+        <h1>Orientación Guiada por Asistente</h1>
+        <p>Un espacio seguro para conversar, despejar dudas sobre convivencia o recibir pautas de bienestar emocional de manera confidencial.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interfaz del Chat -->
+  <main class="container">
+    <div class="chat-wrapper">
+      <div class="chat-header-bar">
+        <div class="chat-status-indicator">
+          <div class="status-dot"></div>
+          Asistente Virtual Elige Tu Vida (Activo)
+        </div>
+        <button type="button" id="clearChat" class="button button-outline button-small" style="font-size: 12px; min-height: 32px; padding: 4px 10px; color: var(--etv-muted);">Limpiar chat</button>
+      </div>
+
+      <div id="chatMessages" class="chat-messages">
+        <div class="message bot">
+          ¡Hola! Soy tu asistente de orientación en **Elige Tu Vida**. Estoy aquí para escucharte y orientarte con total confidencialidad. ¿Cómo te sientes hoy o de qué te gustaría hablar?
         </div>
       </div>
 
-      <div class="messages-area" id="messages">
-        <div class="message-row row-ai">
-          <div class="bubble bubble-ai">
-            <div class="ai-avatar">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>
-            </div>
-            <div id="welcomeMessage">Hola. Este es un espacio de orientación seguro y confidencial. Puedes contarme qué necesitas sin usar tu nombre real.</div>
-          </div>
-        </div>
-
-        <div class="message-row row-ai">
-          <div class="bubble bubble-ai">
-            <div class="ai-avatar">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>
-            </div>
-            <div>
-              ¿Qué opción se acerca más a lo que estás viviendo en este momento? Elige una categoría:
-              <div class="choices-container">
-                <button class="choice-btn" data-choice><span>😔</span> Me siento triste o con miedo</button>
-                <button class="choice-btn" data-choice><span>🎒</span> Tengo un problema en el colegio</button>
-                <button class="choice-btn" data-choice><span>📱</span> Me preocupa algo en internet</button>
-                <button class="choice-btn" data-choice><span>💬</span> Quiero contar otra situación</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <form class="composer" id="chatForm">
-        <textarea id="chatInput" rows="1" placeholder="Escribe tu mensaje con confianza..."></textarea>
-        <button type="submit" aria-label="Enviar">
-          <svg viewBox="0 0 24 24"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
-        </button>
+      <form id="chatForm" class="chat-input-area">
+        <input type="text" id="chatInput" placeholder="Escribe tu mensaje aquí..." autocomplete="off" required>
+        <button type="submit" class="chat-send-btn">Enviar</button>
       </form>
     </div>
   </main>
 
-  <!-- Footer -->
-  <footer class="professional-footer">
+  <!-- Footer estándar -->
+  <professional-footer class="professional-footer">
     <div class="container footer-main">
       <div class="footer-brand">
         <a class="brand" href="index.html">
@@ -358,134 +493,157 @@
       <span>© 2026 Elige Tu Vida</span>
       <span>Proyecto de convivencia escolar y prevención integral</span>
     </div>
-  </footer>
+  </professional-footer>
 
-  <!-- Script Integrado con Supabase y Detección de Sesión -->
+  <!-- Script con sincronización de sesión, cierre instantáneo y lógica interactiva del chat -->
   <script type="module">
     import { supabase } from "./conexion.js";
 
-    document.addEventListener("DOMContentLoaded", async () => {
-      const form = document.getElementById("chatForm");
-      const input = document.getElementById("chatInput");
-      const messages = document.getElementById("messages");
-      const welcomeMessage = document.getElementById("welcomeMessage");
-      const chatSubtext = document.getElementById("chatSubtext");
-
-      const loginLink = document.getElementById("nav-login");
-      const registerLink = document.getElementById("nav-register");
+    document.addEventListener("DOMContentLoaded", () => {
       const navContainer = document.getElementById("nav-options");
 
-      // Cargar sesión activa de Supabase o LocalStorage
-      const { data: { session } } = await supabase.auth.getSession();
-      const localSession = JSON.parse(localStorage.getItem("etv_session") || "null");
-      const localUserObj = JSON.parse(localStorage.getItem("usuario") || sessionStorage.getItem("usuario") || "null");
+      function renderLoggedOutState() {
+          if (!navContainer) return;
+          const existingBadge = navContainer.querySelector(".user-badge-container");
+          const existingLogout = navContainer.querySelector("#nav-logout-btn");
+          if (existingBadge) existingBadge.remove();
+          if (existingLogout) existingLogout.remove();
 
-      const user = session?.user;
-      const currentName = user?.user_metadata?.full_name || 
-                          user?.user_metadata?.nombre || 
-                          localSession?.name || 
-                          localUserObj?.nombre || 
-                          localUserObj?.name;
+          if (!document.getElementById("nav-login")) {
+              const loginLink = document.createElement("a");
+              loginLink.href = "login.html";
+              loginLink.id = "nav-login";
+              loginLink.className = "button button-outline button-small";
+              loginLink.style.color = "var(--etv-navy)";
+              loginLink.textContent = "Ingresar";
+              navContainer.appendChild(loginLink);
+          }
 
-      if (user || localSession || localUserObj) {
-        if (loginLink) loginLink.remove();
-        if (registerLink) registerLink.remove();
-
-        const userBadge = document.createElement("div");
-        userBadge.className = "user-badge-container";
-        
-        const initial = (currentName ? currentName.charAt(0) : "U").toUpperCase();
-        userBadge.innerHTML = `
-          <div class="user-avatar-circle">${initial}</div>
-          <span class="user-name-text">${currentName || 'Usuario'}</span>
-        `;
-
-        const logoutButton = document.createElement("button");
-        logoutButton.textContent = "Cerrar sesión";
-        logoutButton.className = "button button-small button-outline";
-        logoutButton.style.marginLeft = "4px";
-
-        logoutButton.addEventListener("click", async () => {
-          await supabase.auth.signOut();
-          localStorage.removeItem("etv_session");
-          localStorage.removeItem("usuario");
-          sessionStorage.removeItem("usuario");
-          window.location.reload();
-        });
-
-        navContainer.appendChild(userBadge);
-        navContainer.appendChild(logoutButton);
-
-        if (welcomeMessage && currentName) {
-          welcomeMessage.textContent = `Hola, ${currentName}. Este es un espacio de orientación seguro y confidencial. Puedes contarme qué necesitas.`;
-        }
-        if (chatSubtext && currentName) {
-          chatSubtext.textContent = `Sesión activa como ${currentName}. Tu información está totalmente protegida.`;
-        }
+          if (!document.getElementById("nav-register")) {
+              const registerLink = document.createElement("a");
+              registerLink.href = "registro.html";
+              registerLink.id = "nav-register";
+              registerLink.className = "button button-small";
+              registerLink.textContent = "Registrarse";
+              navContainer.appendChild(registerLink);
+          }
       }
 
-      if (!form || !input || !messages) return;
+      supabase.auth.onAuthStateChange(async (event, session) => {
+          const user = session?.user;
 
-      const aiAvatarSVG = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>`;
+          if (user) {
+              let userName = user.user_metadata?.nombre || user.user_metadata?.full_name || user.email.split('@')[0];
 
-      const add = (text, type) => {
-        const wrapper = document.createElement("div");
-        wrapper.className = `message-row ${type === 'user' ? 'row-user' : 'row-ai'}`;
-        
-        const message = document.createElement("div");
-        if (type === 'user') {
-          message.className = "bubble bubble-user";
-          message.textContent = text.replace(/^(😔|🎒|📱|💬)\s*/, '');
-        } else {
-          message.className = "bubble bubble-ai";
-          message.innerHTML = `<div class="ai-avatar">${aiAvatarSVG}</div><div>${text}</div>`;
-        }
-        
-        wrapper.appendChild(message);
-        messages.appendChild(wrapper);
-        messages.scrollTop = messages.scrollHeight; 
-      };
+              try {
+                  const { data: perfilData } = await supabase
+                      .from('perfiles')
+                      .select('nombre')
+                      .eq('id', user.id)
+                      .single();
 
-      document.querySelectorAll(".choice-btn").forEach((button) => {
-        button.addEventListener("click", () => {
-          const choiceText = button.textContent.trim();
-          add(choiceText, "user");
-          
-          document.querySelectorAll(".choice-btn").forEach((item) => { 
-            item.disabled = true; 
-          });
-          
-          setTimeout(() => {
-            add("Gracias por compartirlo de forma confidencial. Puedes escribir un detalle adicional abajo si lo deseas, sin incluir datos personales que te identifiquen.", "assistant");
-          }, 500);
-        });
-      });
+                  if (perfilData?.nombre) {
+                      userName = perfilData.nombre;
+                  }
+              } catch (err) {
+                  console.error("Error al obtener perfil:", err);
+              }
 
-      form.addEventListener("submit", (event) => {
-        event.preventDefault();
-        const text = input.value.trim();
-        if (!text) return;
-        
-        add(text, "user");
-        input.value = "";
-        
-        const critical = /suicid|arma|abuso|matar|cortar|golpe/.test(text.toLowerCase());
-        
-        setTimeout(() => {
-          if (critical) {
-            add("Esta situación puede requerir apoyo profesional inmediato y prioritario. Te invitamos a buscar un adulto de confianza o comunicarte con la Línea 106 de atención nacional.", "assistant");
+              if (navContainer && !document.querySelector(".user-badge-container")) {
+                  const loginLink = document.getElementById("nav-login");
+                  const registerLink = document.getElementById("nav-register");
+                  if (loginLink) loginLink.remove();
+                  if (registerLink) registerLink.remove();
+
+                  const userBadge = document.createElement("div");
+                  userBadge.className = "user-badge-container";
+                  
+                  const initial = (userName ? userName.charAt(0) : "U").toUpperCase();
+                  userBadge.innerHTML = `
+                    <div class="user-avatar-circle">${initial}</div>
+                    <span class="user-name-text">${userName}</span>
+                  `;
+
+                  const logoutButton = document.createElement("button");
+                  logoutButton.id = "nav-logout-btn";
+                  logoutButton.textContent = "Cerrar sesión";
+                  logoutButton.className = "button button-small button-outline";
+                  logoutButton.style.color = "var(--etv-navy)";
+                  logoutButton.style.marginLeft = "4px";
+
+                  logoutButton.addEventListener("click", async () => {
+                      renderLoggedOutState();
+                      await supabase.auth.signOut();
+                      localStorage.clear();
+                      sessionStorage.clear();
+                  });
+
+                  navContainer.appendChild(userBadge);
+                  navContainer.appendChild(logoutButton);
+              }
           } else {
-            add("Hemos recibido tu mensaje de manera segura y anónima. Recuerda que no estás solo/a y cuentas con canales de apoyo institucional para respaldarte.", "assistant");
+              renderLoggedOutState();
           }
-        }, 600);
       });
 
-      input.addEventListener("keydown", (e) => {
-        if (e.key === "Enter" && !e.shiftKey) {
-          e.preventDefault();
-          form.requestSubmit();
+      // Lógica interactiva del chat de orientación
+      const chatForm = document.getElementById("chatForm");
+      const chatInput = document.getElementById("chatInput");
+      const chatMessages = document.getElementById("chatMessages");
+      const clearChatBtn = document.getElementById("clearChat");
+
+      function appendMessage(sender, text) {
+        const msgDiv = document.createElement("div");
+        msgDiv.className = `message ${sender}`;
+        msgDiv.textContent = text;
+        chatMessages.appendChild(msgDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      }
+
+      function getBotResponse(userText) {
+        const lower = userText.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        
+        if (/hola|buenos dias|buenas tardes|saludos/.test(lower)) {
+          return "¡Hola! Qué bueno saludarte. ¿En qué te puedo colaborar hoy respecto a tus inquietudes o bienestar?";
         }
-      });
+        if (/triste|mal|deprimid|solo|ansios|preocupad|llorar/.test(lower)) {
+          return "Lamento mucho que estés pasando por un momento difícil. Recuerda que tus sentimientos son válidos y no estás solo/a. ¿Te gustaría conversar sobre qué te hace sentir así?";
+        }
+        if (/acoso|bullying|amenaza|golpe|molestia/.test(lower)) {
+          return "Lo que mencionas es muy serio. Te sugiero reportarlo de manera formal a través de nuestra sección de 'Reporte seguro' para que la institución pueda activar las rutas de apoyo y protección necesarias.";
+        }
+        if (/gracias|adios|chao/.test(lower)) {
+          return "Con mucho gusto. Estoy aquí siempre que lo necesites. ¡Que tengas un excelente día!";
+        }
+        return "Comprendo lo que compartes. Como asistente de orientación, te invito a mantener la calma y buscar apoyo en personas de confianza o utilizar nuestro canal de reporte seguro si la situación lo requiere.";
+      }
+
+      if (chatForm) {
+        chatForm.addEventListener("submit", (e) => {
+          e.preventDefault();
+          const text = chatInput.value.trim();
+          if (!text) return;
+
+          appendMessage("user", text);
+          chatInput.value = "";
+
+          // Simular tiempo de respuesta del asistente
+          setTimeout(() => {
+            const reply = getBotResponse(text);
+            appendMessage("bot", reply);
+          }, 600);
+        });
+      }
+
+      if (clearChatBtn) {
+        clearChatBtn.addEventListener("click", () => {
+          chatMessages.innerHTML = `
+            <div class="message bot">
+              Conversación reiniciada. ¿En qué te puedo colaborar o de qué te gustaría hablar ahora?
+            </div>
+          `;
+        });
+      }
     });
   </script>
 </body>
