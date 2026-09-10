@@ -204,68 +204,54 @@ header{position:sticky;top:0;z-index:10;border-bottom:1px solid var(--line);back
             setBusy(button, true);
 
             try {
-                // 1. Intento de inicio de sesión mediante Supabase Auth
+                // 1. Inicio de sesión seguro con Supabase Auth
                 const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
                     email,
                     password
                 });
 
-                if (!authError && authData?.user) {
-                    const authUser = authData.user;
-                    const userName = authUser.user_metadata?.full_name || authUser.email.split('@')[0];
-
-                    localStorage.setItem("etv_session", JSON.stringify({
-                        id: authUser.id,
-                        name: userName,
-                        email: authUser.email,
-                        school: authUser.user_metadata?.school || "Colegio",
-                        role: authUser.user_metadata?.role || "estudiante",
-                        loginTime: new Date().toISOString()
-                    }));
-
-                    setAlert("loginAlert", `¡Bienvenido/a de nuevo, ${userName}! Redirigiendo...`, true);
-
-                    setTimeout(() => {
-                        window.location.href = "index.html";
-                    }, 1000);
-                    return;
-                }
-
-                // 2. Consulta de respaldo en la tabla personalizada 'usuarios'
-                const { data: users, error: dbError } = await supabase
-                    .from('usuarios')
-                    .select('*')
-                    .eq('email', email)
-                    .eq('password', password);
-
-                if (dbError) {
-                    console.error('Error Supabase DB:', dbError);
-                    setAlert("loginAlert", "Error al conectar con la base de datos.", false);
+                if (authError || !authData?.user) {
+                    let mensajeError = "Correo o contraseña incorrectos.";
+                    if (authError?.message.includes("Email not confirmed")) {
+                        mensajeError = "Debes confirmar tu correo electrónico antes de ingresar.";
+                    }
+                    setAlert("loginAlert", mensajeError, false);
                     setBusy(button, false);
                     return;
                 }
 
-                if (users && users.length > 0) {
-                    const user = users[0];
+                const authUser = authData.user;
+                
+                // 2. Extraer metadatos básicos
+                let nombre = authUser.user_metadata?.nombre || authUser.email.split('@')[0];
+                let colegio = authUser.user_metadata?.colegio || "";
 
-                    localStorage.setItem("etv_session", JSON.stringify({
-                        id: user.id,
-                        name: user.name || user.nombre || "Usuario",
-                        email: user.email,
-                        school: user.school || user.colegio || "",
-                        role: "estudiante",
-                        loginTime: new Date().toISOString()
-                    }));
+                // 3. Consultar la tabla 'perfiles' para obtener los datos actualizados
+                const { data: perfilData, error: perfilError } = await supabase
+                    .from('perfiles')
+                    .select('nombre, colegio')
+                    .eq('id', authUser.id)
+                    .single();
 
-                    setAlert("loginAlert", `¡Bienvenido/a de nuevo, ${user.name || user.nombre}! Redirigiendo...`, true);
-
-                    setTimeout(() => {
-                        window.location.href = "index.html";
-                    }, 1000);
-                } else {
-                    setAlert("loginAlert", "Correo o contraseña incorrectos. Verifica tus credenciales.", false);
-                    setBusy(button, false);
+                if (perfilData && !perfilError) {
+                    nombre = perfilData.nombre || nombre;
+                    colegio = perfilData.colegio || colegio;
                 }
+
+                // 4. Guardar sesión en localStorage unificando el formato con registro.html
+                localStorage.setItem("usuario", JSON.stringify({
+                    id: authUser.id,
+                    nombre: nombre,
+                    colegio: colegio,
+                    correo: authUser.email
+                }));
+
+                setAlert("loginAlert", `¡Bienvenido/a de nuevo, ${nombre}! Redirigiendo...`, true);
+
+                setTimeout(() => {
+                    window.location.href = "index.html";
+                }, 1000);
+
             } catch (err) {
                 console.error("Excepción inesperada:", err);
                 setAlert("loginAlert", "Ocurrió un error inesperado al procesar la solicitud.", false);
