@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Ponte en contacto con el equipo de Elige Tu Vida para consultas institucionales y de soporte.">
+  <meta name="description" content="Página de contacto de Elige Tu Vida, canales de comunicación y soporte institucional.">
   <title>Contacto | Elige Tu Vida</title>
 
   <link rel="icon" href="assets/images/Favicon Hack.png" type="image/svg+xml">
@@ -120,11 +120,29 @@
       cursor: pointer;
     }
     .button:hover { transform: translateY(-2px); box-shadow: 0 10px 20px -5px rgba(21,89,183,0.3); }
-    .button-small { min-height: 38px; padding: 8px 14px; font-size: 13px; }
-    .button-primary { color: #fff; background: var(--etv-blue); box-shadow: 0 4px 14px rgba(21,89,183,.3); }
-    .button-primary:hover { background: var(--etv-blue-dark); }
+    .button-small { min-height: 38px; padding: 8px 14px; font-size: 13px; color: #fff; background: var(--etv-blue); box-shadow: 0 4px 12px rgba(21,89,183,.15); }
+    .button-small:hover { background: var(--etv-blue-dark); }
     .button-outline { border-color: #cbd5e1; color: var(--etv-navy); background: #fff; }
     .button-outline:hover { border-color: var(--etv-blue); background: #eff6ff; color: var(--etv-blue); }
+
+    /* Insignia de usuario */
+    .user-badge-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #f1f5f9;
+      padding: 5px 12px 5px 6px;
+      border-radius: 30px;
+      border: 1px solid #e2e8f0;
+    }
+    .user-avatar-circle {
+      width: 30px; height: 30px; background: var(--etv-blue); color: white;
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: bold;
+    }
+    .user-name-text {
+      font-size: 13px; font-weight: 700; color: var(--etv-navy);
+    }
 
     .menu {
       display: none;
@@ -138,51 +156,54 @@
       margin-left: auto;
     }
 
-    /* Estructura Contacto Split */
-    .form-page { flex: 1; display: flex; flex-direction: column; padding: 40px 0; }
-    .contact-hero { text-align: center; max-width: 680px; margin: 0 auto 36px; }
-    .contact-hero h1 { color: var(--etv-navy); font-size: 34px; font-weight: 800; margin-bottom: 8px; }
-    .contact-hero p { color: var(--etv-muted); font-size: 15px; }
+    /* Estructura de Contacto */
+    .form-page { flex: 1; display: flex; flex-direction: column; padding: 40px 0 60px; }
+    .form-head { padding: 40px 0 30px; text-align: center; }
+    .form-head h1 { color: var(--etv-navy); font-size: 34px; font-weight: 800; margin-bottom: 8px; }
+    .form-head p { color: var(--etv-muted); font-size: 15px; }
 
-    .split-card { display: grid; grid-template-columns: 1fr 1.4fr; border: 1px solid var(--etv-line); border-radius: 20px; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(16px); overflow: hidden; box-shadow: var(--shadow-lg); width: 100%; max-width: 1000px; margin: 0 auto; }
+    .form-wrap { display: grid; grid-template-columns: 320px minmax(0, 1fr); gap: 35px; align-items: start; }
+    .side, .formcard { padding: 32px; border: 1px solid var(--etv-line); border-radius: 20px; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(16px); box-shadow: var(--shadow-lg); }
+    .side { height: max-content; background: linear-gradient(135deg, rgba(239,246,255,0.9) 0%, rgba(224,242,254,0.9) 100%); }
+    .side h2, .formcard h2 { margin-top: 0; color: var(--etv-navy); font-size: 20px; font-weight: 800; margin-bottom: 12px; }
+    .side p { color: var(--etv-muted); font-size: 14px; line-height: 1.6; margin-bottom: 20px; }
 
-    .side-info { background: linear-gradient(135deg, var(--etv-navy) 0%, var(--etv-blue) 100%); padding: 48px; display: flex; flex-direction: column; justify-content: space-between; color: #fff; }
-    .side-info h2 { font-size: 24px; line-height: 1.3; margin-bottom: 12px; color: #fff; font-weight: 800; }
-    .side-info p { color: #e0f2fe; font-size: 14px; opacity: 0.95; margin-bottom: 20px; line-height: 1.5; }
+    .contact-info-list { display: flex; flex-direction: column; gap: 16px; margin-top: 20px; }
+    .contact-item { display: flex; align-items: flex-start; gap: 12px; font-size: 14px; color: #334155; }
+    .contact-item strong { display: block; color: var(--etv-navy); font-size: 13px; text-transform: uppercase; letter-spacing: .05em; }
 
-    .formcard { padding: 48px; display: flex; flex-direction: column; justify-content: center; }
-    .formcard h2 { margin-top: 0; margin-bottom: 6px; color: var(--etv-navy); font-size: 24px; font-weight: 800; }
-    .formcard p.sub { margin-bottom: 20px; color: var(--etv-muted); font-size: 14px; }
+    /* Formulario */
+    .form-group { margin-bottom: 20px; }
+    .form-label { display: block; font-size: 13px; font-weight: 700; color: var(--etv-navy); margin-bottom: 8px; }
+    .form-input, .form-textarea {
+      width: 100%; padding: 12px 16px; border: 1px solid #cbd5e1; border-radius: 10px;
+      background: #fff; color: var(--etv-ink); font-size: 14px; outline: none; transition: all 0.2s;
+    }
+    .form-input:focus, .form-textarea:focus { border-color: var(--etv-blue); box-shadow: 0 0 0 3px rgba(21, 89, 183, 0.15); }
+    .form-textarea { resize: vertical; min-height: 130px; }
 
-    .field { margin-bottom: 16px; }
-    .field label { display: block; margin-bottom: 6px; font-size: 13px; font-weight: 700; color: var(--etv-navy); }
-    .field input, .field textarea, .field select { width: 100%; min-height: 46px; padding: 10px 16px; border: 1.5px solid var(--etv-line); border-radius: 12px; background: #f8fafc; font-size: 14px; transition: all 0.2s; }
-    .field textarea { min-height: 120px; resize: vertical; }
-    .field input:focus, .field textarea:focus, .field select:focus { outline: none; border-color: var(--etv-blue); background: #fff; box-shadow: 0 0 0 4px rgba(21, 89, 183, 0.12); }
+    .button-primary { width: 100%; background: var(--etv-blue); color: #fff; font-size: 15px; font-weight: 700; padding: 12px 24px; border-radius: 10px; border: none; cursor: pointer; transition: background 0.2s; }
+    .button-primary:hover { background: var(--etv-blue-dark); }
 
-    .error { display: block; min-height: 14px; color: #dc2626; font-size: 12px; font-weight: 700; margin-top: 3px; }
-    .alert { margin-bottom: 15px; padding: 12px 16px; border-radius: 10px; font-size: 13px; font-weight: 600; border: 1px solid #fca5a5; color: #991b1b; background: #fef2f2; }
-    .alert.ok { border-color: #86efac; color: #166534; background: #f0fdf4; }
+    .alert-success {
+      display: none; padding: 14px 18px; border-radius: 10px; background: #ecfdf5; border: 1px solid #10b981;
+      color: #065f46; font-size: 14px; font-weight: 600; margin-bottom: 20px; text-align: center;
+    }
 
-    .text-link { color: var(--etv-blue); font-weight: 700; background: none; border: none; padding: 0; cursor: pointer; }
-    .text-link:hover { color: var(--etv-navy); text-decoration: underline; }
-
-    /* Footer */
+    /* Footer estándar */
     .professional-footer { padding: 40px 0 20px; background: #101a2d; color: #aebdd1; margin-top: auto; }
     .footer-main { display: grid; grid-template-columns: 1.6fr .7fr .7fr; gap: 60px; padding-bottom: 30px; }
-    .footer-brand p { max-width: 430px; margin: 14px 0 0; color: #9eafc6; font-size: 13px; line-height: 1.6; }
+    .footer-main p { max-width: 430px; margin: 14px 0 0; color: #9eafc6; font-size: 13px; line-height: 1.6; }
     .professional-footer .brand strong { color: #fff; }
     .professional-footer .brand small { color: #91a5c0; }
     .footer-main > div:not(.footer-brand) { display: flex; flex-direction: column; gap: 10px; }
     .footer-main > div:not(.footer-brand) > strong { margin-bottom: 4px; color: #fff; font-size: 13px; }
-    .footer-main > div:not(.footer-brand) > a { color: #aebdd1; font-size: 13px; }
-    .footer-main a:hover { color: #fff; }
+    .footer-main a { color: #aebdd1; font-size: 13px; transition: color 0.2s; }
+    .footer-main a:hover { color: #ffffff; }
     .footer-bottom { display: flex; justify-content: space-between; gap: 20px; padding-top: 18px; border-top: 1px solid rgba(255,255,255,.12); color: #7e91ad; font-size: 11px; }
 
     @media(max-width:880px){
-      .split-card{grid-template-columns:1fr}
-      .side-info{padding:30px 20px}
-      .formcard{padding:30px 20px}
+      .form-wrap{grid-template-columns:1fr}
       .site-nav nav { display: none; }
       .site-nav nav.open {
         position: absolute; top: 78px; right: 0; left: 0;
@@ -202,13 +223,13 @@
     document.addEventListener("DOMContentLoaded", () => {
         const button = document.querySelector(".menu");
         const navigation = document.querySelector(".site-nav nav");
-        if (!button || !navigation) return;
-
-        button.addEventListener("click", () => {
-            const open = button.getAttribute("aria-expanded") === "true";
-            button.setAttribute("aria-expanded", String(!open));
-            navigation.classList.toggle("open", !open);
-        });
+        if (button && navigation) {
+            button.addEventListener("click", () => {
+                const open = button.getAttribute("aria-expanded") === "true";
+                button.setAttribute("aria-expanded", String(!open));
+                navigation.classList.toggle("open", !open);
+            });
+        }
     });
   </script>
 </head>
@@ -235,7 +256,8 @@
         <a href="index.html">Inicio</a>
         <a href="chat.html">Orientación guiada</a>
         <a href="reporte-seguro.html">Reporte seguro</a>
-        <a href="login.html" class="button button-outline button-small">Ingresar</a>
+        <a href="login.html" id="nav-login" class="button button-outline button-small" style="color:var(--etv-navy);">Ingresar</a>
+        <a href="registro.html" id="nav-register" class="button button-small">Registrarse</a>
       </nav>
     </div>
   </header>
@@ -243,84 +265,66 @@
   <main class="form-page">
     <div class="container">
       
-      <div class="contact-hero">
-        <span style="color: var(--etv-blue); font-size: 12px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; display: block; margin-bottom: 8px;">CANAL INSTITUCIONAL</span>
-        <h1>Contacto y orientación</h1>
-        <p>No compartas información de emergencia ni datos sensibles en este formulario institucional.</p>
+      <div class="form-head">
+        <span style="color: var(--etv-blue); font-size: 12px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; display: block; margin-bottom: 8px;">COMUNICACIÓN INSTITUCIONAL</span>
+        <h1>Ponte en contacto</h1>
+        <p>¿Tienes dudas, sugerencias o requieres soporte sobre la plataforma? Escríbenos.</p>
       </div>
 
-      <div class="split-card">
-        
-        <!-- Lateral de Información -->
-        <div class="side-info">
-          <div>
-            <span style="color: #e0f2fe; font-size: 12px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; display: block; margin-bottom: 10px;">RECOMENDACIÓN</span>
-            <h2>Antes de escribir</h2>
-            <p>Para situaciones de convivencia o riesgo escolar, es más seguro y rápido usar nuestros canales especializados:</p>
-            
-            <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 20px;">
-              <a href="chat.html" style="background: rgba(255,255,255,0.1); padding: 12px 16px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; font-weight: 700; font-size: 14px; transition: background 0.2s;">
-                <span>Hablar con orientación guiada</span>
-                <span>&rarr;</span>
-              </a>
-              <a href="reporte-seguro.html" style="background: rgba(255,255,255,0.1); padding: 12px 16px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; font-weight: 700; font-size: 14px; transition: background 0.2s;">
-                <span>Hacer reporte seguro</span>
-                <span>&rarr;</span>
-              </a>
+      <div class="form-wrap">
+        <aside class="side">
+          <h2>Información de apoyo</h2>
+          <p>Estamos comprometidos con la convivencia escolar y la correcta orientación a la comunidad académica.</p>
+          
+          <div class="contact-info-list">
+            <div class="contact-item">
+              <div>
+                <strong>Soporte Técnico</strong>
+                <span>soporte@eligetuvida.site</span>
+              </div>
+            </div>
+            <div class="contact-item">
+              <div>
+                <strong>Canal Institucional</strong>
+                <span>Bogotá D.C., Colombia</span>
+              </div>
             </div>
           </div>
+        </aside>
 
-          <div style="margin-top: 30px; font-size: 13px; opacity: 0.85;">
-            <p style="margin: 0;">¿Dudas sobre el funcionamiento de la plataforma? Envíanos tu consulta aquí.</p>
-          </div>
-        </div>
+        <article class="formcard">
+          <h2>Envíanos un mensaje</h2>
+          <p>Completa el formulario a continuación y nos pondremos en contacto contigo a la brevedad posible.</p>
 
-        <!-- Formulario de Contacto -->
-        <form class="formcard" id="contactForm" novalidate>
-          <h2>Escríbenos</h2>
-          <p class="sub">Completa los datos y te responderemos a la mayor brevedad.</p>
-
-          <div id="contactAlert" class="alert" role="status" aria-live="polite" hidden></div>
-
-          <div class="field">
-            <label for="contactName">Nombre</label>
-            <input id="contactName" name="name" autocomplete="name" required placeholder="Tu nombre">
-            <small id="contactNameError" class="error"></small>
+          <div id="alert-success" class="alert-success">
+            ¡Mensaje enviado con éxito! Gracias por comunicarte con nosotros.
           </div>
 
-          <div class="field">
-            <label for="contactEmail">Correo electrónico</label>
-            <input id="contactEmail" name="email" type="email" autocomplete="email" required placeholder="nombre@correo.com">
-            <small id="contactEmailError" class="error"></small>
-          </div>
+          <form id="contact-form">
+            <div class="form-group">
+              <label class="form-label" for="nombre">Nombre completo</label>
+              <input class="form-input" type="text" id="nombre" name="nombre" placeholder="Ej. Juan Pérez" required>
+            </div>
 
-          <div class="field">
-            <label for="contactSubject">Motivo</label>
-            <select id="contactSubject" name="subject" required>
-              <option value="">Selecciona una opción</option>
-              <option>Consulta sobre la plataforma</option>
-              <option>Privacidad y datos personales</option>
-              <option>Información institucional</option>
-            </select>
-            <small id="contactSubjectError" class="error"></small>
-          </div>
+            <div class="form-group">
+              <label class="form-label" for="correo">Correo electrónico</label>
+              <input class="form-input" type="email" id="correo" name="correo" placeholder="tucorreo@dominio.com" required>
+            </div>
 
-          <div class="field">
-            <label for="contactMessage">Mensaje</label>
-            <textarea id="contactMessage" name="message" required maxlength="1200" placeholder="Escribe tu consulta sin incluir información sensible..."></textarea>
-            <small id="contactMessageError" class="error"></small>
-          </div>
+            <div class="form-group">
+              <label class="form-label" for="mensaje">Mensaje o consulta</label>
+              <textarea class="form-textarea" id="mensaje" name="mensaje" placeholder="Escribe detalladamente tu solicitud..." required></textarea>
+            </div>
 
-          <button class="button button-primary" id="contactSubmit" type="submit" data-loading-text="Enviando..." style="width: 100%;">
-            Enviar mensaje
-          </button>
-        </form>
-
+            <button type="submit" class="button-primary">Enviar mensaje</button>
+          </form>
+        </article>
       </div>
+
     </div>
   </main>
 
-  <!-- Footer -->
+  <!-- Footer estándar -->
   <footer class="professional-footer">
     <div class="container footer-main">
       <div class="footer-brand">
@@ -349,70 +353,81 @@
     </div>
   </footer>
 
-  <!-- Lógica modular de validación -->
-  <script>
-    "use strict";
+  <!-- Script interactivo del formulario y Supabase Auth -->
+  <script type="module">
+    import { supabase } from './conexion.js';
 
-    function validEmail(value) {
-        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
-    }
+    document.addEventListener("DOMContentLoaded", async () => {
+        // 1. Verificación de sesión dinámica en barra de navegación
+        const loginLink = document.getElementById("nav-login");
+        const registerLink = document.getElementById("nav-register");
+        const navContainer = document.getElementById("nav-options");
 
-    function setError(id, message) {
-        const element = document.getElementById(id);
-        if (element) element.textContent = message;
-    }
+        if (navContainer) {
+            try {
+                const { data: { session } } = await supabase.auth.getSession();
+                const user = session?.user;
 
-    function setAlert(id, message, success) {
-        const element = document.getElementById(id);
-        if (!element) return;
-        element.hidden = false;
-        element.textContent = message;
-        element.classList.toggle("ok", success);
-    }
+                if (user) {
+                    let userName = user.user_metadata?.nombre || user.user_metadata?.full_name || user.email.split('@')[0];
 
-    function setBusy(button, busy) {
-        if (!button) return;
-        if (!button.dataset.defaultText) button.dataset.defaultText = button.textContent.trim();
-        button.disabled = busy;
-        button.setAttribute("aria-busy", String(busy));
-        button.textContent = busy ? button.dataset.loadingText : button.dataset.defaultText;
-    }
+                    const { data: perfilData } = await supabase
+                        .from('perfiles')
+                        .select('nombre')
+                        .eq('id', user.id)
+                        .single();
 
-    document.addEventListener("DOMContentLoaded", () => {
-        const form = document.getElementById("contactForm");
-        if (!form) return;
+                    if (perfilData?.nombre) {
+                        userName = perfilData.nombre;
+                    }
 
-        form.addEventListener("submit", (event) => {
-            event.preventDefault();
-            const button = document.getElementById("contactSubmit");
-            const name = document.getElementById("contactName").value.trim();
-            const email = document.getElementById("contactEmail").value.trim();
-            const subject = document.getElementById("contactSubject").value;
-            const message = document.getElementById("contactMessage").value.trim();
+                    if (loginLink) loginLink.remove();
+                    if (registerLink) registerLink.remove();
 
-            ["contactNameError", "contactEmailError", "contactSubjectError", "contactMessageError"].forEach((id) => setError(id, ""));
-            setAlert("contactAlert", "", false);
+                    const userBadge = document.createElement("div");
+                    userBadge.className = "user-badge-container";
+                    
+                    const initial = (userName ? userName.charAt(0) : "U").toUpperCase();
+                    userBadge.innerHTML = `
+                      <div class="user-avatar-circle">${initial}</div>
+                      <span class="user-name-text">${userName}</span>
+                    `;
 
-            let valid = true;
-            if (name.length < 3) { setError("contactNameError", "Escribe tu nombre."); valid = false; }
-            if (!validEmail(email)) { setError("contactEmailError", "Escribe un correo válido."); valid = false; }
-            if (!subject) { setError("contactSubjectError", "Selecciona un motivo."); valid = false; }
-            if (message.length < 10) { setError("contactMessageError", "Escribe al menos 10 caracteres."); valid = false; }
+                    const logoutButton = document.createElement("button");
+                    logoutButton.textContent = "Cerrar sesión";
+                    logoutButton.className = "button button-small button-outline";
+                    logoutButton.style.marginLeft = "4px";
 
-            if (!valid) {
-                setAlert("contactAlert", "Revisa los campos señalados.", false);
-                return;
+                    logoutButton.addEventListener("click", async () => {
+                        await supabase.auth.signOut();
+                        window.location.reload();
+                    });
+
+                    navContainer.appendChild(userBadge);
+                    navContainer.appendChild(logoutButton);
+                }
+            } catch (e) {
+                console.error("Error al verificar la sesión con Supabase:", e);
             }
+        }
 
-            setBusy(button, true);
+        // 2. Manejo del formulario de contacto
+        const contactForm = document.getElementById("contact-form");
+        const alertSuccess = document.getElementById("alert-success");
 
-            // Simulación de envío o conexión con endpoint institucional
-            setTimeout(() => {
-                setBusy(button, false);
-                setAlert("contactAlert", "¡Mensaje enviado con éxito! Nos pondremos en contacto contigo pronto.", true);
-                form.reset();
-            }, 1000);
-        });
+        if (contactForm) {
+            contactForm.addEventListener("submit", (e) => {
+                e.preventDefault();
+                // Simulación de envío exitoso o integración futura con tabla en Supabase
+                contactForm.reset();
+                if (alertSuccess) {
+                    alertSuccess.style.display = "block";
+                    setTimeout(() => {
+                        alertSuccess.style.display = "none";
+                    }, 5000);
+                }
+            });
+        }
     });
   </script>
 </body>
