@@ -340,7 +340,7 @@
       <h3>Uso responsable</h3>
       <p>Elige Tu Vida orienta rutas de apoyo escolar. No reemplaza servicios de emergencia, atención médica o protocolos institucionales obligatorios.</p>
       <h3>Datos personales</h3>
-      <p>El tratamiento institucional debe respetar la normatividad vigente aplicable de protección de datos y la protección reforzada de menores.</p>
+      <p>El tratamiento institucional debe respetar la normatividad vigente aplicable de protección de datos y la protección reinforced de menores.</p>
       <h3>Ruta anónima</h3>
       <p>Puedes usar el chat y el reporte sin crear cuenta. Evita incluir datos identificables si deseas permanecer completamente anónimo.</p>
     </main>
@@ -378,7 +378,7 @@
     </div>
   </footer>
 
-  <!-- Lógica modular conectada a Supabase Auth -->
+  <!-- Lógica modular conectada a Supabase Auth con Verificación Obligatoria de Correo -->
   <script type="module">
     import { supabase } from './conexion.js';
 
@@ -478,6 +478,7 @@
                     email: data.email,
                     password: data.password,
                     options: {
+                        emailRedirectTo: 'https://eligetuvida.site/login.html',
                         data: {
                             nombre: data.name,
                             colegio: data.school
@@ -496,23 +497,26 @@
                     return;
                 }
 
-                localStorage.setItem("usuario", JSON.stringify({
-                    id: authData.user?.id,
-                    nombre: data.name,
-                    colegio: data.school,
-                    correo: data.email
-                }));
+                // Supabase devuelve identidades vacías si el usuario ya existía previamente sin confirmar
+                if (authData.user && authData.user.identities && authData.user.identities.length === 0) {
+                    const mensajeExistente = "Este correo electrónico ya se encuentra registrado.";
+                    setError("registerEmailError", mensajeExistente);
+                    setAlert("registerAlert", mensajeExistente, false);
+                    setBusy(button, false);
+                    return;
+                }
 
                 form.reset();
-                setAlert("registerAlert", "¡Cuenta creada con éxito! Redirigiendo...", true);
-
-                setTimeout(() => {
-                    window.location.href = "login.html";
-                }, 1500);
+                setAlert(
+                  "registerAlert", 
+                  "¡Registro exitoso! Te hemos enviado un correo de verificación. Por favor revisa tu bandeja de entrada (o carpeta de spam) y confirma tu cuenta para poder ingresar.", 
+                  true
+                );
 
             } catch (err) {
                 console.error("Excepción inesperada:", err);
                 setAlert("registerAlert", "Error inesperado al conectar con el servidor.", false);
+            } finally {
                 setBusy(button, false);
             }
         });
