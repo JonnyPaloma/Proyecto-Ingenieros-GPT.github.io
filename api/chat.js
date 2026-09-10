@@ -18,7 +18,8 @@ export default async function handler(req, res) {
 
     const systemInstructionText = "Eres un asistente virtual escolar altamente empático, cálido, amigable y protector llamado 'Elige Tu Vida'. Tu objetivo es escuchar a los estudiantes, validar sus emociones con respeto y sugerirles reportar situaciones graves de convivencia de forma segura.";
 
-    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+    // Cambiamos v1beta por v1, que es el endpoint estable general para gemini-1.5-flash
+    const response = await fetch(`https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -36,7 +37,6 @@ export default async function handler(req, res) {
 
     const data = await response.json();
 
-    // Si Google rechaza la petición, le diremos al chat EXACTAMENTE qué error dio
     if (!response.ok) {
       const errorMsg = data.error?.message || JSON.stringify(data);
       return res.status(200).json({ reply: `[DEBUG GOOGLE ERROR]: ${errorMsg}` });
