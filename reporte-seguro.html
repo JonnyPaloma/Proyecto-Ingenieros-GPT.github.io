@@ -3,11 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="description" content="Crea un reporte seguro y confidencial en Elige Tu Vida.">
+  <meta name="description" content="Reporte seguro y confidencial en Elige Tu Vida">
   <title>Reporte Seguro | Elige Tu Vida</title>
   
-  <!-- Favicon: Escudo Incógnito en SVG -->
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%230f1f46'%3E%3Cpath d='M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z'/%3E%3Ccircle cx='15.5' cy='13' r='2.5' fill='%23fff'/%3E%3Ccircle cx='8.5' cy='13' r='2.5' fill='%23fff'/%3E%3Cpath d='M8.5 13h2M4 11h16' stroke='%23fff' stroke-width='2' stroke-linecap='round'/%3E%3Cpath d='M7 8l2.5-3 5 3' stroke='%23fff' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" type="image/svg+xml">
+  <!-- Favicon apuntando al archivo original Favicon Hack -->
+  <link rel="icon" href="Favicon Hack.png" type="image/png">
   
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -23,7 +23,6 @@
       --bg: #f8fafc;
       --white: #ffffff;
       --line: #e2e8f0;
-      --error: #ef4444;
       --success: #10b981;
     }
     
@@ -34,11 +33,14 @@
     
     .container { width: min(1120px, calc(100% - 40px)); margin: auto; }
     
-    /* Header (Mismo estilo que el index) */
+    /* Header en armonía visual con la página principal */
     header { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 50; }
     .nav-container { display: flex; align-items: center; justify-content: space-between; min-height: 80px; }
     .brand { display: flex; align-items: center; gap: 12px; }
-    .brand-icon { width: 44px; height: 44px; color: var(--navy); }
+    
+    /* Logo referenciando directamente a Favicon Hack */
+    .brand-icon { width: 44px; height: 44px; object-fit: contain; }
+    
     .brand-text strong { display: block; color: var(--navy); font-size: 20px; font-weight: 800; line-height: 1.1; }
     .brand-text small { display: block; color: var(--gray); font-size: 12px; font-weight: 600; }
     
@@ -51,13 +53,14 @@
     .btn-primary { background: var(--blue); color: var(--white); box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2); width: 100%; padding: 14px; font-size: 16px; }
     .btn-primary:hover { background: #1d4ed8; transform: translateY(-1px); }
     .btn-outline { border: 2px solid var(--line); color: var(--navy); background: transparent; }
+    .btn-outline:hover { border-color: var(--blue); color: var(--blue); background: var(--light-blue); }
     
     .user-badge-container { display: flex; align-items: center; gap: 10px; background: var(--light-blue); padding: 6px 14px 6px 6px; border-radius: 30px; border: 1px solid #bfdbfe; }
     .user-avatar-circle { width: 32px; height: 32px; background: var(--indigo); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: bold; }
     
     /* Formulario de Reporte */
     main { flex: 1; display: flex; align-items: center; justify-content: center; padding: 60px 0; }
-    .report-card { background: var(--white); border-radius: 16px; border: 1px solid var(--line); box-shadow: 0 10px 25px rgba(15, 31, 70, 0.05); max-width: 600px; width: 100%; padding: 40px; margin: auto; }
+    .report-card { background: var(--white); border-radius: 16px; border: 1px solid var(--line); box-shadow: 0 10px 25px rgba(15, 31, 70, 0.05); max-width: 640px; width: 100%; padding: 40px; }
     
     .report-header { text-align: center; margin-bottom: 32px; }
     .report-header h1 { font-size: 28px; font-weight: 800; color: var(--navy); margin: 0 0 8px; }
@@ -65,7 +68,7 @@
     
     .form-group { margin-bottom: 24px; }
     .form-label { display: block; font-size: 14px; font-weight: 600; color: var(--navy); margin-bottom: 8px; }
-    .form-control { width: 100%; padding: 12px 16px; border-radius: 8px; border: 1px solid var(--line); background: var(--bg); font-family: inherit; font-size: 15px; color: var(--text); transition: border-color 0.2s; }
+    .form-control { width: 100%; padding: 12px 16px; border-radius: 8px; border: 1px solid var(--line); background: var(--bg); font-family: inherit; font-size: 15px; color: var(--text); transition: all 0.2s; }
     .form-control:focus { outline: none; border-color: var(--blue); background: var(--white); box-shadow: 0 0 0 3px var(--light-blue); }
     textarea.form-control { resize: vertical; min-height: 120px; }
     
@@ -74,19 +77,17 @@
     .anonymous-toggle label { font-size: 14px; font-weight: 600; color: var(--navy); cursor: pointer; display: flex; flex-direction: column; }
     .anonymous-toggle label span { font-size: 12px; color: var(--gray); font-weight: 400; margin-top: 2px; }
     
-    /* File upload estilizado */
-    .file-drop-area { border: 2px dashed var(--line); border-radius: 8px; padding: 24px; text-align: center; background: var(--bg); cursor: pointer; transition: all 0.2s; }
+    .file-drop-area { border: 2px dashed var(--line); border-radius: 8px; padding: 24px; text-align: center; background: var(--bg); cursor: pointer; transition: all 0.2s; display: block; }
     .file-drop-area:hover { border-color: var(--blue); background: var(--light-blue); }
-    .file-drop-area svg { width: 32px; height: 32px; color: var(--gray); margin: 0 auto 12px; }
     .file-drop-text { font-size: 14px; color: var(--gray); margin: 0; }
     .file-drop-text strong { color: var(--blue); }
     .file-input { display: none; }
 
-    footer { background: #0f172a; padding: 30px 0; color: #94a3b8; text-align: center; font-size: 14px; }
+    footer { background: #0f172a; padding: 30px 0; color: #94a3b8; text-align: center; font-size: 14px; border-top: 1px solid #1e293b; }
     
     @media (max-width: 600px) {
       .nav-links { display: none; }
-      .report-card { padding: 24px; border-radius: 0; border-left: none; border-right: none; }
+      .report-card { padding: 24px; border-radius: 0; border: none; }
     }
   </style>
 </head>
@@ -95,13 +96,8 @@
   <header>
     <div class="container nav-container">
       <a class="brand" href="index.html">
-        <svg class="brand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" fill="#0f1f46" stroke="#0f1f46"/>
-          <circle cx="15.5" cy="13" r="2.5" fill="#fff" stroke="#fff"/>
-          <circle cx="8.5" cy="13" r="2.5" fill="#fff" stroke="#fff"/>
-          <path d="M8.5 13h2M4 11h16" stroke="#fff" stroke-width="2"/>
-          <path d="M7 8l2.5-3 5 3" stroke="#fff"/>
-        </svg>
+        <!-- Logo apuntando exactamente a la imagen del sistema -->
+        <img src="Favicon Hack.png" alt="Logo Elige Tu Vida" class="brand-icon">
         <span class="brand-text">
           <strong>Elige Tu Vida</strong>
           <small>Reporte Seguro</small>
@@ -121,10 +117,9 @@
       <div class="report-card">
         <div class="report-header">
           <h1>Crear un reporte</h1>
-          <p>Este espacio es seguro y confidencial. Cuéntanos qué está pasando.</p>
+          <p>Este espacio es confidencial. La información que registres estará protegida.</p>
         </div>
         
-        <!-- Apuntando al backend en PHP que procesará el formulario -->
         <form action="procesar_reporte.php" method="POST" enctype="multipart/form-data">
           
           <div class="form-group">
@@ -134,43 +129,39 @@
               <option value="acoso">Acoso escolar (Bullying)</option>
               <option value="ciberacoso">Ciberacoso o problemas digitales</option>
               <option value="violencia">Violencia física o verbal</option>
-              <option value="emocional">Bienestar emocional / Depresión</option>
+              <option value="emocional">Bienestar emocional</option>
               <option value="otro">Otra situación</option>
             </select>
           </div>
 
           <div class="form-group">
-            <label class="form-label" for="lugar_fecha">Lugar y Fecha aproximada</label>
-            <input type="text" class="form-control" id="lugar_fecha" name="lugar_fecha" placeholder="Ej: En el descanso, ayer por la mañana" required>
+            <label class="form-label" for="lugar_fecha">Lugar y fecha aproximada</label>
+            <input type="text" class="form-control" id="lugar_fecha" name="lugar_fecha" placeholder="Ej: En la cancha principal, ayer en el descanso" required>
           </div>
 
           <div class="form-group">
-            <label class="form-label" for="descripcion">Describe lo que sucedió</label>
-            <textarea class="form-control" id="descripcion" name="descripcion" placeholder="Explica con tus palabras qué pasó, quiénes están involucrados y cómo te sientes al respecto..." required></textarea>
+            <label class="form-label" for="descripcion">Descripción del caso</label>
+            <textarea class="form-control" id="descripcion" name="descripcion" placeholder="Describe lo sucedido de la forma más clara posible..." required></textarea>
           </div>
 
           <div class="form-group">
-            <label class="form-label">Evidencia (Opcional)</label>
+            <label class="form-label">Adjuntar evidencia (Opcional)</label>
             <label class="file-drop-area" for="evidencia">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M21.2 15c.7-1.2 1-2.5.7-3.9-.6-2-2.4-3.5-4.4-3.5h-1.2c-.7-3-3.2-5.2-6.2-5.6-3-.3-5.9 1.3-7.3 4-1.2 2.5-1 6.5.5 8.8m8.7-1.6V21"/>
-                <path d="M16 16l-4-4-4 4"/>
-              </svg>
-              <p class="file-drop-text"><strong>Haz clic para subir un archivo</strong> o arrástralo aquí</p>
-              <p class="file-drop-text" style="font-size: 12px; margin-top: 4px;">PNG, JPG, PDF o MP4 (Max. 10MB)</p>
-              <input type="file" id="evidencia" name="evidencia" class="file-input" accept="image/*,.pdf,video/mp4">
+              <p class="file-drop-text" id="file-label-text"><strong>Haz clic para subir un archivo</strong> o arrástralo aquí</p>
+              <p class="file-drop-text" style="font-size: 12px; margin-top: 4px;">Imágenes, PDF o documentos (Max. 10MB)</p>
+              <input type="file" id="evidencia" name="evidencia" class="file-input" accept="image/*,.pdf,.doc,.docx">
             </label>
           </div>
 
           <div class="anonymous-toggle">
             <input type="checkbox" id="anonimo" name="anonimo" value="si">
             <label for="anonimo">
-              Quiero que este reporte sea anónimo
-              <span>Tus datos de usuario no serán visibles para quien revise el caso.</span>
+              Enviar este reporte de forma anónima
+              <span>Tu nombre no será visible para el equipo institucional.</span>
             </label>
           </div>
 
-          <button type="submit" class="btn btn-primary">Enviar reporte de forma segura</button>
+          <button type="submit" class="btn btn-primary">Enviar reporte seguro</button>
         </form>
       </div>
     </div>
@@ -178,43 +169,53 @@
 
   <footer>
     <div class="container">
-      <p>© 2026 Elige Tu Vida - Plataforma de prevención y convivencia escolar.</p>
+      <p>© 2026 Elige Tu Vida — Plataforma de convivencia y protección escolar.</p>
     </div>
   </footer>
 
-  <script>
-    // Manejo visual del input de archivo
+  <script type="module">
+    import { supabase } from './conexion.js';
+
+    // Manejo de la etiqueta de archivo adjunto
     const fileInput = document.getElementById('evidencia');
-    const dropText = document.querySelector('.file-drop-text strong');
+    const dropText = document.getElementById('file-label-text');
 
-    fileInput.addEventListener('change', function(e) {
-      if (this.files && this.files.length > 0) {
-        dropText.textContent = `Archivo seleccionado: ${this.files[0].name}`;
-        dropText.style.color = 'var(--success)';
-      } else {
-        dropText.textContent = 'Haz clic para subir un archivo';
-        dropText.style.color = 'var(--blue)';
-      }
-    });
+    if (fileInput && dropText) {
+      fileInput.addEventListener('change', function() {
+        if (this.files && this.files.length > 0) {
+          dropText.innerHTML = `<strong style="color: var(--success);">Archivo cargado: ${this.files[0].name}</strong>`;
+        } else {
+          dropText.innerHTML = '<strong>Haz clic para subir un archivo</strong> o arrástralo aquí';
+        }
+      });
+    }
 
-    // Validar sesión local para mostrar el usuario en el header (Opcional, igual que el index)
-    document.addEventListener("DOMContentLoaded", () => {
-        const localUserObj = JSON.parse(localStorage.getItem("usuario") || sessionStorage.getItem("usuario") || "null");
-        const navContainer = document.getElementById("nav-options");
+    // Validación de sesión activa
+    document.addEventListener("DOMContentLoaded", async () => {
         const navLogin = document.getElementById("nav-login");
+        const navContainer = document.getElementById("nav-options");
 
-        if (localUserObj && localUserObj.nombre) {
-            if (navLogin) navLogin.remove();
-            
-            const userBadge = document.createElement("div");
-            userBadge.className = "user-badge-container";
-            const initial = localUserObj.nombre.charAt(0).toUpperCase();
-            
-            userBadge.innerHTML = `
-              <div class="user-avatar-circle">${initial}</div>
-              <span style="font-size: 13px; font-weight: 700; color: var(--navy);">${localUserObj.nombre}</span>
-            `;
-            navContainer.appendChild(userBadge);
+        try {
+            const { data: { session } } = await supabase.auth.getSession();
+            const localUser = JSON.parse(localStorage.getItem("usuario") || sessionStorage.getItem("usuario") || "null");
+
+            const userName = session?.user?.user_metadata?.nombre || localUser?.nombre;
+
+            if (userName) {
+                if (navLogin) navLogin.remove();
+                
+                const userBadge = document.createElement("div");
+                userBadge.className = "user-badge-container";
+                const initial = userName.charAt(0).toUpperCase();
+                
+                userBadge.innerHTML = `
+                  <div class="user-avatar-circle">${initial}</div>
+                  <span style="font-size: 13px; font-weight: 700; color: var(--navy);">${userName}</span>
+                `;
+                navContainer.appendChild(userBadge);
+            }
+        } catch(e) {
+            console.error("Error al validar sesión:", e);
         }
     });
   </script>
