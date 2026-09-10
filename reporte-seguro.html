@@ -6,7 +6,6 @@
   <meta name="description" content="Reporte seguro y confidencial en Elige Tu Vida: acompañamiento y convivencia escolar protegida.">
   <title>Reporte Seguro | Elige Tu Vida</title>
   
-  <!-- Favicon e íconos idénticos al index -->
   <link rel="icon" href="assets/images/Favicon Hack.png" type="image/svg+xml">
   <link rel="icon" href="assets/images/Favicon Hack.png" sizes="32x32" type="image/png">
   <link rel="icon" href="assets/images/Favicon Hack.png" sizes="16x16" type="image/png">
@@ -50,7 +49,7 @@
     a { color: inherit; text-decoration: none; }
     .container { width: min(1240px, calc(100% - 48px)); margin-inline: auto; }
 
-    /* Header y Navegación idénticos al index */
+    /* Header */
     .site-header {
       position: sticky;
       z-index: 50;
@@ -132,101 +131,75 @@
     }
     .user-name-text { font-size: 13px; font-weight: 700; color: var(--etv-navy); }
 
-    /* Hero Dinámico Estilo Index */
+    /* Hero Centrado y Equilibrado */
     .hero-section {
       position: relative;
       background: var(--etv-gradient-hero);
       color: white;
-      padding: 64px 0 80px;
+      padding: 50px 0 70px;
       overflow: hidden;
+      text-align: center;
     }
     .hero-glow {
       position: absolute;
-      top: -100px;
-      right: -100px;
-      width: 450px;
-      height: 450px;
-      background: radial-gradient(circle, rgba(56,189,248,0.25) 0%, rgba(255,255,255,0) 70%);
+      top: -50%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(56,189,248,0.2) 0%, rgba(255,255,255,0) 70%);
       pointer-events: none;
     }
-    .hero-grid {
-      display: grid;
-      grid-template-columns: 1.2fr 0.8fr;
+    .hero-centered-content {
+      max-width: 780px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
       align-items: center;
-      gap: 40px;
+      position: relative;
+      z-index: 2;
     }
     .hero-badge {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      padding: 6px 14px;
+      padding: 6px 16px;
       border-radius: 20px;
-      background: rgba(255, 255, 255, 0.15);
+      background: rgba(255, 255, 255, 0.12);
       backdrop-filter: blur(8px);
-      border: 1px solid rgba(255, 255, 255, 0.25);
+      border: 1px solid rgba(255, 255, 255, 0.2);
       font-size: 12px;
       font-weight: 800;
       letter-spacing: .05em;
       text-transform: uppercase;
-      margin-bottom: 16px;
+      margin-bottom: 18px;
       color: #e0f2fe;
     }
     .hero-section h1 {
-      margin: 0 0 16px;
-      font-size: clamp(32px, 4vw, 48px);
+      margin: 0 0 12px;
+      font-size: clamp(30px, 3.8vw, 44px);
       font-weight: 900;
-      line-height: 1.15;
+      line-height: 1.18;
       letter-spacing: -0.02em;
     }
     .hero-section p {
-      margin: 0;
+      margin: 0 0 20px;
       color: #cbd5e1;
-      font-size: 17px;
-      max-width: 580px;
+      font-size: 16px;
+      max-width: 640px;
       line-height: 1.6;
     }
 
-    /* Imagen Ilustrativa Hero */
-    .hero-image-wrapper {
-      position: relative;
-      display: flex;
-      justify-content: center;
+    /* Imagen Sutil Integrada */
+    .hero-subtle-image {
+      width: 90px;
+      height: 90px;
+      margin-bottom: 14px;
+      filter: drop-shadow(0 10px 15px rgba(0,0,0,0.25));
+      opacity: 0.95;
+      transition: transform 0.3s ease;
     }
-    .hero-image-card {
-      position: relative;
-      width: 100%;
-      max-width: 360px;
-      border-radius: 20px;
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      backdrop-filter: blur(12px);
-      padding: 24px;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
-      text-align: center;
-    }
-    .hero-image-card img {
-      width: 100%;
-      height: auto;
-      border-radius: 12px;
-      object-fit: cover;
-    }
-    .floating-chip {
-      position: absolute;
-      bottom: -15px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: #ffffff;
-      color: var(--etv-navy);
-      padding: 8px 18px;
-      border-radius: 30px;
-      font-size: 13px;
-      font-weight: 800;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      white-space: nowrap;
-    }
+    .hero-subtle-image:hover { transform: scale(1.05); }
 
     /* Layout del Formulario */
     main { flex: 1; margin-top: -30px; position: relative; z-index: 10; }
@@ -267,8 +240,8 @@
     }
     .side-link:hover { background: var(--etv-blue); color: white; }
 
-    /* Form UI Vistosa */
-    .field { margin-bottom: 24px; }
+    /* Form UI */
+    .field { margin-bottom: 22px; }
     .field label {
       display: flex;
       align-items: center;
@@ -290,12 +263,60 @@
       color: var(--etv-ink);
       transition: all 0.2s ease;
     }
-    .field textarea { min-height: 140px; resize: vertical; }
+    .field textarea { min-height: 130px; resize: vertical; }
     .field input:focus, .field textarea:focus, .field select:focus {
       outline: none;
       border-color: var(--etv-blue);
       box-shadow: 0 0 0 4px rgba(21, 89, 183, 0.12);
     }
+
+    /* Caja de Carga de Archivo / Evidencia */
+    .file-upload-box {
+      position: relative;
+      border: 2px dashed #cbd5e1;
+      border-radius: 10px;
+      padding: 18px 20px;
+      text-align: center;
+      background: #f8fafc;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+    .file-upload-box:hover {
+      border-color: var(--etv-blue);
+      background: #eff6ff;
+    }
+    .file-upload-box input[type="file"] {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      opacity: 0;
+      cursor: pointer;
+    }
+    .file-upload-content {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      color: #475569;
+      font-size: 13.5px;
+      font-weight: 600;
+    }
+    .preview-container {
+      display: none;
+      margin-top: 10px;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      background: #f1f5f9;
+      border-radius: 8px;
+    }
+    .preview-thumb {
+      width: 42px;
+      height: 42px;
+      object-fit: cover;
+      border-radius: 6px;
+      border: 1px solid #cbd5e1;
+    }
+    
     .error { display: block; min-height: 18px; margin-top: 5px; color: var(--etv-red); font-size: 12px; font-weight: 600; }
     
     .alert {
@@ -311,10 +332,10 @@
     .alert:not(.ok) { border: 1px solid #fca5a5; color: #991b1b; background: #fef2f2; }
     .alert.ok { border: 1px solid #86efac; color: #166534; background: #f0fdf4; }
 
-    /* Triaje Dinámico Reaccionario */
+    /* Triaje */
     .triage-box {
-      margin: 24px 0;
-      padding: 18px 20px;
+      margin: 20px 0;
+      padding: 16px 18px;
       border-radius: 12px;
       background: #f0f9ff;
       border: 1px solid #bae6fd;
@@ -332,14 +353,14 @@
       border-left-color: var(--etv-amber);
     }
     .triage-header { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
-    .triage-box strong { color: var(--etv-navy); font-size: 15px; font-weight: 800; }
-    .triage-box p { margin: 0; color: #475569; font-size: 13.5px; line-height: 1.5; }
+    .triage-box strong { color: var(--etv-navy); font-size: 14.5px; font-weight: 800; }
+    .triage-box p { margin: 0; color: #475569; font-size: 13px; line-height: 1.5; }
 
     .check {
       display: flex;
       gap: 12px;
       align-items: flex-start;
-      margin: 24px 0;
+      margin: 20px 0;
       padding: 12px 14px;
       background: #f8fafc;
       border-radius: 8px;
@@ -350,7 +371,7 @@
     }
     .check input[type="checkbox"] { width: 18px; height: 18px; margin-top: 1px; accent-color: var(--etv-blue); }
 
-    /* Modal Estilizado */
+    /* Modal */
     .modal {
       width: min(540px, calc(100% - 32px));
       border: none;
@@ -365,7 +386,7 @@
     .modal main { padding: 28px 24px; color: var(--etv-ink); font-size: 15px; line-height: 1.6; }
     .modal footer { padding: 16px 24px; text-align: right; background: #f8fafc; border-top: 1px solid var(--etv-line); }
 
-    /* Footer idéntico al index */
+    /* Footer */
     .professional-footer { padding: 62px 0 22px; background: #101a2d; color: #aebdd1; margin-top: auto; }
     .footer-main { display: grid; grid-template-columns: 1.6fr .7fr .7fr; gap: 60px; padding-bottom: 45px; }
     .footer-brand p { max-width: 430px; margin: 18px 0 0; color: #9eafc6; font-size: 13px; line-height: 1.65; }
@@ -378,9 +399,6 @@
     .footer-bottom { display: flex; justify-content: space-between; gap: 20px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,.12); color: #7e91ad; font-size: 11px; }
 
     @media(max-width:900px) {
-      .hero-grid { grid-template-columns: 1fr; text-align: center; }
-      .hero-section p { margin-inline: auto; }
-      .hero-image-wrapper { display: none; }
       .form-wrap { grid-template-columns: 1fr; }
       .side { display: none; }
     }
@@ -442,27 +460,20 @@
     </div>
   </header>
 
-  <!-- Hero Principal Dinámico -->
+  <!-- Hero Principal Centrado y Sobrio -->
   <section class="hero-section">
     <div class="hero-glow"></div>
-    <div class="container hero-grid">
-      <div>
+    <div class="container">
+      <div class="hero-centered-content">
+        <!-- Logo/Imagen compacta e integrada -->
+        <img src="assets/images/Escudo Elige Tu Vida Hack.png" alt="Insignia Elige Tu Vida" class="hero-subtle-image">
+        
         <div class="hero-badge">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-          Espacio 100% Protegido y Confidencial
+          Canal Confidencial y Protegido
         </div>
-        <h1>Cuéntanos lo que ocurre, te escuchamos.</h1>
-        <p>Tu tranquilidad es lo primero. Puedes expresarte libremente, solicitar orientación o enviar una alerta con total confidencialidad.</p>
-      </div>
-      <div class="hero-image-wrapper">
-        <div class="hero-image-card">
-          <!-- Imagen de respaldo o insignia del sistema -->
-          <img src="assets/images/Escudo Elige Tu Vida Hack.png" alt="Ilustración Protección Escolar" style="max-height: 180px; object-fit: contain; margin: 0 auto;">
-          <div class="floating-chip">
-            <svg width="18" height="18" fill="none" stroke="#10b981" stroke-width="2.5" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-            Entorno de reporte seguro
-          </div>
-        </div>
+        <h1>Formulario de Reporte Seguro</h1>
+        <p>Tu voz es importante. Cuéntanos la situación con tranquilidad; puedes aportar detalles, adjuntar imágenes de prueba y mantener tu privacidad en todo momento.</p>
       </div>
     </div>
   </section>
@@ -505,11 +516,32 @@
             <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
             ¿Qué está ocurriendo?
           </label>
-          <textarea id="description" name="description" required maxlength="2500" placeholder="Escribe aquí de manera detallada lo que recuerdes o cómo te sientes..."></textarea>
+          <textarea id="description" name="description" required maxlength="2500" placeholder="Escribe de manera detallada lo sucedido, personas involucradas o cómo te sientes..."></textarea>
           <small id="descriptionError" class="error"></small>
         </div>
 
-        <!-- Panel Interactivo de Triaje Automático -->
+        <!-- Campo de Carga de Evidencia / Imagen -->
+        <div class="field">
+          <label for="evidence">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            Adjuntar imagen de prueba / evidencia (Opcional)
+          </label>
+          <div class="file-upload-box" id="dropZone">
+            <input type="file" id="evidence" name="evidence" accept="image/png, image/jpeg, image/webp">
+            <div class="file-upload-content">
+              <svg width="22" height="22" fill="none" stroke="var(--etv-blue)" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              <span id="fileLabel">Haz clic o arrastra una captura/foto aquí (PNG, JPG)</span>
+            </div>
+          </div>
+          <div id="previewContainer" class="preview-container">
+            <img id="imagePreview" class="preview-thumb" src="" alt="Previsualización">
+            <span id="fileNameText" style="font-size: 13px; font-weight: 600; color: var(--etv-navy);"></span>
+            <button type="button" id="removeFile" style="margin-left: auto; color: var(--etv-red); font-size: 12px; font-weight: 700; border: none; background: none; cursor: pointer;">Quitar</button>
+          </div>
+          <small id="evidenceError" class="error"></small>
+        </div>
+
+        <!-- Panel Interactivo de Triaje -->
         <div id="triage" class="triage-box">
           <div class="triage-header">
             <svg id="triageIcon" width="18" height="18" fill="none" stroke="var(--etv-blue)" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
@@ -521,7 +553,7 @@
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
           <div class="field">
             <label for="location">¿Dónde ocurrió? (Opcional)</label>
-            <input id="location" name="location" maxlength="190" placeholder="Ej: Aula, patio, redes sociales...">
+            <input id="location" name="location" maxlength="190" placeholder="Ej: Aula, patio, red social...">
             <small id="locationError" class="error"></small>
           </div>
 
@@ -555,7 +587,7 @@
     </footer>
   </dialog>
 
-  <!-- Footer idéntico al index -->
+  <!-- Footer -->
   <footer class="professional-footer">
     <div class="container footer-main">
       <div class="footer-brand">
@@ -584,7 +616,7 @@
     </div>
   </footer>
 
-  <!-- Lógica e integración con Supabase -->
+  <!-- Script con integración Supabase y Manejo de Evidencias -->
   <script type="module">
     import { supabase } from "./conexion.js";
 
@@ -621,7 +653,7 @@
     document.addEventListener("DOMContentLoaded", async () => {
       setupModals();
 
-      // Control de sesión y Badge de Usuario
+      // Sesión de usuario
       const loginLink = document.getElementById("nav-login");
       const registerLink = document.getElementById("nav-register");
       const navContainer = document.getElementById("nav-options");
@@ -663,7 +695,42 @@
           navContainer.appendChild(logoutButton);
       }
 
-      // Triaje interactivo dinámico con cambio de colores
+      // Previsualización de Imagen / Evidencia
+      const fileInput = document.getElementById("evidence");
+      const fileLabel = document.getElementById("fileLabel");
+      const previewContainer = document.getElementById("previewContainer");
+      const imagePreview = document.getElementById("imagePreview");
+      const fileNameText = document.getElementById("fileNameText");
+      const removeFileBtn = document.getElementById("removeFile");
+
+      let selectedFile = null;
+
+      fileInput.addEventListener("change", (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          if (file.size > 5 * 1024 * 1024) {
+            setError("evidenceError", "La imagen no debe superar los 5 MB.");
+            fileInput.value = "";
+            return;
+          }
+          setError("evidenceError", "");
+          selectedFile = file;
+          fileNameText.textContent = file.name;
+          imagePreview.src = URL.createObjectURL(file);
+          previewContainer.style.display = "flex";
+          fileLabel.textContent = "Cambiar imagen seleccionada";
+        }
+      });
+
+      removeFileBtn.addEventListener("click", () => {
+        selectedFile = null;
+        fileInput.value = "";
+        previewContainer.style.display = "none";
+        imagePreview.src = "";
+        fileLabel.textContent = "Haz clic o arrastra una captura/foto aquí (PNG, JPG)";
+      });
+
+      // Triaje interactivo
       const form = document.getElementById("reportForm");
       const description = document.getElementById("description");
       const triageBox = document.getElementById("triage");
@@ -681,30 +748,30 @@
           if (critical) {
             triageBox.classList.add("critical");
             triageTitle.textContent = "Situación de atención prioritaria / urgente";
-            triageDesc.textContent = "Detectamos palabras asociadas a un riesgo alto. Si te sientes en riesgo inminente, recurre inmediatamente a una persona adulta de confianza o red de apoyo local.";
+            triageDesc.textContent = "Detectamos palabras asociadas a un riesgo alto. Si te sientes en peligro inminente, recurre inmediatamente a una persona adulta de confianza.";
           } else if (serious) {
             triageBox.classList.add("serious");
             triageTitle.textContent = "Seguimiento institucional sugerido";
-            triageDesc.textContent = "La situación descrita requiere revisión por el equipo directivo/orientador para brindarte acompañamiento adecuado.";
+            triageDesc.textContent = "La situación descrita requiere revisión por el equipo de orientación para brindarte el acompañamiento adecuado.";
           } else {
             triageTitle.textContent = "Orientación de convivencia escolar";
-            triageDesc.textContent = "Tu reporte será procesado respetando tu privacidad para activar las medidas institucionales correspondientes.";
+            triageDesc.textContent = "Tu reporte será procesado respetando tu privacidad para activar las medidas correspondientes.";
           }
         });
 
-        // Envió del Formulario
+        // Envío con Supabase Storage opcional
         form.addEventListener("submit", async (event) => {
           event.preventDefault();
           const button = document.getElementById("reportSubmit");
-          ["routeError", "descriptionError", "locationError", "dateError", "confirmReportError"].forEach((id) => setError(id, ""));
+          ["routeError", "descriptionError", "locationError", "dateError", "confirmReportError", "evidenceError"].forEach((id) => setError(id, ""));
 
           const confirmed = document.getElementById("confirmReport").checked;
           const textVal = description.value.trim();
           let valid = true;
 
-          if (textVal.length < 10) { setError("descriptionError", "Escribe al menos una descripción de mínimo 10 caracteres."); valid = false; }
+          if (textVal.length < 10) { setError("descriptionError", "Escribe al menos 10 caracteres."); valid = false; }
           if (!confirmed) { setError("confirmReportError", "Debes confirmar la veracidad del reporte."); valid = false; }
-          if (!valid) { setAlert("reportAlert", "Revisa los datos ingresados antes de enviar.", false); return; }
+          if (!valid) { setAlert("reportAlert", "Revisa los campos requeridos.", false); return; }
 
           setBusy(button, true);
 
@@ -712,8 +779,27 @@
             const routeVal = document.getElementById("route").value;
             const locationVal = document.getElementById("location").value.trim();
             const dateVal = document.getElementById("date").value;
-
             const ticketCode = generateTicket();
+            
+            let imageUrl = null;
+
+            // Subir archivo a Supabase Storage si se adjuntó alguno
+            if (selectedFile) {
+              const fileExt = selectedFile.name.split('.').pop();
+              const filePath = `evidencias/${ticketCode}_${Date.now()}.${fileExt}`;
+
+              const { data: storageData, error: storageError } = await supabase.storage
+                .from('reportes-evidencias')
+                .upload(filePath, selectedFile);
+
+              if (!storageError) {
+                const { data: urlData } = supabase.storage.from('reportes-evidencias').getPublicUrl(filePath);
+                imageUrl = urlData?.publicUrl || null;
+              } else {
+                console.warn("No se pudo subir la imagen a Storage, guardando reporte sin imagen:", storageError.message);
+              }
+            }
+
             const normalized = textVal.toLowerCase();
             const riskLevel = /suicid|arma|abuso|violacion|matar/.test(normalized) ? "Crítico" : /acoso|bullying|amenaza|golpe/.test(normalized) ? "Alto" : "Medio";
 
@@ -731,6 +817,7 @@
                 ubicacion: locationVal || null,
                 fecha_suceso: dateVal || null,
                 riesgo: riskLevel,
+                evidencia_url: imageUrl,
                 usuario_id: userId,
                 creado_en: new Date().toISOString()
               }
@@ -739,18 +826,18 @@
             if (error) throw error;
 
             document.getElementById("reportDoneText").textContent =
-              `Tu código asignado es ${ticketCode}. Nivel asignado: ${riskLevel}. Tu solicitud fue enviada correctamente.`;
+              `Tu código asignado es ${ticketCode}. Nivel asignado: ${riskLevel}. Tu reporte fue enviado exitosamente.`;
             
             form.reset();
+            removeFileBtn.click();
             triageBox.className = "triage-box";
             triageTitle.textContent = "Orientación de prioridad en desarrollo";
-            triageDesc.textContent = "Mientras redactas, el sistema evaluará el nivel de prioridad sugerido para dar el trámite adecuado.";
             
             document.getElementById("reportDone").showModal();
             setAlert("reportAlert", "Reporte enviado satisfactoriamente.", true);
 
           } catch (err) {
-            console.error("Error Supabase:", err);
+            console.error("Error al registrar:", err);
             setAlert("reportAlert", "Ocurrió un inconveniente al guardar: " + (err.message || "Error de conexión"), false);
           } finally {
             setBusy(button, false);
