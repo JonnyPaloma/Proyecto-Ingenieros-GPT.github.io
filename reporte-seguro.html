@@ -77,7 +77,7 @@
     a { color: inherit; text-decoration: none; }
     .container { width: min(1240px, calc(100% - 48px)); margin-inline: auto; }
 
-    /* Header Consistente */
+    /* Header */
     .site-header {
       position: sticky;
       z-index: 50;
@@ -159,12 +159,12 @@
     }
     .user-name-text { font-size: 13px; font-weight: 700; color: var(--etv-navy); }
 
-    /* Hero Compacto y Centrado */
+    /* Hero */
     .hero-section {
       position: relative;
       background: var(--etv-gradient-hero);
       color: white;
-      padding: 32px 0 55px;
+      padding: 36px 0 60px;
       overflow: hidden;
       text-align: center;
     }
@@ -228,8 +228,59 @@
     }
     .hero-subtle-image:hover { transform: scale(1.05); }
 
-    /* Layout del Formulario */
-    main { flex: 1; margin-top: -25px; position: relative; z-index: 10; }
+    /* Layout */
+    main { flex: 1; margin-top: -30px; position: relative; z-index: 10; }
+    
+    /* Tarjeta de Requisito de Autenticación */
+    .auth-notice-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      background: rgba(255, 255, 255, 0.98);
+      border: 1px solid var(--etv-line);
+      border-left: 5px solid var(--etv-blue);
+      border-radius: 16px;
+      padding: 20px 28px;
+      margin-bottom: 28px;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 15px 30px -10px rgba(15, 31, 70, 0.08);
+    }
+    .auth-notice-main {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .auth-notice-icon {
+      width: 50px;
+      height: 50px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--etv-sky);
+      border-radius: 12px;
+      border: 1px solid #bae6fd;
+    }
+    .auth-notice-content h3 {
+      margin: 0 0 4px;
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--etv-navy);
+    }
+    .auth-notice-content p {
+      margin: 0;
+      font-size: 13.5px;
+      color: #475569;
+      line-height: 1.45;
+    }
+    .auth-notice-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
     .form-wrap {
       display: grid;
       grid-template-columns: 320px minmax(0, 720px);
@@ -298,7 +349,6 @@
       box-shadow: 0 0 0 4px rgba(21, 89, 183, 0.12);
     }
 
-    /* Caja de Carga de Archivo / Evidencia */
     .file-upload-box {
       position: relative;
       border: 2px dashed #cbd5e1;
@@ -399,7 +449,7 @@
     }
     .check input[type="checkbox"] { width: 18px; height: 18px; margin-top: 1px; accent-color: var(--etv-blue); }
 
-    /* Estilos del Modal Centrado y Estilizado */
+    /* Modal Centrado */
     .modal {
       margin: auto;
       position: fixed;
@@ -501,7 +551,7 @@
       line-height: 1.4;
     }
 
-    /* Footer estándar */
+    /* Footer */
     .professional-footer { padding: 40px 0 20px; background: #101a2d; color: #aebdd1; margin-top: auto; }
     .footer-main { display: grid; grid-template-columns: 1.6fr .7fr .7fr; gap: 60px; padding-bottom: 30px; }
     .footer-main p { max-width: 430px; margin: 14px 0 0; color: #9eafc6; font-size: 13px; line-height: 1.6; }
@@ -516,6 +566,18 @@
     @media(max-width:900px) {
       .form-wrap { grid-template-columns: 1fr; }
       .side { display: none; }
+      .auth-notice-card {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .auth-notice-actions {
+        width: 100%;
+        margin-top: 6px;
+      }
+      .auth-notice-actions .button {
+        flex: 1;
+        justify-content: center;
+      }
     }
 
     @media(max-width:850px) {
@@ -532,7 +594,7 @@
       }
       .site-nav nav.open a { padding: 12px; border-bottom: 1px solid var(--etv-line); }
       .site-nav nav.open a.button { margin-top: 10px; text-align: center; }
-      .menu { display: block; }
+      .menu { display: flex; align-items: center; gap: 6px; }
       .footer-main { grid-template-columns: 1fr; gap: 30px; }
       .footer-bottom { flex-direction: column; }
     }
@@ -571,7 +633,10 @@
           <small>Orientación segura y confidencial</small>
         </span>
       </a>
-      <button class="menu" type="button" aria-label="Abrir menú" aria-expanded="false">Menú ☰</button>
+      <button class="menu" type="button" aria-label="Abrir menú" aria-expanded="false">
+        <span>Menú</span>
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
       <nav id="nav-options" aria-label="Navegación principal">
         <a href="index.html">Inicio</a>
         <a href="chat.html">Orientación guiada</a>
@@ -582,7 +647,7 @@
     </div>
   </header>
 
-  <!-- Hero Principal Compacto -->
+  <!-- Hero Principal -->
   <section class="hero-section">
     <div class="hero-glow"></div>
     <div class="container">
@@ -594,110 +659,132 @@
           Canal Confidencial y Protegido
         </div>
         <h1>Formulario de Reporte Seguro</h1>
-        <p>Tu voz es importante. Cuéntanos la situación con tranquilidad; puedes aportar detalles, adjuntar imágenes de prueba y mantener tu privacidad en todo momento.</p>
+        <p>Tu voz es fundamental. Cuéntanos la situación con tranquilidad para activar la ruta de atención institucional correspondiente.</p>
       </div>
     </div>
   </section>
 
   <main>
-    <section class="form-wrap container">
-      <!-- Tarjeta Lateral de Información -->
-      <aside class="side">
-        <h2>Acompañamiento activo</h2>
-        <p>No estás solo/a en esto. Puedes realizar la solicitud de forma anónima o iniciar sesión para dar un seguimiento directo a tu caso.</p>
-        
-        <div style="margin: 24px 0; border-top: 1px solid var(--etv-line); padding-top: 20px;">
-          <p style="font-size: 13px; font-weight: 700; color: var(--etv-navy); margin-bottom: 8px;">¿Necesitas orientación inmediata?</p>
-          <a class="side-link" href="chat.html">
-            Hablar con asistente de apoyo
-            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-          </a>
+    <div class="container">
+      <!-- Tarjeta Informativa de Requisito Obligatorio -->
+      <div class="auth-notice-card" id="authNoticeBanner">
+        <div class="auth-notice-main">
+          <div class="auth-notice-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--etv-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+          </div>
+          <div class="auth-notice-content">
+            <h3>Inicio de sesión obligatorio para reportar</h3>
+            <p>Para enviar un reporte y garantizar la validez institucional del seguimiento, <strong>debes contar con una sesión activa</strong> en la plataforma. Si aún no tienes una cuenta, puedes crearte una en pocos segundos.</p>
+          </div>
         </div>
-      </aside>
-
-      <!-- Formulario Principal -->
-      <form class="formcard" id="reportForm" novalidate>
-        <h2>Formular un reporte</h2>
-        <div id="reportAlert" class="alert" role="status" aria-live="polite" hidden></div>
-
-        <div class="field">
-          <label for="route">
-            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/></svg>
-            Modo de envío
-          </label>
-          <select id="route" name="route">
-            <option value="anonymous">Reporte anónimo (No guarda tus datos personales)</option>
-            <option value="identified">Reporte con seguimiento personal registrado</option>
-          </select>
-          <small id="routeError" class="error"></small>
+        <div class="auth-notice-actions">
+          <a href="login.html" class="button button-primary button-small">Iniciar sesión</a>
+          <a href="registro.html" class="button button-outline button-small">Registrarse</a>
         </div>
+      </div>
 
-        <div class="field">
-          <label for="description">
-            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-            ¿Qué está ocurriendo?
-          </label>
-          <textarea id="description" name="description" required maxlength="2500" placeholder="Escribe de manera detallada lo sucedido, personas involucradas o cómo te sientes..."></textarea>
-          <small id="descriptionError" class="error"></small>
-        </div>
+      <section class="form-wrap">
+        <!-- Tarjeta Lateral de Información -->
+        <aside class="side">
+          <h2>Acompañamiento activo</h2>
+          <p>No estás solo/a en esto. Puedes solicitar orientación o acompañamiento directo mediante nuestra plataforma.</p>
+          
+          <div style="margin: 24px 0; border-top: 1px solid var(--etv-line); padding-top: 20px;">
+            <p style="font-size: 13px; font-weight: 700; color: var(--etv-navy); margin-bottom: 8px;">¿Necesitas orientación inmediata?</p>
+            <a class="side-link" href="chat.html">
+              Hablar con asistente de apoyo
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </a>
+          </div>
+        </aside>
 
-        <!-- Campo de Carga de Evidencia / Imagen -->
-        <div class="field">
-          <label for="evidence">
-            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-            Adjuntar imagen de prueba / evidencia (Opcional)
-          </label>
-          <div class="file-upload-box" id="dropZone">
-            <input type="file" id="evidence" name="evidence" accept="image/png, image/jpeg, image/webp">
-            <div class="file-upload-content">
-              <svg width="22" height="22" fill="none" stroke="var(--etv-blue)" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-              <span id="fileLabel">Haz clic o arrastra una captura/foto aquí (PNG, JPG)</span>
+        <!-- Formulario Principal -->
+        <form class="formcard" id="reportForm" novalidate>
+          <h2>Formular un reporte</h2>
+          <div id="reportAlert" class="alert" role="status" aria-live="polite" hidden></div>
+
+          <div class="field">
+            <label for="route">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/></svg>
+              Modo de envío
+            </label>
+            <select id="route" name="route">
+              <option value="anonymous">Reporte reservado / anónimo</option>
+              <option value="identified">Reporte con seguimiento personal registrado</option>
+            </select>
+            <small id="routeError" class="error"></small>
+          </div>
+
+          <div class="field">
+            <label for="description">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+              ¿Qué está ocurriendo?
+            </label>
+            <textarea id="description" name="description" required maxlength="2500" placeholder="Escribe de manera detallada lo sucedido, personas involucradas o cómo te sientes..."></textarea>
+            <small id="descriptionError" class="error"></small>
+          </div>
+
+          <!-- Carga de Evidencia / Imagen -->
+          <div class="field">
+            <label for="evidence">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              Adjuntar imagen de prueba / evidencia (Opcional)
+            </label>
+            <div class="file-upload-box" id="dropZone">
+              <input type="file" id="evidence" name="evidence" accept="image/png, image/jpeg, image/webp">
+              <div class="file-upload-content">
+                <svg width="22" height="22" fill="none" stroke="var(--etv-blue)" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                <span id="fileLabel">Haz clic o arrastra una captura/foto aquí (PNG, JPG)</span>
+              </div>
+            </div>
+            <div id="previewContainer" class="preview-container">
+              <img id="imagePreview" class="preview-thumb" src="" alt="Previsualización">
+              <span id="fileNameText" style="font-size: 13px; font-weight: 600; color: var(--etv-navy);"></span>
+              <button type="button" id="removeFile" style="margin-left: auto; color: var(--etv-red); font-size: 12px; font-weight: 700; border: none; background: none; cursor: pointer;">Quitar</button>
+            </div>
+            <small id="evidenceError" class="error"></small>
+          </div>
+
+          <!-- Panel Interactivo de Triaje -->
+          <div id="triage" class="triage-box">
+            <div class="triage-header">
+              <svg id="triageIcon" width="18" height="18" fill="none" stroke="var(--etv-blue)" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+              <strong id="triageTitle">Orientación de prioridad en desarrollo</strong>
+            </div>
+            <p id="triageDesc">Mientras redactas, el sistema evaluará el nivel de prioridad sugerido para dar el trámite adecuado.</p>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+            <div class="field">
+              <label for="location">¿Dónde ocurrió? (Opcional)</label>
+              <input id="location" name="location" maxlength="190" placeholder="Ej: Aula, patio, red social...">
+              <small id="locationError" class="error"></small>
+            </div>
+
+            <div class="field">
+              <label for="date">¿Cuándo ocurrió? (Opcional)</label>
+              <input id="date" name="date" type="date">
+              <small id="dateError" class="error"></small>
             </div>
           </div>
-          <div id="previewContainer" class="preview-container">
-            <img id="imagePreview" class="preview-thumb" src="" alt="Previsualización">
-            <span id="fileNameText" style="font-size: 13px; font-weight: 600; color: var(--etv-navy);"></span>
-            <button type="button" id="removeFile" style="margin-left: auto; color: var(--etv-red); font-size: 12px; font-weight: 700; border: none; background: none; cursor: pointer;">Quitar</button>
-          </div>
-          <small id="evidenceError" class="error"></small>
-        </div>
 
-        <!-- Panel Interactivo de Triaje -->
-        <div id="triage" class="triage-box">
-          <div class="triage-header">
-            <svg id="triageIcon" width="18" height="18" fill="none" stroke="var(--etv-blue)" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-            <strong id="triageTitle">Orientación de prioridad en desarrollo</strong>
-          </div>
-          <p id="triageDesc">Mientras redactas, el sistema evaluará el nivel de prioridad sugerido para dar el trámite adecuado.</p>
-        </div>
+          <label class="check">
+            <input id="confirmReport" name="confirmed" type="checkbox"> Confirmo que la información suministrada refleja la situación conocida.
+          </label>
+          <small id="confirmReportError" class="error"></small>
 
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
-          <div class="field">
-            <label for="location">¿Dónde ocurrió? (Opcional)</label>
-            <input id="location" name="location" maxlength="190" placeholder="Ej: Aula, patio, red social...">
-            <small id="locationError" class="error"></small>
-          </div>
-
-          <div class="field">
-            <label for="date">¿Cuándo ocurrió? (Opcional)</label>
-            <input id="date" name="date" type="date">
-            <small id="dateError" class="error"></small>
-          </div>
-        </div>
-
-        <label class="check">
-          <input id="confirmReport" name="confirmed" type="checkbox"> Confirmo que la información suministrada refleja la situación conocida.
-        </label>
-        <small id="confirmReportError" class="error"></small>
-
-        <button class="button button-primary" id="reportSubmit" type="submit" data-loading-text="Registrando reporte..." style="width: 100%; min-height: 50px; font-size: 15px;">
-          Enviar reporte seguro
-        </button>
-      </form>
-    </section>
+          <button class="button button-primary" id="reportSubmit" type="submit" data-loading-text="Registrando reporte..." style="width: 100%; min-height: 50px; font-size: 15px;">
+            Enviar reporte seguro
+          </button>
+        </form>
+      </section>
+    </div>
   </main>
 
-  <!-- Modal Centrado y Estilizado -->
+  <!-- Modal Centrado -->
   <dialog class="modal" id="reportDone">
     <div class="modal-card">
       <div class="modal-icon-wrap">
@@ -707,7 +794,7 @@
         </svg>
       </div>
       
-      <h2>¡Reporte Enviado Exitosamente!</h2>
+      <h2>Reporte Enviado Exitosamente</h2>
       <p class="modal-subtext">Tu solicitud ha sido registrada en el sistema de convivencia escolar protegida.</p>
       
       <div class="ticket-card">
@@ -730,7 +817,7 @@
     </div>
   </dialog>
 
-  <!-- Footer estándar -->
+  <!-- Footer -->
   <footer class="professional-footer">
     <div class="container footer-main">
       <div class="footer-brand">
@@ -798,8 +885,10 @@
       setupModals();
 
       const navContainer = document.getElementById("nav-options");
+      const authNoticeBanner = document.getElementById("authNoticeBanner");
 
       function renderLoggedOutState() {
+          if (authNoticeBanner) authNoticeBanner.style.display = "flex";
           if (!navContainer) return;
           const existingBadge = navContainer.querySelector(".user-badge-container");
           const existingLogout = navContainer.querySelector("#nav-logout-btn");
@@ -830,6 +919,8 @@
           const user = session?.user;
 
           if (user) {
+              if (authNoticeBanner) authNoticeBanner.style.display = "none";
+
               let userName = user.user_metadata?.nombre || user.user_metadata?.full_name || user.email.split('@')[0];
 
               try {
@@ -883,7 +974,7 @@
           }
       });
 
-      // Previsualización de Imagen / Evidencia
+      // Previsualización de Imagen
       const fileInput = document.getElementById("evidence");
       const fileLabel = document.getElementById("fileLabel");
       const previewContainer = document.getElementById("previewContainer");
@@ -957,10 +1048,10 @@
           const button = document.getElementById("reportSubmit");
           ["routeError", "descriptionError", "locationError", "dateError", "confirmReportError", "evidenceError"].forEach((id) => setError(id, ""));
 
-          // 1. Verificación obligatoria de inicio de sesión
+          // Validación obligatoria de inicio de sesión
           const { data: { session: currentSession } } = await supabase.auth.getSession();
           if (!currentSession) {
-            setAlert("reportAlert", "Debes iniciar sesión para poder enviar un reporte seguro. Redirigiendo...", false);
+            setAlert("reportAlert", "Debes iniciar sesión para poder enviar un reporte seguro. Redirigiendo al inicio de sesión...", false);
             setTimeout(() => {
               window.location.href = "login.html";
             }, 2000);
@@ -1022,7 +1113,6 @@
 
             if (error) throw error;
 
-            // Actualizar el contenido de la modal estilizada
             document.getElementById("ticketCodeDisplay").textContent = ticketCode;
             const riskBadge = document.getElementById("ticketRiskDisplay");
             riskBadge.textContent = riskLevel;
@@ -1033,7 +1123,6 @@
             triageBox.className = "triage-box";
             triageTitle.textContent = "Orientación de prioridad en desarrollo";
             
-            // Abrir la modal en el centro exacto de la pantalla
             document.getElementById("reportDone").showModal();
             setAlert("reportAlert", "Reporte enviado satisfactoriamente.", true);
 
