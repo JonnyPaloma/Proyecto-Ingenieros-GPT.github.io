@@ -180,6 +180,7 @@
       background: #fff; color: var(--etv-ink); font-size: 14px; outline: none; transition: all 0.2s;
     }
     .form-input:focus, .form-textarea:focus { border-color: var(--etv-blue); box-shadow: 0 0 0 3px rgba(21, 89, 183, 0.15); }
+    .form-input[readonly] { background-color: #f1f5f9; color: #475569; cursor: not-allowed; }
     .form-textarea { resize: vertical; min-height: 130px; }
 
     .button-primary { width: 100%; background: var(--etv-blue); color: #fff; font-size: 15px; font-weight: 700; padding: 12px 24px; border-radius: 10px; border: none; cursor: pointer; transition: background 0.2s; }
@@ -188,6 +189,20 @@
     .alert-success {
       display: none; padding: 14px 18px; border-radius: 10px; background: #ecfdf5; border: 1px solid #10b981;
       color: #065f46; font-size: 14px; font-weight: 600; margin-bottom: 20px; text-align: center;
+    }
+
+    /* Estado protegido (cuando no ha iniciado sesión) */
+    .auth-required-box {
+      text-align: center; padding: 30px 20px;
+    }
+    .auth-required-box h3 {
+      color: var(--etv-navy); font-size: 20px; font-weight: 800; margin-bottom: 10px;
+    }
+    .auth-required-box p {
+      color: var(--etv-muted); font-size: 14px; line-height: 1.6; margin-bottom: 20px;
+    }
+    .auth-buttons-flex {
+      display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
     }
 
     /* Footer estándar */
@@ -292,32 +307,12 @@
           </div>
         </aside>
 
-        <article class="formcard">
-          <h2>Envíanos un mensaje</h2>
-          <p>Completa el formulario a continuación y nos pondremos en contacto contigo a la brevedad posible.</p>
-
-          <div id="alert-success" class="alert-success">
-            ¡Mensaje enviado con éxito! Gracias por comunicarte con nosotros.
+        <!-- Contenedor dinámico del formulario / estado de autenticación -->
+        <article class="formcard" id="contact-card-container">
+          <!-- Se llenará dinámicamente mediante JavaScript según la sesión -->
+          <div style="text-align: center; padding: 20px; color: var(--etv-muted);">
+            Verificando estado de sesión...
           </div>
-
-          <form id="contact-form">
-            <div class="form-group">
-              <label class="form-label" for="nombre">Nombre completo</label>
-              <input class="form-input" type="text" id="nombre" name="nombre" placeholder="Ej. Juan Pérez" required>
-            </div>
-
-            <div class="form-group">
-              <label class="form-label" for="correo">Correo electrónico</label>
-              <input class="form-input" type="email" id="correo" name="correo" placeholder="tucorreo@dominio.com" required>
-            </div>
-
-            <div class="form-group">
-              <label class="form-label" for="mensaje">Mensaje o consulta</label>
-              <textarea class="form-textarea" id="mensaje" name="mensaje" placeholder="Escribe detalladamente tu solicitud..." required></textarea>
-            </div>
-
-            <button type="submit" class="button-primary">Enviar mensaje</button>
-          </form>
         </article>
       </div>
 
@@ -353,34 +348,36 @@
     </div>
   </footer>
 
-  <!-- Script interactivo del formulario y Supabase Auth -->
+  <!-- Lógica de autenticación y control del formulario -->
   <script type="module">
     import { supabase } from './conexion.js';
 
     document.addEventListener("DOMContentLoaded", async () => {
-        // 1. Verificación de sesión dinámica en barra de navegación
         const loginLink = document.getElementById("nav-login");
         const registerLink = document.getElementById("nav-register");
         const navContainer = document.getElementById("nav-options");
+        const contactCardContainer = document.getElementById("contact-card-container");
 
-        if (navContainer) {
-            try {
-                const { data: { session } } = await supabase.auth.getSession();
-                const user = session?.user;
+        try {
+            const { data: { session } } = await supabase.auth.getSession();
+            const user = session?.user;
 
-                if (user) {
-                    let userName = user.user_metadata?.nombre || user.user_metadata?.full_name || user.email.split('@')[0];
+            if (user) {
+                // --- USUARIO LOGUEADO ---
+                let userName = user.user_metadata?.nombre || user.user_metadata?.full_name || user.email.split('@')[0];
 
-                    const { data: perfilData } = await supabase
-                        .from('perfiles')
-                        .select('nombre')
-                        .eq('id', user.id)
-                        .single();
+                const { data: perfilData } = await supabase
+                    .from('perfiles')
+                    .select('nombre')
+                    .eq('id', user.id)
+                    .single();
 
-                    if (perfilData?.nombre) {
-                        userName = perfilData.nombre;
-                    }
+                if (perfilData?.nombre) {
+                    userName = perfilData.nombre;
+                }
 
+                // Actualizar barra de navegación con insignia de usuario
+                if (navContainer) {
                     if (loginLink) loginLink.remove();
                     if (registerLink) registerLink.remove();
 
@@ -406,27 +403,86 @@
                     navContainer.appendChild(userBadge);
                     navContainer.appendChild(logoutButton);
                 }
-            } catch (e) {
-                console.error("Error al verificar la sesión con Supabase:", e);
-            }
-        }
 
-        // 2. Manejo del formulario de contacto
-        const contactForm = document.getElementById("contact-form");
-        const alertSuccess = document.getElementById("alert-success");
+                // Mostrar formulario de contacto y autocompletar datos del usuario
+                contactCardContainer.innerHTML = `
+                  <h2>Envíanos un mensaje</h2>
+                  <p>Hola <strong>${userName}</strong>. Completa el formulario a continuación y nos pondremos en contacto contigo.</p>
 
-        if (contactForm) {
-            contactForm.addEventListener("submit", (e) => {
-                e.preventDefault();
-                // Simulación de envío exitoso o integración futura con tabla en Supabase
-                contactForm.reset();
-                if (alertSuccess) {
-                    alertSuccess.style.display = "block";
-                    setTimeout(() => {
-                        alertSuccess.style.display = "none";
-                    }, 5000);
+                  <div id="alert-success" class="alert-success">
+                    ¡Mensaje enviado con éxito! Gracias por comunicarte con nosotros.
+                  </div>
+
+                  <form id="contact-form">
+                    <div class="form-group">
+                      <label class="form-label" for="nombre">Nombre completo</label>
+                      <input class="form-input" type="text" id="nombre" name="nombre" value="${userName}" readonly>
+                    </div>
+
+                    <div class="form-group">
+                      <label class="form-label" for="correo">Correo electrónico</label>
+                      <input class="form-input" type="email" id="correo" name="correo" value="${user.email || ''}" readonly>
+                    </div>
+
+                    <div class="form-group">
+                      <label class="form-label" for="mensaje">Mensaje o consulta</label>
+                      <textarea class="form-textarea" id="mensaje" name="mensaje" placeholder="Escribe detalladamente tu solicitud..." required></textarea>
+                    </div>
+
+                    <button type="submit" class="button-primary">Enviar mensaje</button>
+                  </form>
+                `;
+
+                // Manejar envío del formulario
+                const contactForm = document.getElementById("contact-form");
+                const alertSuccess = document.getElementById("alert-success");
+
+                if (contactForm) {
+                    contactForm.addEventListener("submit", async (e) => {
+                        e.preventDefault();
+                        const mensajeTexto = document.getElementById("mensaje").value;
+
+                        // Opcional: Aquí puedes insertar el mensaje en una tabla de Supabase si lo deseas, por ejemplo:
+                        /*
+                        await supabase.from('mensajes_contacto').insert([
+                          { user_id: user.id, nombre: userName, correo: user.email, mensaje: mensajeTexto }
+                        ]);
+                        */
+
+                        contactForm.reset();
+                        // Restaurar los campos de lectura después del reset
+                        document.getElementById("nombre").value = userName;
+                        document.getElementById("correo").value = user.email || '';
+
+                        if (alertSuccess) {
+                            alertSuccess.style.display = "block";
+                            setTimeout(() => {
+                                alertSuccess.style.display = "none";
+                            }, 5000);
+                        }
+                    });
                 }
-            });
+
+            } else {
+                // --- USUARIO NO LOGUEADO (BLOQUEAR ACCESO AL FORMULARIO) ---
+                contactCardContainer.innerHTML = `
+                  <div class="auth-required-box">
+                    <div style="font-size: 48px; margin-bottom: 12px;">🔒</div>
+                    <h3>Inicio de sesión requerido</h3>
+                    <p>Para enviar un mensaje a través de nuestro canal de contacto institucional, es necesario que inicies sesión en tu cuenta de Elige Tu Vida o te registres si aún no la tienes.</p>
+                    <div class="auth-buttons-flex">
+                      <a href="login.html" class="button button-small" style="padding: 10px 20px; font-size: 14px;">Ingresar ahora</a>
+                      <a href="registro.html" class="button button-outline button-small" style="padding: 10px 20px; font-size: 14px; color: var(--etv-navy);">Registrarse</a>
+                    </div>
+                  </div>
+                `;
+            }
+
+        } catch (e) {
+            console.error("Error al verificar la sesión con Supabase:", e);
+            contactCardContainer.innerHTML = `
+              <p style="color: #ef4444; text-align: center;">Ocurrió un error al verificar tu sesión. Por favor recarga la página.</p>
+            `;
         }
     });
   </script>
