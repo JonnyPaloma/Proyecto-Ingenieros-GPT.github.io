@@ -13,46 +13,114 @@ Restricciones estrictas de salida (No negociables):
 - Solo texto plano: Queda estrictamente prohibido utilizar asteriscos (*), formato markdown, etiquetas de negrita, viñetas o cualquier símbolo estructural. La salida debe ser prosa pura y legible para un humano.
 - Idioma: Español latino cálido, nativo, sumamente natural y empático, adecuado para estudiantes, libre de traducciones forzadas o expresiones artificiales.`;
 
-const FALLBACK = "Comprendo lo difícil que es atravesar por una situación así, y lamento mucho que tengas que vivirlo. Tu bienestar importa y podemos buscar apoyo seguro con un adulto de confianza o mediante Reporte Seguro. ¿Te gustaría contarme qué ocurrió y si estás a salvo en este momento?";
+const FALLBACK = "Comprendo lo difícil que puede ser vivir una situación así, y lamento que estés teniendo que afrontarla. Tu bienestar importa; si hay peligro inmediato, busca ahora a un adulto de confianza o a los servicios de emergencia de tu localidad, y si no, podemos revisar juntos el Reporte Seguro. ¿Qué ocurrió y te encuentras a salvo en este momento?";
+const MAX_MESSAGE_LENGTH = 4000;
+const MAX_HISTORY_ITEMS = 12;
+const REQUEST_TIMEOUT_MS = 25000;
 
-export default async function handler(req, res) {
-  if (req.method !== 'POST') return res.status(405).json({ error: 'Método no permitido' });
+function cleanPlainText(text) {
+  return String(text || '')
+    .replace(/[\*_#`~>]/g, '')
+    .replace(/^\s*[-•]\s*/gm, '')
+    .replace(/\n{2,}/g, '\n')
+    .trim();
+}
+
+function normalizeHistory(history, message) {
+  const safeHistory = history
+    .filter(item => item && ['user', 'model'].includes(item.role) && typeof item.text === 'string')
+    .map(item => ({ role: item.role, text: cleanPlainText(item.text).slice(0, MAX_MESSAGE_LENGTH) }))
+    .filter(item => item.text)
+    .slice(-MAX_HISTORY_ITEMS);
+
+  const last = safeHistory[safeHistory.length - 1];
+  if (!last || last.role !== 'user' || last.text !== message) {
+    safeHistory.push({ role: 'user', text: message });
+  }
+
+  return safeHistory.map(item => ({ role: item.role, parts: [{ text: item.text }] }));
+}
+
+async function callGemini({ apiKey, model, contents }) {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
 
   try {
-    const message = typeof req.body?.message === 'string' ? req.body.message.trim() : '';
-    const history = Array.isArray(req.body?.history) ? req.body.history : [];
-    if (!message) return res.status(400).json({ error: 'El mensaje es requerido' });
-    if (message.length > 4000) return res.status(413).json({ error: 'El mensaje es demasiado largo' });
-
-    const apiKey = process.env.GEMINI_API_KEY;
-    if (!apiKey) return res.status(500).json({ error: 'Falta configurar la API Key en Vercel' });
-
-    const contents = history
-      .filter(item => item && ['user', 'model'].includes(item.role) && typeof item.text === 'string')
-      .slice(-10)
-      .map(item => ({ role: item.role, parts: [{ text: item.text.slice(0, 4000) }] }));
-    contents.push({ role: 'user', parts: [{ text: message }] });
-
-    let data;
-    for (let attempt = 0; attempt < 2; attempt += 1) {
-      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=${encodeURIComponent(apiKey)}`, {
+    const response = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(apiKey)}`,
+      {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        signal: controller.signal,
         body: JSON.stringify({
           system_instruction: { parts: [{ text: SYSTEM_INSTRUCTION }] },
           contents,
-          generationConfig: { maxOutputTokens: 300, temperature: 0.75 }
+          generationConfig: {
+            maxOutputTokens: 1200,
+            temperature: 0.78,
+            topP: 0.92,
+            candidateCount: 1
+          },
+          safetySettings: [
+            { category: 'HARM_CATEGORY_HARASSMENT', threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
+            { category: 'HARM_CATEGORY_HATE_SPEECH', threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
+            { category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT', threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
+            { category: 'HARM_CATEGORY_DANGEROUS_CONTENT', threshold: 'BLOCK_MEDIUM_AND_ABOVE' }
+          ]
         })
-      });
-      data = await response.json().catch(() => null);
-      if (response.ok) break;
-      if (attempt === 0) await new Promise(resolve => setTimeout(resolve, 450));
+      }
+    );
+
+    const data = await response.json().catch(() => null);
+    return { ok: response.ok, data };
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
+export default async function handler(req, res) {
+  if (req.method !== 'POST') {
+    res.setHeader('Allow', 'POST');
+    return res.status(405).json({ error: 'Método no permitido' });
+  }
+
+  try {
+    const message = typeof req.body?.message === 'string' ? cleanPlainText(req.body.message) : '';
+    const history = Array.isArray(req.body?.history) ? req.body.history : [];
+
+    if (!message) return res.status(400).json({ error: 'El mensaje es requerido' });
+    if (message.length > MAX_MESSAGE_LENGTH) return res.status(413).json({ error: 'El mensaje es demasiado largo' });
+
+    const apiKey = process.env.GEMINI_API_KEY;
+    if (!apiKey) return res.status(500).json({ error: 'Falta configurar GEMINI_API_KEY en Vercel' });
+
+    const preferredModel = process.env.GEMINI_MODEL || 'gemini-3.7-flash';
+    const modelsToTry = [...new Set([preferredModel, 'gemini-2.5-flash', 'gemini-3.5-flash'])];
+    const contents = normalizeHistory(history, message);
+    let result = null;
+
+    for (const model of modelsToTry) {
+      for (let attempt = 0; attempt < 2; attempt += 1) {
+        try {
+          result = await callGemini({ apiKey, model, contents });
+          if (result.ok) break;
+        } catch (error) {
+          if (attempt === 1) console.error(`Error consultando ${model}:`, error.message);
+        }
+        if (attempt === 0) await new Promise(resolve => setTimeout(resolve, 500));
+      }
+      if (result?.ok) break;
     }
 
-    let botReply = data?.candidates?.[0]?.content?.parts?.map(part => part.text || '').join('').trim();
-    if (!botReply) return res.status(200).json({ reply: FALLBACK });
-    botReply = botReply.replace(/[\*_#`~>]/g, '').replace(/^\s*[-•]\s*/gm, '').replace(/\n{2,}/g, '\n').trim();
-    return res.status(200).json({ reply: botReply || FALLBACK });
+    const parts = result?.data?.candidates?.[0]?.content?.parts || [];
+    const botReply = cleanPlainText(parts.map(part => part.text || '').join(''));
+
+    if (!botReply) {
+      console.error('Gemini no devolvió contenido:', JSON.stringify(result?.data || {}));
+      return res.status(200).json({ reply: FALLBACK });
+    }
+
+    return res.status(200).json({ reply: botReply });
   } catch (error) {
     console.error('Error en /api/chat:', error);
     return res.status(200).json({ reply: FALLBACK });
