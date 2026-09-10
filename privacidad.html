@@ -248,28 +248,28 @@
       <article class="legal-card">
         <div class="legal-head">
           <h1>Política de Privacidad</h1>
-          <p>Última actualización: Agosto de 2026</p>
+          <p>Última actualización: Agosto de 2026[cite: 3]</p>
         </div>
 
         <div class="legal-content">
-          <p>En <strong>Elige Tu Vida</strong> valoramos y protegemos la privacidad de todos los miembros de nuestra comunidad académica. Esta política describe cómo recopilamos, utilizamos y salvaguardamos la información personal dentro de nuestra plataforma institucional.</p>
+          <p>En <strong>Elige Tu Vida</strong> valoramos y protegemos la privacidad de todos los miembros de nuestra comunidad académica[cite: 3]. Esta política describe cómo recopilamos, utilizamos y salvaguardamos la información personal dentro de nuestra plataforma institucional[cite: 3].</p>
 
           <h2>1. Información que recopilamos</h2>
-          <p>Para garantizar el acceso seguro a los servicios de orientación y convivencia, podemos recopilar datos básicos de registro tales como:</p>
+          <p>Para garantizar el acceso seguro a los servicios de orientación y convivencia, podemos recopilar datos básicos de registro tales como[cite: 3]:</p>
           <ul>
-            <li>Nombre completo y datos de identificación institucional.</li>
-            <li>Correo electrónico de contacto.</li>
-            <li>Registros de interacción con los módulos de orientación y reportes seguros.</li>
+            <li>Nombre completo y datos de identificación institucional[cite: 3].</li>
+            <li>Correo electrónico de contacto[cite: 3].</li>
+            <li>Registros de interacción con los módulos de orientación y reportes seguros[cite: 3].</li>
           </ul>
 
           <h2>2. Uso de la información</h2>
-          <p>Los datos recopilados son utilizados exclusivamente con fines de gestión institucional, soporte técnico, prevención integral de la convivencia escolar y garantía de acceso seguro a los perfiles de usuario.</p>
+          <p>Los datos recopilados son utilizados exclusivamente con fines de gestión institucional, soporte técnico, prevención integral de la convivencia escolar y garantía de acceso seguro a los perfiles de usuario[cite: 3].</p>
 
           <h2>3. Confidencialidad y Seguridad</h2>
-          <p>Implementamos estrictos protocolos de seguridad tecnológica y cifrado a través de infraestructura especializada (Supabase) para salvaguardar la integridad de la información frente a accesos no autorizados.</p>
+          <p>Implementamos estrictos protocolos de seguridad tecnológica y cifrado a través de infraestructura especializada (Supabase) para salvaguardar la integridad de la información frente a accesos no autorizados[cite: 3].</p>
 
           <h2>4. Derechos del usuario</h2>
-          <p>Como usuario registrado, tienes derecho a consultar, actualizar o solicitar la revisión de tus datos personales a través de nuestros canales oficiales de soporte institucional.</p>
+          <p>Como usuario registrado, tienes derecho a consultar, actualizar o solicitar la revisión de tus datos personales a través de nuestros canales oficiales de soporte institucional[cite: 3].</p>
         </div>
       </article>
     </div>
@@ -304,14 +304,39 @@
     </div>
   </footer>
 
-  <!-- Sincronización en tiempo real con onAuthStateChange -->
+  <!-- Sincronización en tiempo real y limpieza instantánea al cerrar sesión -->
   <script type="module">
     import { supabase } from './conexion.js';
 
     document.addEventListener("DOMContentLoaded", () => {
-        const loginLink = document.getElementById("nav-login");
-        const registerLink = document.getElementById("nav-register");
         const navContainer = document.getElementById("nav-options");
+
+        function renderLoggedOutState() {
+            if (!navContainer) return;
+            const existingBadge = navContainer.querySelector(".user-badge-container");
+            const existingLogout = navContainer.querySelector("#nav-logout-btn");
+            if (existingBadge) existingBadge.remove();
+            if (existingLogout) existingLogout.remove();
+
+            if (!document.getElementById("nav-login")) {
+                const loginLink = document.createElement("a");
+                loginLink.href = "login.html";
+                loginLink.id = "nav-login";
+                loginLink.className = "button button-outline button-small";
+                loginLink.style.color = "var(--etv-navy)";
+                loginLink.textContent = "Ingresar";
+                navContainer.appendChild(loginLink);
+            }
+
+            if (!document.getElementById("nav-register")) {
+                const registerLink = document.createElement("a");
+                registerLink.href = "registro.html";
+                registerLink.id = "nav-register";
+                registerLink.className = "button button-small";
+                registerLink.textContent = "Registrarse";
+                navContainer.appendChild(registerLink);
+            }
+        }
 
         supabase.auth.onAuthStateChange(async (event, session) => {
             const user = session?.user;
@@ -334,6 +359,8 @@
                 }
 
                 if (navContainer && !document.querySelector(".user-badge-container")) {
+                    const loginLink = document.getElementById("nav-login");
+                    const registerLink = document.getElementById("nav-register");
                     if (loginLink) loginLink.remove();
                     if (registerLink) registerLink.remove();
 
@@ -347,21 +374,24 @@
                     `;
 
                     const logoutButton = document.createElement("button");
+                    logoutButton.id = "nav-logout-btn";
                     logoutButton.textContent = "Cerrar sesión";
                     logoutButton.className = "button button-small button-outline";
+                    logoutButton.style.color = "var(--etv-navy)";
                     logoutButton.style.marginLeft = "4px";
 
                     logoutButton.addEventListener("click", async () => {
+                        renderLoggedOutState();
                         await supabase.auth.signOut();
+                        localStorage.clear();
+                        sessionStorage.clear();
                     });
 
                     navContainer.appendChild(userBadge);
                     navContainer.appendChild(logoutButton);
                 }
             } else {
-                if (event === 'SIGN_OUT') {
-                    window.location.reload();
-                }
+                renderLoggedOutState();
             }
         });
     });
