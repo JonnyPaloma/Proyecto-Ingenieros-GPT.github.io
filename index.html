@@ -10,7 +10,7 @@
   <link rel="icon" href="assets/images/Favicon Hack.png" sizes="16x16" type="image/png">
   <link rel="shortcut icon" href="assets/images/Favicon Hack.png">
   <link rel="apple-touch-icon" href="assets/images/Favicon Hack.png">
-  <metaname="theme-color " content="#0f1f46">
+  <meta name="theme-color" content="#0f1f46">
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <script>window.tailwind=window.tailwind||{};tailwind.config={theme:{extend:{colors:{primary:{50:"#eff6ff",100:"#dbeafe",200:"#bfdbfe",300:"#93c5fd",400:"#60a5fa",500:"#3b82f6",600:"#2563eb",700:"#1d4ed8",800:"#1e40af",900:"#1e3a8a",950:"#172554"},trust:{cyan:"#dff7ff",indigo:"#3730a3",navy:"#0f1f46",gray:"#64748b"}}}}};</script>
   <script>
@@ -159,7 +159,7 @@ footer{padding:38px 0;color:#c8d5e9;background:#172033}
           <article class="route-card route-emotional"><span class="route-number">01</span><div class="route-icon">♥</div><h3>Bienestar emocional</h3><p>Para momentos de tristeza, ansiedad, miedo, soledad o cambios que se sienten difíciles de manejar.</p><a href="chat.html">Iniciar orientación <b>→</b></a></article>
           <article class="route-card route-school"><span class="route-number">02</span><div class="route-icon">+</div><h3>Convivencia escolar</h3><p>Para conflictos, acoso, intimidación, discriminación o situaciones que afectan tu tranquilidad.</p><a href="reporte-seguro.html">Crear reporte seguro <b>→</b></a></article>
           <article class="route-card route-digital"><span class="route-number">03</span><div class="route-icon">#</div><h3>Seguridad digital</h3><p>Para amenazas, suplantación, chantaje o difusión de contenido sin consentimiento.</p><a href="chat.html">Recibir orientación <b>→</b></a></article>
-          <article class="route-card route-family"><span class="route-number">04</span><div class="route-icon">i</div><h3>Protección integral</h3><p>Когда algo ocurre fuera del colegio y necesitas encontrar una ruta de protección confiable.</p><a href="reporte-seguro.html">Pedir acompañamiento <b>→</b></a></article>
+          <article class="route-card route-family"><span class="route-number">04</span><div class="route-icon">i</div><h3>Protección integral</h3><p>Cuando algo ocurre fuera del colegio y necesitas encontrar una ruta de protección confiable.</p><a href="reporte-seguro.html">Pedir acompañamiento <b>→</b></a></article>
         </div>
       </div>
     </section>
@@ -205,50 +205,66 @@ footer{padding:38px 0;color:#c8d5e9;background:#172033}
     <div class="container footer-bottom"><span>© 2026 Elige Tu Vida</span><span>Proyecto de convivencia escolar y prevención integral</span></div>
   </footer>
 
+  <!-- Sincronización en tiempo real con onAuthStateChange -->
   <script type="module">
     import { supabase } from './conexion.js';
 
-    document.addEventListener("DOMContentLoaded", async () => {
+    document.addEventListener("DOMContentLoaded", () => {
         const loginLink = document.getElementById("nav-login");
         const registerLink = document.getElementById("nav-register");
         const navContainer = document.getElementById("nav-options");
 
-        const { data: { session } } = await supabase.auth.getSession();
-        const localSession = JSON.parse(localStorage.getItem("etv_session") || "null");
-        const localUserObj = JSON.parse(localStorage.getItem("usuario") || sessionStorage.getItem("usuario") || "null");
+        supabase.auth.onAuthStateChange(async (event, session) => {
+            const user = session?.user;
 
-        const user = session?.user;
-        const userName = user?.user_metadata?.full_name || user?.user_metadata?.nombre || localSession?.name || localUserObj?.nombre || localUserObj?.name;
+            if (user) {
+                let userName = user.user_metadata?.nombre || user.user_metadata?.full_name || user.email.split('@')[0];
 
-        if (user || localSession || localUserObj) {
-            if (loginLink) loginLink.remove();
-            if (registerLink) registerLink.remove();
+                try {
+                    const { data: perfilData } = await supabase
+                        .from('perfiles')
+                        .select('nombre')
+                        .eq('id', user.id)
+                        .single();
 
-            const userBadge = document.createElement("div");
-            userBadge.className = "user-badge-container";
-            
-            const initial = (userName ? userName.charAt(0) : "U").toUpperCase();
-            userBadge.innerHTML = `
-              <div class="user-avatar-circle">${initial}</div>
-              <span class="user-name-text">${userName || 'Usuario'}</span>
-            `;
+                    if (perfilData?.nombre) {
+                        userName = perfilData.nombre;
+                    }
+                } catch (err) {
+                    console.error("Error al obtener perfil:", err);
+                }
 
-            const logoutButton = document.createElement("button");
-            logoutButton.textContent = "Cerrar sesión";
-            logoutButton.className = "button button-small button-outline";
-            logoutButton.style.marginLeft = "4px";
+                if (navContainer && !document.querySelector(".user-badge-container")) {
+                    if (loginLink) loginLink.remove();
+                    if (registerLink) registerLink.remove();
 
-            logoutButton.addEventListener("click", async () => {
-                await supabase.auth.signOut();
-                localStorage.removeItem("etv_session");
-                localStorage.removeItem("usuario");
-                sessionStorage.removeItem("usuario");
-                window.location.reload();
-            });
+                    const userBadge = document.createElement("div");
+                    userBadge.className = "user-badge-container";
+                    
+                    const initial = (userName ? userName.charAt(0) : "U").toUpperCase();
+                    userBadge.innerHTML = `
+                      <div class="user-avatar-circle">${initial}</div>
+                      <span class="user-name-text">${userName}</span>
+                    `;
 
-            navContainer.appendChild(userBadge);
-            navContainer.appendChild(logoutButton);
-        }
+                    const logoutButton = document.createElement("button");
+                    logoutButton.textContent = "Cerrar sesión";
+                    logoutButton.className = "button button-small button-outline";
+                    logoutButton.style.marginLeft = "4px";
+
+                    logoutButton.addEventListener("click", async () => {
+                        await supabase.auth.signOut();
+                    });
+
+                    navContainer.appendChild(userBadge);
+                    navContainer.appendChild(logoutButton);
+                }
+            } else {
+                if (event === 'SIGN_OUT') {
+                    window.location.reload();
+                }
+            }
+        });
     });
   </script>
 </body>
