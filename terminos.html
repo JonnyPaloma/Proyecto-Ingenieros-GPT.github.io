@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Términos de uso de la plataforma Elige Tu Vida, condiciones y normas de convivencia escolar.">
-  <title>Términos de uso | Elige Tu Vida</title>
+  <meta name="description" content="Términos y condiciones de uso de la plataforma Elige Tu Vida, normas de convivencia y pautas de participación.">
+  <title>Términos y condiciones | Elige Tu Vida</title>
 
   <link rel="icon" href="assets/images/Favicon Hack.png" type="image/svg+xml">
   <link rel="icon" href="assets/images/Favicon Hack.png" sizes="32x32" type="image/png">
@@ -155,7 +155,7 @@
     .text { color: var(--etv-blue); font-weight: 700; transition: color 0.2s; }
     .text:hover { color: #2563eb; text-decoration: underline; }
 
-    /* Footer estándar idéntico al resto de la plataforma */
+    /* Footer estándar */
     .professional-footer { padding: 40px 0 20px; background: #101a2d; color: #aebdd1; margin-top: auto; }
     .footer-main { display: grid; grid-template-columns: 1.6fr .7fr .7fr; gap: 60px; padding-bottom: 30px; }
     .footer-main p { max-width: 430px; margin: 14px 0 0; color: #9eafc6; font-size: 13px; line-height: 1.6; }
@@ -189,13 +189,30 @@
     document.addEventListener("DOMContentLoaded", () => {
         const button = document.querySelector(".menu");
         const navigation = document.querySelector(".site-nav nav");
-        if (!button || !navigation) return;
+        if (button && navigation) {
+            button.addEventListener("click", () => {
+                const open = button.getAttribute("aria-expanded") === "true";
+                button.setAttribute("aria-expanded", String(!open));
+                navigation.classList.toggle("open", !open);
+            });
+        }
 
-        button.addEventListener("click", () => {
-            const open = button.getAttribute("aria-expanded") === "true";
-            button.setAttribute("aria-expanded", String(!open));
-            navigation.classList.toggle("open", !open);
-        });
+        // Validación y persistencia de sesión en la barra de navegación
+        const authContainer = document.getElementById("auth-action-container");
+        if (!authContainer) return;
+
+        try {
+            const activeUser = localStorage.getItem("etv_active_user") || sessionStorage.getItem("etv_active_user");
+            if (activeUser) {
+                const userData = JSON.parse(activeUser);
+                const firstName = userData.nombre ? userData.nombre.split(" ")[0] : "Mi cuenta";
+                authContainer.innerHTML = `<a href="dashboard.html" class="button button-small" style="background: var(--etv-blue); color: #fff;">Hola, ${firstName}</a>`;
+            } else {
+                authContainer.innerHTML = `<a href="login.html" class="button button-outline button-small">Ingresar</a>`;
+            }
+        } catch (e) {
+            authContainer.innerHTML = `<a href="login.html" class="button button-outline button-small">Ingresar</a>`;
+        }
     });
   </script>
 </head>
@@ -222,7 +239,9 @@
         <a href="index.html">Inicio</a>
         <a href="chat.html">Orientación guiada</a>
         <a href="reporte-seguro.html">Reporte seguro</a>
-        <a href="login.html" class="button button-outline button-small">Ingresar</a>
+        <div id="auth-action-container" style="display: inline-block;">
+          <a href="login.html" class="button button-outline button-small">Ingresar</a>
+        </div>
       </nav>
     </div>
   </header>
@@ -232,35 +251,35 @@
       
       <div class="form-head">
         <span style="color: var(--etv-blue); font-size: 12px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; display: block; margin-bottom: 8px;">INFORMACIÓN LEGAL</span>
-        <h1>Términos de uso</h1>
+        <h1>Términos y condiciones de uso</h1>
         <p>Última actualización: septiembre de 2026.</p>
       </div>
 
       <div class="form-wrap">
         <aside class="side">
-          <h2>Marco normativo</h2>
-          <p>Este documento establece los lineamientos institucionales y los estándares de uso responsable que rigen la plataforma de apoyo escolar.</p>
-          <a class="text" href="privacidad.html">Política de privacidad &rarr;</a>
+          <h2>Uso responsable</h2>
+          <p>La plataforma está diseñada para fomentar la convivencia escolar positiva y brindar canales de apoyo y reporte seguro.</p>
+          <a class="text" href="contacto.html">Soporte técnico &rarr;</a>
         </aside>
 
         <article class="formcard">
-          <h2>1. Propósito institucional</h2>
-          <p>Elige Tu Vida es un entorno digital enfocado en la orientación y la convivencia escolar. Su misión principal es proveer canales eficientes de primera escucha y establecer rutas de apoyo integrales para los estudiantes y la comunidad educativa.</p>
+          <h2>1. Aceptación de los términos</h2>
+          <p>Al acceder, navegar o utilizar la plataforma Elige Tu Vida, el usuario acepta de manera expresa los presentes términos y condiciones, comprometiéndose a hacer un uso adecuado y respetuoso de las herramientas digitales disponibles.</p>
           
-          <h2>2. Normas de uso responsable</h2>
-          <p>Los usuarios se comprometen a emplear la plataforma bajo estrictos principios de respeto mutuo y buena fe. Queda prohibido utilizar el sistema para cometer actos de acoso, intimidación, suplantación de identidad, divulgación de información confidencial o emisión deliberada de reportes falsos.</p>
+          <h2>2. Propósito institucional y alcance</h2>
+          <p>El sistema funciona como un entorno preventivo de apoyo escolar y reporte de incidentes dentro del ámbito educativo. No reemplaza los protocolos de emergencia legales ni constituye una instancia de dictamen judicial o médico oficial.</p>
           
-          <h2>3. Alcance y limitaciones</h2>
-          <p>Las orientaciones y respuestas automatizadas ofrecidas poseen un carácter estrictamente informativo y de acompañamiento preventivo. No constituyen dictámenes psicológicos, médicos ni jurídicos, y no sustituyen los protocolos formales de atención institucional.</p>
+          <h2>3. Obligaciones del usuario</h2>
+          <p>El usuario se compromete a no utilizar los canales de reporte o interacción para enviar información falsa, ofensiva o que vulnere la integridad de los miembros de la comunidad educativa. El mal uso intencional puede acarrear restricciones de acceso.</p>
           
-          <h2>4. Protocolos de emergencia</h2>
-          <p>Ante situaciones que representen un peligro inminente para la integridad física o emocional de un individuo, se exhorta a contactar de manera inmediata a un adulto responsable de confianza y a recurrir a las líneas oficiales de emergencia locales.</p>
+          <h2>4. Confidencialidad y reportes seguros</h2>
+          <p>Los canales anónimos están diseñados para proteger la identidad del emisor. La plataforma implementa medidas técnicas locales para salvaguardar la privacidad de la información suministrada durante las sesiones de orientación.</p>
           
-          <h2>5. Entorno y privacidad local</h2>
-          <p>Esta aplicación opera bajo una arquitectura estática orientada a la protección de datos. Los registros generados mediante los módulos interactivos se gestionan de manera local y transitoria, garantizando la confidencialidad y evitando la exposición a servidores externos no autorizados.</p>
+          <h2>5. Propiedad intelectual</h2>
+          <p>Todos los diseños, logotipos, códigos fuente, interfaces y contenidos gráficos de Elige Tu Vida están protegidos bajo normativas de derechos de autor. Queda prohibida su reproducción o modificación comercial sin autorización previa.</p>
           
-          <h2>6. Canales de contacto</h2>
-          <p>Para resolver inquietudes adicionales sobre las normativas de la plataforma, consulte nuestra sección de <a class="text" href="contacto.html">contacto institucional</a>.</p>
+          <h2>6. Modificaciones de la plataforma</h2>
+          <p>Los administradores se reservan el derecho de actualizar, modificar o suspender temporalmente funciones del sitio con el propósito de optimizar su seguridad, rendimiento o adaptabilidad institucional.</p>
         </article>
       </div>
 
