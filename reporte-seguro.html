@@ -2,221 +2,569 @@
 <html lang="es-CO">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="description" content="Reporte seguro y confidencial en Elige Tu Vida">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Reporte seguro y confidencial en Elige Tu Vida: acompañamiento y convivencia escolar protegida.">
   <title>Reporte Seguro | Elige Tu Vida</title>
   
-  <!-- Favicon apuntando al archivo original Favicon Hack -->
-  <link rel="icon" href="Favicon Hack.png" type="image/png">
+  <!-- Favicon e íconos idénticos al index -->
+  <link rel="icon" href="assets/images/Favicon Hack.png" type="image/svg+xml">
+  <link rel="icon" href="assets/images/Favicon Hack.png" sizes="32x32" type="image/png">
+  <link rel="icon" href="assets/images/Favicon Hack.png" sizes="16x16" type="image/png">
+  <link rel="shortcut icon" href="assets/images/Favicon Hack.png">
+  <link rel="apple-touch-icon" href="assets/images/Favicon Hack.png">
+  <meta name="theme-color" content="#0f1f46">
   
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script>
+    window.tailwind = window.tailwind || {};
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: { 50:"#eff6ff", 100:"#dbeafe", 200:"#bfdbfe", 300:"#93c5fd", 400:"#60a5fa", 500:"#3b82f6", 600:"#2563eb", 700:"#1d4ed8", 800:"#1e40af", 900:"#1e3a8a", 950:"#172554" },
+            trust: { cyan:"#dff7ff", indigo:"#3730a3", navy:"#0f1f46", gray:"#64748b" }
+          }
+        }
+      }
+    };
+  </script>
+  
+  <script>
+    "use strict";
+    document.addEventListener("DOMContentLoaded", () => {
+        const button = document.querySelector(".menu");
+        const navigation = document.querySelector(".site-nav nav");
+        if (!button || !navigation) return;
+
+        button.addEventListener("click", () => {
+            const open = button.getAttribute("aria-expanded") === "true";
+            button.setAttribute("aria-expanded", String(!open));
+            navigation.classList.toggle("open", !open);
+        });
+    });
+  </script>
   
   <style>
     :root {
-      --navy: #0f1f46;
-      --indigo: #3730a3;
-      --blue: #2563eb;
-      --light-blue: #eff6ff;
-      --gray: #64748b;
-      --text: #1e293b;
-      --bg: #f8fafc;
-      --white: #ffffff;
-      --line: #e2e8f0;
-      --success: #10b981;
+      --etv-navy: #0b1f48;
+      --etv-blue: #1559b7;
+      --etv-blue-dark: #103c81;
+      --etv-sky: #dff3ff;
+      --etv-indigo: #3730a3;
+      --etv-ink: #1c2b43;
+      --etv-muted: #5f6f85;
+      --etv-line: #dbe5ef;
+      --etv-soft: #f5f8fb;
+      --etv-white: #fff;
+      --etv-green: #0f9f6e;
     }
-    
-    * { box-sizing: border-box; }
-    html { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); }
-    body { margin: 0; min-height: 100vh; display: flex; flex-direction: column; }
-    a { color: inherit; text-decoration: none; transition: all 0.2s ease; }
-    
-    .container { width: min(1120px, calc(100% - 40px)); margin: auto; }
-    
-    /* Header en armonía visual con la página principal */
-    header { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 50; }
-    .nav-container { display: flex; align-items: center; justify-content: space-between; min-height: 80px; }
-    .brand { display: flex; align-items: center; gap: 12px; }
-    
-    /* Logo referenciando directamente a Favicon Hack */
-    .brand-icon { width: 44px; height: 44px; object-fit: contain; }
-    
-    .brand-text strong { display: block; color: var(--navy); font-size: 20px; font-weight: 800; line-height: 1.1; }
-    .brand-text small { display: block; color: var(--gray); font-size: 12px; font-weight: 600; }
-    
-    .nav-links { display: flex; align-items: center; gap: 24px; }
-    .nav-links a { font-size: 14px; font-weight: 600; color: var(--gray); }
-    .nav-links a:hover { color: var(--blue); }
-    
-    /* Botones y Badges */
-    .btn { display: inline-flex; align-items: center; justify-content: center; padding: 10px 20px; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.2s; border: none; }
-    .btn-primary { background: var(--blue); color: var(--white); box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2); width: 100%; padding: 14px; font-size: 16px; }
-    .btn-primary:hover { background: #1d4ed8; transform: translateY(-1px); }
-    .btn-outline { border: 2px solid var(--line); color: var(--navy); background: transparent; }
-    .btn-outline:hover { border-color: var(--blue); color: var(--blue); background: var(--light-blue); }
-    
-    .user-badge-container { display: flex; align-items: center; gap: 10px; background: var(--light-blue); padding: 6px 14px 6px 6px; border-radius: 30px; border: 1px solid #bfdbfe; }
-    .user-avatar-circle { width: 32px; height: 32px; background: var(--indigo); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: bold; }
-    
-    /* Formulario de Reporte */
-    main { flex: 1; display: flex; align-items: center; justify-content: center; padding: 60px 0; }
-    .report-card { background: var(--white); border-radius: 16px; border: 1px solid var(--line); box-shadow: 0 10px 25px rgba(15, 31, 70, 0.05); max-width: 640px; width: 100%; padding: 40px; }
-    
-    .report-header { text-align: center; margin-bottom: 32px; }
-    .report-header h1 { font-size: 28px; font-weight: 800; color: var(--navy); margin: 0 0 8px; }
-    .report-header p { color: var(--gray); font-size: 15px; margin: 0; }
-    
-    .form-group { margin-bottom: 24px; }
-    .form-label { display: block; font-size: 14px; font-weight: 600; color: var(--navy); margin-bottom: 8px; }
-    .form-control { width: 100%; padding: 12px 16px; border-radius: 8px; border: 1px solid var(--line); background: var(--bg); font-family: inherit; font-size: 15px; color: var(--text); transition: all 0.2s; }
-    .form-control:focus { outline: none; border-color: var(--blue); background: var(--white); box-shadow: 0 0 0 3px var(--light-blue); }
-    textarea.form-control { resize: vertical; min-height: 120px; }
-    
-    .anonymous-toggle { display: flex; align-items: center; gap: 12px; padding: 16px; background: var(--light-blue); border-radius: 8px; border: 1px solid #bfdbfe; margin-bottom: 32px; }
-    .anonymous-toggle input[type="checkbox"] { width: 20px; height: 20px; accent-color: var(--blue); cursor: pointer; }
-    .anonymous-toggle label { font-size: 14px; font-weight: 600; color: var(--navy); cursor: pointer; display: flex; flex-direction: column; }
-    .anonymous-toggle label span { font-size: 12px; color: var(--gray); font-weight: 400; margin-top: 2px; }
-    
-    .file-drop-area { border: 2px dashed var(--line); border-radius: 8px; padding: 24px; text-align: center; background: var(--bg); cursor: pointer; transition: all 0.2s; display: block; }
-    .file-drop-area:hover { border-color: var(--blue); background: var(--light-blue); }
-    .file-drop-text { font-size: 14px; color: var(--gray); margin: 0; }
-    .file-drop-text strong { color: var(--blue); }
-    .file-input { display: none; }
 
-    footer { background: #0f172a; padding: 30px 0; color: #94a3b8; text-align: center; font-size: 14px; border-top: 1px solid #1e293b; }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--etv-ink);
+      background: var(--etv-soft);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+      font-size: 16px;
+      line-height: 1.55;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    a { color: inherit; text-decoration: none; }
+    .container { width: min(1240px, calc(100% - 48px)); margin-inline: auto; }
+
+    /* Header y Navegación idénticos al index */
+    .site-header {
+      position: sticky;
+      z-index: 50;
+      top: 0;
+      border-bottom: 1px solid var(--etv-line);
+      background: rgba(255, 255, 255, 0.97);
+      backdrop-filter: blur(14px);
+    }
+    .site-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 78px;
+      gap: 28px;
+    }
+    .brand { display: flex; align-items: center; gap: 12px; }
+    .brand strong, .brand small { display: block; }
+    .brand strong { color: var(--etv-navy); font-size: 20px; line-height: 1.2; font-weight: 800; }
+    .brand small { color: var(--etv-muted); font-size: 13px; line-height: 1.2; font-weight: 600; }
+
+    .site-nav nav { display: flex; align-items: center; gap: 10px; }
+    .site-nav nav > a:not(.button), .site-nav nav > span {
+      padding: 10px 12px;
+      border-radius: 6px;
+      color: #52647c;
+      font-size: 13px;
+      font-weight: 750;
+    }
+    .site-nav nav > a:not(.button):hover { color: var(--etv-blue-dark); background: #eff6ff; }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 10px 18px;
+      border: 1px solid transparent;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 1.2;
+      transition: all .2s ease;
+      cursor: pointer;
+    }
+    .button:hover { transform: translateY(-1px); }
+    .button-small { min-height: 38px; padding: 8px 14px; font-size: 13px; color: #fff; background: var(--etv-blue); box-shadow: 0 4px 12px rgba(21,89,183,.15); }
+    .button-primary { color: #fff; background: var(--etv-blue); box-shadow: 0 8px 20px rgba(21,89,183,.18); }
+    .button-primary:hover, .button-small:hover { background: var(--etv-blue-dark); box-shadow: 0 6px 15px rgba(16,60,129,.25); }
+    .button-outline { border-color: #cbd5e1; color: var(--etv-blue-dark); background: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
+    .button-outline:hover { border-color: var(--etv-blue); background: #eff6ff; color: var(--etv-blue); }
+
+    .menu {
+      display: none;
+      padding: 8px 12px;
+      border: 1px solid var(--etv-line);
+      border-radius: 6px;
+      background: #fff;
+      font-weight: bold;
+      cursor: pointer;
+      color: var(--etv-navy);
+      margin-left: auto;
+    }
+
+    .user-badge-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #f1f5f9;
+      padding: 5px 12px 5px 6px;
+      border-radius: 30px;
+      border: 1px solid #e2e8f0;
+    }
+    .user-avatar-circle {
+      width: 30px; height: 30px; background: var(--etv-blue); color: white;
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: bold;
+    }
+    .user-name-text { font-size: 13px; font-weight: 700; color: var(--etv-navy); }
+
+    /* Layout del Formulario */
+    main { flex: 1; }
+    .form-head {
+      padding: 50px 0 30px;
+      background: #edf4f8;
+      border-bottom: 1px solid var(--etv-line);
+    }
+    .eyebrow { margin: 0 0 10px; color: var(--etv-blue-dark); font-size: 12px; font-weight: 850; text-transform: uppercase; letter-spacing: .04em; }
+    .form-head h1 { margin: 0 0 8px; color: var(--etv-navy); font-size: clamp(32px, 3.5vw, 46px); font-weight: 880; line-height: 1.1; }
+    .form-head p { margin: 0; color: var(--etv-muted); font-size: 16px; }
+
+    .form-wrap {
+      display: grid;
+      grid-template-columns: 300px minmax(0, 680px);
+      justify-content: center;
+      gap: 40px;
+      padding: 50px 0 80px;
+    }
+    .side, .formcard {
+      padding: 32px;
+      border: 1px solid var(--etv-line);
+      border-radius: 12px;
+      background: #fff;
+      box-shadow: 0 10px 30px rgba(15, 31, 70, 0.04);
+    }
+    .side {
+      height: max-content;
+      background: #f1f7fd;
+      border-color: #dceeff;
+    }
+    .side h2, .formcard h2 { margin-top: 0; margin-bottom: 12px; color: var(--etv-navy); font-size: 22px; font-weight: 800; }
+    .side p { color: var(--etv-muted); font-size: 14px; line-height: 1.6; margin-bottom: 16px; }
+    .side-link { color: var(--etv-blue-dark); font-weight: 750; font-size: 14px; display: inline-flex; align-items: center; gap: 4px; }
+    .side-link:hover { color: var(--etv-blue); text-decoration: underline; }
+
+    .field { margin-bottom: 22px; }
+    .field label { display: block; margin-bottom: 8px; font-size: 14px; font-weight: 700; color: var(--etv-navy); }
+    .field input, .field textarea, .field select {
+      width: 100%;
+      min-height: 46px;
+      padding: 12px 14px;
+      border: 1px solid var(--etv-line);
+      border-radius: 8px;
+      background: #fff;
+      font-family: inherit;
+      font-size: 14px;
+      color: var(--etv-ink);
+      transition: all .2s;
+    }
+    .field textarea { min-height: 140px; resize: vertical; }
+    .field input:focus, .field textarea:focus, .field select:focus {
+      outline: none;
+      border-color: var(--etv-blue);
+      box-shadow: 0 0 0 3px rgba(21, 89, 183, 0.15);
+    }
+    .error { display: block; min-height: 18px; margin-top: 4px; color: #dc2626; font-size: 12px; font-weight: 600; }
     
-    @media (max-width: 600px) {
-      .nav-links { display: none; }
-      .report-card { padding: 24px; border-radius: 0; border: none; }
+    .alert {
+      margin-bottom: 20px;
+      padding: 12px 16px;
+      border: 1px solid #fca5a5;
+      border-radius: 8px;
+      color: #991b1b;
+      background: #fef2f2;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .alert.ok { border-color: #86efac; color: #166534; background: #f0fdf4; }
+
+    .triage-box {
+      margin: 20px 0;
+      padding: 16px;
+      border-radius: 8px;
+      background: #eef7ff;
+      border-left: 4px solid var(--etv-blue);
+    }
+    .triage-box strong { display: block; color: var(--etv-navy); font-size: 14px; margin-bottom: 4px; }
+    .triage-box p { margin: 0; color: var(--etv-muted); font-size: 13px; line-height: 1.5; }
+
+    .check { display: flex; gap: 10px; align-items: flex-start; margin: 22px 0; font-size: 13px; color: var(--etv-ink); cursor: pointer; }
+    .check input[type="checkbox"] { width: 18px; height: 18px; margin-top: 1px; accent-color: var(--etv-blue); }
+
+    /* Estilos del Modal */
+    .modal {
+      width: min(600px, calc(100% - 32px));
+      border: 1px solid var(--etv-line);
+      border-radius: 12px;
+      padding: 0;
+      box-shadow: 0 20px 50px rgba(15, 31, 70, 0.2);
+    }
+    .modal::backdrop { background: rgba(11, 31, 72, 0.6); backdrop-filter: blur(4px); }
+    .modal header { display: flex; align-items: center; justify-content: space-between; padding: 20px 24px; border-bottom: 1px solid var(--etv-line); background: #f8fafc; }
+    .modal h2 { margin: 0; color: var(--etv-navy); font-size: 20px; font-weight: 800; }
+    .modal main { padding: 24px; color: var(--etv-ink); font-size: 15px; line-height: 1.6; }
+    .modal footer { padding: 16px 24px; text-align: right; background: #f8fafc; border-top: 1px solid var(--etv-line); }
+
+    /* Footer idéntico al index */
+    .professional-footer { padding: 62px 0 22px; background: #101a2d; color: #aebdd1; margin-top: auto; }
+    .footer-main { display: grid; grid-template-columns: 1.6fr .7fr .7fr; gap: 60px; padding-bottom: 45px; }
+    .footer-brand p { max-width: 430px; margin: 18px 0 0; color: #9eafc6; font-size: 13px; line-height: 1.65; }
+    .professional-footer .brand strong { color: #fff; }
+    .professional-footer .brand small { color: #91a5c0; }
+    .footer-main > div:not(.footer-brand) { display: flex; flex-direction: column; gap: 11px; }
+    .footer-main > div:not(.footer-brand) > strong { margin-bottom: 6px; color: #fff; font-size: 13px; }
+    .footer-main > div:not(.footer-brand) > a { color: #aebdd1; font-size: 13px; }
+    .footer-main a:hover { color: #fff; }
+    .footer-bottom { display: flex; justify-content: space-between; gap: 20px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,.12); color: #7e91ad; font-size: 11px; }
+
+    @media(max-width:850px) {
+      .site-nav nav { display: none; }
+      .site-nav nav.open {
+        position: absolute;
+        top: 78px; right: 0; left: 0;
+        display: flex; flex-direction: column; align-items: stretch;
+        padding: 18px 24px;
+        border-bottom: 1px solid var(--etv-line);
+        background: #fff;
+        box-shadow: 0 16px 30px rgba(15,31,70,.12);
+        z-index: 20;
+      }
+      .site-nav nav.open a { padding: 12px; border-bottom: 1px solid var(--etv-line); }
+      .site-nav nav.open a.button { margin-top: 10px; text-align: center; }
+      .menu { display: block; }
+      .form-wrap { grid-template-columns: 1fr; }
+      .side { display: none; }
+      .footer-main { grid-template-columns: 1fr; gap: 30px; }
+      .footer-bottom { flex-direction: column; }
     }
   </style>
 </head>
 <body>
 
-  <header>
-    <div class="container nav-container">
-      <a class="brand" href="index.html">
-        <!-- Logo apuntando exactamente a la imagen del sistema -->
-        <img src="Favicon Hack.png" alt="Logo Elige Tu Vida" class="brand-icon">
-        <span class="brand-text">
+  <!-- Header / Nav -->
+  <header class="site-header">
+    <div class="container site-nav">
+      <a class="brand" href="index.html" aria-label="Elige Tu Vida, página de inicio">
+        <img src="assets/images/Escudo Elige Tu Vida Hack.png" alt="Logo Elige Tu Vida" width="55" height="55" style="object-fit: contain;">
+        <span>
           <strong>Elige Tu Vida</strong>
-          <small>Reporte Seguro</small>
+          <small>Bienestar y protección escolar</small>
         </span>
       </a>
-      
-      <nav id="nav-options" class="nav-links">
+      <button class="menu" type="button" aria-label="Abrir menú" aria-expanded="false">Menú ☰</button>
+      <nav id="nav-options" aria-label="Navegación principal">
         <a href="index.html">Inicio</a>
         <a href="chat.html">Chat de apoyo</a>
-        <a href="login.html" id="nav-login" class="btn btn-outline" style="padding: 8px 16px;">Volver al panel</a>
+        <a href="login.html" id="nav-login" class="button button-outline button-small">Ingresar</a>
+        <a class="button button-small" href="registro.html" id="nav-register">Crear cuenta</a>
       </nav>
     </div>
   </header>
 
   <main>
-    <div class="container">
-      <div class="report-card">
-        <div class="report-header">
-          <h1>Crear un reporte</h1>
-          <p>Este espacio es confidencial. La información que registres estará protegida.</p>
-        </div>
-        
-        <form action="procesar_reporte.php" method="POST" enctype="multipart/form-data">
-          
-          <div class="form-group">
-            <label class="form-label" for="tipo_reporte">¿De qué trata la situación?</label>
-            <select class="form-control" id="tipo_reporte" name="tipo_reporte" required>
-              <option value="" disabled selected>Selecciona una categoría...</option>
-              <option value="acoso">Acoso escolar (Bullying)</option>
-              <option value="ciberacoso">Ciberacoso o problemas digitales</option>
-              <option value="violencia">Violencia física o verbal</option>
-              <option value="emocional">Bienestar emocional</option>
-              <option value="otro">Otra situación</option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label class="form-label" for="lugar_fecha">Lugar y fecha aproximada</label>
-            <input type="text" class="form-control" id="lugar_fecha" name="lugar_fecha" placeholder="Ej: En la cancha principal, ayer en el descanso" required>
-          </div>
-
-          <div class="form-group">
-            <label class="form-label" for="descripcion">Descripción del caso</label>
-            <textarea class="form-control" id="descripcion" name="descripcion" placeholder="Describe lo sucedido de la forma más clara posible..." required></textarea>
-          </div>
-
-          <div class="form-group">
-            <label class="form-label">Adjuntar evidencia (Opcional)</label>
-            <label class="file-drop-area" for="evidencia">
-              <p class="file-drop-text" id="file-label-text"><strong>Haz clic para subir un archivo</strong> o arrástralo aquí</p>
-              <p class="file-drop-text" style="font-size: 12px; margin-top: 4px;">Imágenes, PDF o documentos (Max. 10MB)</p>
-              <input type="file" id="evidencia" name="evidencia" class="file-input" accept="image/*,.pdf,.doc,.docx">
-            </label>
-          </div>
-
-          <div class="anonymous-toggle">
-            <input type="checkbox" id="anonimo" name="anonimo" value="si">
-            <label for="anonimo">
-              Enviar este reporte de forma anónima
-              <span>Tu nombre no será visible para el equipo institucional.</span>
-            </label>
-          </div>
-
-          <button type="submit" class="btn btn-primary">Enviar reporte seguro</button>
-        </form>
+    <section class="form-head">
+      <div class="container">
+        <p class="eyebrow">REPORTE SEGURO</p>
+        <h1>Cuéntanos lo que está pasando</h1>
+        <p>Avanza a tu ritmo. Tu información está protegida y puedes usar una ruta anónima.</p>
       </div>
-    </div>
+    </section>
+
+    <section class="form-wrap container">
+      <aside class="side">
+        <h2>Espacio protegido</h2>
+        <p>No tienes que escribir nada que te haga sentir incómodo. Si te encuentras en peligro inmediato, busca a un adulto de confianza o profesional cercano.</p>
+        <a class="side-link" href="chat.html">Hablar con alguien ahora →</a>
+      </aside>
+
+      <form class="formcard" id="reportForm" novalidate>
+        <h2>Crear reporte</h2>
+        <div id="reportAlert" class="alert" role="status" aria-live="polite" hidden></div>
+
+        <div class="field">
+          <label for="route">Modo de envío</label>
+          <select id="route" name="route">
+            <option value="anonymous">Reporte anónimo (Sin datos personales)</option>
+            <option value="identified">Reporte con seguimiento personal</option>
+          </select>
+          <small id="routeError" class="error"></small>
+        </div>
+
+        <div class="field">
+          <label for="description">¿Qué está ocurriendo?</label>
+          <textarea id="description" name="description" required maxlength="2500" placeholder="Describe lo que recuerdes o lo que sientas con tus propias palabras..."></textarea>
+          <small id="descriptionError" class="error"></small>
+        </div>
+
+        <div id="triage" class="triage-box">
+          <strong>Orientación inicial pendiente</strong>
+          <p>Al escribir, la plataforma identifica el nivel de prioridad orientativo para direccionar la ayuda.</p>
+        </div>
+
+        <div class="field">
+          <label for="location">¿Dónde ocurrió? (Opcional)</label>
+          <input id="location" name="location" maxlength="190" placeholder="Ej: Salón de clases, patio, redes sociales...">
+          <small id="locationError" class="error"></small>
+        </div>
+
+        <div class="field">
+          <label for="date">¿Cuándo ocurrió? (Opcional)</label>
+          <input id="date" name="date" type="date">
+          <small id="dateError" class="error"></small>
+        </div>
+
+        <label class="check">
+          <input id="confirmReport" name="confirmed" type="checkbox"> Confirmo que la información ingresada corresponde a lo que conozco.
+        </label>
+        <small id="confirmReportError" class="error"></small>
+
+        <button class="button button-primary" id="reportSubmit" type="submit" data-loading-text="Enviando reporte..." style="width: 100%; margin-top: 10px;">Enviar reporte seguro</button>
+      </form>
+    </section>
   </main>
 
-  <footer>
-    <div class="container">
-      <p>© 2026 Elige Tu Vida — Plataforma de convivencia y protección escolar.</p>
+  <dialog class="modal" id="reportDone">
+    <header>
+      <h2>Reporte recibido con éxito</h2>
+      <button type="button" class="button button-outline button-small" data-modal-close>✕</button>
+    </header>
+    <main><p id="reportDoneText"></p></main>
+    <footer>
+      <button class="button button-primary button-small" type="button" data-modal-close>Entendido</button>
+    </footer>
+  </dialog>
+
+  <!-- Footer idéntico al index -->
+  <footer class="professional-footer">
+    <div class="container footer-main">
+      <div class="footer-brand">
+        <a class="brand" href="index.html">
+          <img src="assets/images/Escudo Elige Tu Vida Hack.png" alt="Logo Elige Tu Vida" width="45" height="45" style="object-fit: contain;">
+          <span><strong>Elige Tu Vida</strong><small>Bienestar y protección escolar</small></span>
+        </a>
+        <p>Una plataforma para escuchar, orientar y proteger a estudiantes y comunidades educativas.</p>
+      </div>
+      <div>
+        <strong>Plataforma</strong>
+        <a href="chat.html">Orientación guiada</a>
+        <a href="reporte-seguro.html">Reporte seguro</a>
+        <a href="login.html">Acceso institucional</a>
+      </div>
+      <div>
+        <strong>Información</strong>
+        <a href="terminos.html">Términos de uso</a>
+        <a href="privacidad.html">Política de privacidad</a>
+        <a href="contacto.html">Contacto</a>
+      </div>
+    </div>
+    <div class="container footer-bottom">
+      <span>© 2026 Elige Tu Vida</span>
+      <span>Proyecto de convivencia escolar y prevención integral</span>
     </div>
   </footer>
 
+  <!-- Lógica e integración con Supabase y estado de sesión -->
   <script type="module">
-    import { supabase } from './conexion.js';
+    import { supabase } from "./conexion.js";
 
-    // Manejo de la etiqueta de archivo adjunto
-    const fileInput = document.getElementById('evidencia');
-    const dropText = document.getElementById('file-label-text');
-
-    if (fileInput && dropText) {
-      fileInput.addEventListener('change', function() {
-        if (this.files && this.files.length > 0) {
-          dropText.innerHTML = `<strong style="color: var(--success);">Archivo cargado: ${this.files[0].name}</strong>`;
-        } else {
-          dropText.innerHTML = '<strong>Haz clic para subir un archivo</strong> o arrástralo aquí';
-        }
+    function setupModals() {
+      document.querySelectorAll("[data-modal-close]").forEach((btn) => {
+        btn.addEventListener("click", () => btn.closest("dialog")?.close());
       });
     }
 
-    // Validación de sesión activa
+    function setError(id, message) {
+      const element = document.getElementById(id);
+      if (element) element.textContent = message;
+    }
+
+    function setAlert(id, message, success) {
+      const element = document.getElementById(id);
+      if (!element) return;
+      element.hidden = false;
+      element.textContent = message;
+      element.classList.toggle("ok", success);
+    }
+
+    function setBusy(button, busy) {
+      if (!button) return;
+      if (!button.dataset.defaultText) button.dataset.defaultText = button.textContent.trim();
+      button.disabled = busy;
+      button.textContent = busy ? button.dataset.loadingText : button.dataset.defaultText;
+    }
+
+    function generateTicket() {
+      return 'TK-' + Math.floor(100000 + Math.random() * 900000);
+    }
+
     document.addEventListener("DOMContentLoaded", async () => {
-        const navLogin = document.getElementById("nav-login");
-        const navContainer = document.getElementById("nav-options");
+      setupModals();
+
+      // Control de sesión y Badge de Usuario en Header
+      const loginLink = document.getElementById("nav-login");
+      const registerLink = document.getElementById("nav-register");
+      const navContainer = document.getElementById("nav-options");
+
+      const { data: { session } } = await supabase.auth.getSession();
+      const localSession = JSON.parse(localStorage.getItem("etv_session") || "null");
+      const localUserObj = JSON.parse(localStorage.getItem("usuario") || sessionStorage.getItem("usuario") || "null");
+
+      const user = session?.user;
+      const userName = user?.user_metadata?.full_name || user?.user_metadata?.nombre || localSession?.name || localUserObj?.nombre || localUserObj?.name;
+
+      if (user || localSession || localUserObj) {
+          if (loginLink) loginLink.remove();
+          if (registerLink) registerLink.remove();
+
+          const userBadge = document.createElement("div");
+          userBadge.className = "user-badge-container";
+          
+          const initial = (userName ? userName.charAt(0) : "U").toUpperCase();
+          userBadge.innerHTML = `
+            <div class="user-avatar-circle">${initial}</div>
+            <span class="user-name-text">${userName || 'Usuario'}</span>
+          `;
+
+          const logoutButton = document.createElement("button");
+          logoutButton.textContent = "Cerrar sesión";
+          logoutButton.className = "button button-small button-outline";
+          logoutButton.style.marginLeft = "4px";
+
+          logoutButton.addEventListener("click", async () => {
+              await supabase.auth.signOut();
+              localStorage.removeItem("etv_session");
+              localStorage.removeItem("usuario");
+              sessionStorage.removeItem("usuario");
+              window.location.reload();
+          });
+
+          navContainer.appendChild(userBadge);
+          navContainer.appendChild(logoutButton);
+      }
+
+      // Triaje interactivo y envío del formulario
+      const form = document.getElementById("reportForm");
+      const description = document.getElementById("description");
+      if (!form || !description) return;
+
+      description.addEventListener("input", () => {
+        const normalized = description.value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        const critical = /suicid|arma|abuso|violacion|matar|peligro inmediato/.test(normalized);
+        const serious = /acoso|bullying|amenaza|violencia|chantaje|golpe/.test(normalized);
+        
+        const panel = document.getElementById("triage");
+        panel.querySelector("strong").textContent = critical ? "Posible situación crítica" : serious ? "Atención prioritaria" : "Orientación escolar";
+        panel.querySelector("p").textContent = critical
+          ? "Busca ahora a un adulto de confianza cercano y a las líneas de emergencia institucionales."
+          : serious ? "Esta situación puede requerir acompañamiento y seguimiento institucional prioritario."
+          : "Continúa cuando te sientas preparado o preparada.";
+      });
+
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const button = document.getElementById("reportSubmit");
+        ["routeError", "descriptionError", "locationError", "dateError", "confirmReportError"].forEach((id) => setError(id, ""));
+
+        const confirmed = document.getElementById("confirmReport").checked;
+        const textVal = description.value.trim();
+        let valid = true;
+
+        if (textVal.length < 10) { setError("descriptionError", "Escribe al menos una descripción de mínimo 10 caracteres."); valid = false; }
+        if (!confirmed) { setError("confirmReportError", "Debes confirmar que la información ingresada es real."); valid = false; }
+        if (!valid) { setAlert("reportAlert", "Revisa los campos señalados antes de continuar.", false); return; }
+
+        setBusy(button, true);
 
         try {
-            const { data: { session } } = await supabase.auth.getSession();
-            const localUser = JSON.parse(localStorage.getItem("usuario") || sessionStorage.getItem("usuario") || "null");
+          const routeVal = document.getElementById("route").value;
+          const locationVal = document.getElementById("location").value.trim();
+          const dateVal = document.getElementById("date").value;
 
-            const userName = session?.user?.user_metadata?.nombre || localUser?.nombre;
+          const ticketCode = generateTicket();
+          const normalized = textVal.toLowerCase();
+          const riskLevel = /suicid|arma|abuso|violacion|matar/.test(normalized) ? "Crítico" : /acoso|bullying|amenaza|golpe/.test(normalized) ? "Alto" : "Medio";
 
-            if (userName) {
-                if (navLogin) navLogin.remove();
-                
-                const userBadge = document.createElement("div");
-                userBadge.className = "user-badge-container";
-                const initial = userName.charAt(0).toUpperCase();
-                
-                userBadge.innerHTML = `
-                  <div class="user-avatar-circle">${initial}</div>
-                  <span style="font-size: 13px; font-weight: 700; color: var(--navy);">${userName}</span>
-                `;
-                navContainer.appendChild(userBadge);
+          let userId = null;
+          if (routeVal === "identified") {
+            if (user?.id) userId = user.id;
+            else if (localUserObj?.id) userId = localUserObj.id;
+          }
+
+          const { error } = await supabase.from('reportes').insert([
+            {
+              ticket: ticketCode,
+              ruta: routeVal,
+              descripcion: textVal,
+              ubicacion: locationVal || null,
+              fecha_suceso: dateVal || null,
+              riesgo: riskLevel,
+              usuario_id: userId,
+              creado_en: new Date().toISOString()
             }
-        } catch(e) {
-            console.error("Error al validar sesión:", e);
+          ]);
+
+          if (error) throw error;
+
+          document.getElementById("reportDoneText").textContent =
+            `Tu código de seguimiento es ${ticketCode}. Nivel de prioridad identificado: ${riskLevel}. Tu reporte ha sido registrado de forma protegida.`;
+          
+          form.reset();
+          document.getElementById("reportDone").showModal();
+          setAlert("reportAlert", "Reporte enviado correctamente.", true);
+
+        } catch (err) {
+          console.error("Error al guardar en Supabase:", err);
+          setAlert("reportAlert", "Ocurrió un error al enviar el reporte: " + (err.message || "Error de conexión"), false);
+        } finally {
+          setBusy(button, false);
         }
+      });
     });
   </script>
 </body>
