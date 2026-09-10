@@ -33,6 +33,12 @@ export default async function handler(req, res) {
     });
 
     const data = await response.json();
+    
+    if (!response.ok) {
+      console.error("Error de la API de Google:", data);
+      return res.status(500).json({ reply: 'Lo siento, la IA no pudo procesar la solicitud en este momento.' });
+    }
+
     const botReply = data.candidates?.[0]?.content?.parts?.[0]?.text || 'Lo siento, no pude procesar una respuesta en este momento, pero estoy contigo.';
 
     return res.status(200).json({ reply: botReply.trim() });
