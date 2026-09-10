@@ -256,7 +256,7 @@
           <small>Orientación segura y confidencial</small>
         </span>
       </a>
-      <button class="menu" type="button" aria-label="Abrir menú" aria-expanded="false">Menú ☰</button>
+      <button class="menu" type="button" aria-label="Abrir menú" aria-expanded="false">Menú</button>
       <nav id="nav-options" aria-label="Navegación principal">
         <a href="index.html">Inicio</a>
         <a href="chat.html">Orientación guiada</a>
@@ -286,7 +286,7 @@
             <div class="contact-item">
               <div>
                 <strong>Soporte Técnico</strong>
-                <span>soporte@eligetuvida.site</span>
+                <span>eligetuvidareportes@gmail.com</span>
               </div>
             </div>
             <div class="contact-item">
@@ -339,7 +339,7 @@
   <script type="module">
     import { supabase } from './conexion.js';
 
-    // CONFIGURACIÓN DE EMAILJS (Reemplaza con tus llaves reales)
+    // CONFIGURACIÓN DE EMAILJS
     const EMAILJS_PUBLIC_KEY = "TU_PUBLIC_KEY_AQUI"; 
     const EMAILJS_SERVICE_ID = "TU_SERVICE_ID_AQUI"; 
     const EMAILJS_TEMPLATE_ID = "TU_TEMPLATE_ID_AQUI"; 
@@ -356,7 +356,12 @@
             if (contactCardContainer) {
                 contactCardContainer.innerHTML = `
                   <div class="auth-required-box">
-                    <div style="font-size: 48px; margin-bottom: 12px;">🔒</div>
+                    <div style="margin-bottom: 16px; display: flex; justify-content: center;">
+                      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--etv-navy)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                      </svg>
+                    </div>
                     <h3>Inicio de sesión requerido</h3>
                     <p>Para enviar un mensaje a través de nuestro canal de contacto institucional, es necesario que inicies sesión en tu cuenta de Elige Tu Vida o te registres si aún no la tienes.</p>
                     <div class="auth-buttons-flex">
@@ -498,7 +503,6 @@
                             alertStatus.style.display = "none";
 
                             try {
-                                // 1. Guardar copia de respaldo en Supabase
                                 const { error: dbError } = await supabase.from('contactos').insert([
                                     {
                                         usuario_id: user.id,
@@ -511,7 +515,6 @@
                                 ]);
                                 if (dbError) console.warn("Aviso al guardar en Supabase:", dbError.message);
 
-                                // 2. Enviar correo directo a tu cuenta vía EmailJS
                                 if (typeof emailjs !== "undefined" && EMAILJS_PUBLIC_KEY !== "TU_PUBLIC_KEY_AQUI") {
                                     await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
                                         from_name: nameVal,
