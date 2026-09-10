@@ -2,329 +2,220 @@
 <html lang="es-CO">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Reporte seguro | Elige Tu Vida</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Crea un reporte seguro y confidencial en Elige Tu Vida.">
+  <title>Reporte Seguro | Elige Tu Vida</title>
   
-  <!-- Favicons optimizados -->
-  <link rel="icon" href="assets/images/favicon.svg" type="image/svg+xml">
-  <link rel="icon" href="assets/images/favicon-32.png" sizes="32x32" type="image/png">
-  <link rel="icon" href="assets/images/favicon-16.png" sizes="16x16" type="image/png">
-  <link rel="shortcut icon" href="assets/images/favicon.ico">
-  <link rel="apple-touch-icon" href="assets/images/apple-touch-icon.png">
-  <meta name="theme-color" content="#0f1f46">
-
-  <!-- Tailwind CSS optimizado sin bloqueos -->
+  <!-- Favicon: Escudo Incógnito en SVG -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%230f1f46'%3E%3Cpath d='M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z'/%3E%3Ccircle cx='15.5' cy='13' r='2.5' fill='%23fff'/%3E%3Ccircle cx='8.5' cy='13' r='2.5' fill='%23fff'/%3E%3Cpath d='M8.5 13h2M4 11h16' stroke='%23fff' stroke-width='2' stroke-linecap='round'/%3E%3Cpath d='M7 8l2.5-3 5 3' stroke='%23fff' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" type="image/svg+xml">
+  
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
   <style>
     :root {
-      --navy: #0b1f4a;
-      --blue: #1d5eb8;
-      --pale: #eff7ff;
-      --cyan: #dff5fb;
-      --ink: #263852;
-      --muted: #61718a;
-      --line: #dbe4ee;
-      --white: #fff;
-      --soft: #f7f9fb;
+      --navy: #0f1f46;
+      --indigo: #3730a3;
+      --blue: #2563eb;
+      --light-blue: #eff6ff;
+      --gray: #64748b;
+      --text: #1e293b;
+      --bg: #f8fafc;
+      --white: #ffffff;
+      --line: #e2e8f0;
+      --error: #ef4444;
+      --success: #10b981;
     }
+    
     * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body { margin: 0; color: var(--ink); background: var(--white); font: 16px/1.55 Arial, Helvetica, sans-serif; }
-    a { color: inherit; text-decoration: none; }
+    html { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); }
+    body { margin: 0; min-height: 100vh; display: flex; flex-direction: column; }
+    a { color: inherit; text-decoration: none; transition: all 0.2s ease; }
+    
     .container { width: min(1120px, calc(100% - 40px)); margin: auto; }
     
-    header { position: sticky; top: 0; z-index: 10; border-bottom: 1px solid var(--line); background: #fff; }
-    .nav { display: flex; align-items: center; justify-content: space-between; min-height: 74px; gap: 20px; }
+    /* Header (Mismo estilo que el index) */
+    header { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 50; }
+    .nav-container { display: flex; align-items: center; justify-content: space-between; min-height: 80px; }
     .brand { display: flex; align-items: center; gap: 12px; }
-    .brand strong, .brand small { display: block; }
-    .brand strong { color: var(--navy); }
-    .brand small { color: var(--muted); font-size: 11px; }
+    .brand-icon { width: 44px; height: 44px; color: var(--navy); }
+    .brand-text strong { display: block; color: var(--navy); font-size: 20px; font-weight: 800; line-height: 1.1; }
+    .brand-text small { display: block; color: var(--gray); font-size: 12px; font-weight: 600; }
     
-    .shield { display: grid; place-items: center; color: #fff; width: 40px; height: 46px; clip-path: polygon(50% 0, 93% 17%, 86% 66%, 50% 100%, 14% 66%, 7% 17%); background: linear-gradient(150deg, #3b82f6 0%, var(--blue) 55%, var(--navy) 100%); box-shadow: 0 6px 14px rgba(11,31,74,.35); font-weight: bold; }
+    .nav-links { display: flex; align-items: center; gap: 24px; }
+    .nav-links a { font-size: 14px; font-weight: 600; color: var(--gray); }
+    .nav-links a:hover { color: var(--blue); }
     
-    .button { display: inline-flex; align-items: center; justify-content: center; min-height: 43px; margin: 4px 7px 4px 0; padding: 10px 18px; border: 1px solid var(--blue); border-radius: 8px; color: #fff; background: var(--blue); font-size: 14px; font-weight: bold; cursor: pointer; transition: background .2s; }
-    .button:hover { background: #164a91; }
-    .button.outline { background: transparent; color: var(--blue); }
-    .button.outline:hover { background: var(--pale); }
+    /* Botones y Badges */
+    .btn { display: inline-flex; align-items: center; justify-content: center; padding: 10px 20px; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.2s; border: none; }
+    .btn-primary { background: var(--blue); color: var(--white); box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2); width: 100%; padding: 14px; font-size: 16px; }
+    .btn-primary:hover { background: #1d4ed8; transform: translateY(-1px); }
+    .btn-outline { border: 2px solid var(--line); color: var(--navy); background: transparent; }
+    
+    .user-badge-container { display: flex; align-items: center; gap: 10px; background: var(--light-blue); padding: 6px 14px 6px 6px; border-radius: 30px; border: 1px solid #bfdbfe; }
+    .user-avatar-circle { width: 32px; height: 32px; background: var(--indigo); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: bold; }
+    
+    /* Formulario de Reporte */
+    main { flex: 1; display: flex; align-items: center; justify-content: center; padding: 60px 0; }
+    .report-card { background: var(--white); border-radius: 16px; border: 1px solid var(--line); box-shadow: 0 10px 25px rgba(15, 31, 70, 0.05); max-width: 600px; width: 100%; padding: 40px; margin: auto; }
+    
+    .report-header { text-align: center; margin-bottom: 32px; }
+    .report-header h1 { font-size: 28px; font-weight: 800; color: var(--navy); margin: 0 0 8px; }
+    .report-header p { color: var(--gray); font-size: 15px; margin: 0; }
+    
+    .form-group { margin-bottom: 24px; }
+    .form-label { display: block; font-size: 14px; font-weight: 600; color: var(--navy); margin-bottom: 8px; }
+    .form-control { width: 100%; padding: 12px 16px; border-radius: 8px; border: 1px solid var(--line); background: var(--bg); font-family: inherit; font-size: 15px; color: var(--text); transition: border-color 0.2s; }
+    .form-control:focus { outline: none; border-color: var(--blue); background: var(--white); box-shadow: 0 0 0 3px var(--light-blue); }
+    textarea.form-control { resize: vertical; min-height: 120px; }
+    
+    .anonymous-toggle { display: flex; align-items: center; gap: 12px; padding: 16px; background: var(--light-blue); border-radius: 8px; border: 1px solid #bfdbfe; margin-bottom: 32px; }
+    .anonymous-toggle input[type="checkbox"] { width: 20px; height: 20px; accent-color: var(--blue); cursor: pointer; }
+    .anonymous-toggle label { font-size: 14px; font-weight: 600; color: var(--navy); cursor: pointer; display: flex; flex-direction: column; }
+    .anonymous-toggle label span { font-size: 12px; color: var(--gray); font-weight: 400; margin-top: 2px; }
+    
+    /* File upload estilizado */
+    .file-drop-area { border: 2px dashed var(--line); border-radius: 8px; padding: 24px; text-align: center; background: var(--bg); cursor: pointer; transition: all 0.2s; }
+    .file-drop-area:hover { border-color: var(--blue); background: var(--light-blue); }
+    .file-drop-area svg { width: 32px; height: 32px; color: var(--gray); margin: 0 auto 12px; }
+    .file-drop-text { font-size: 14px; color: var(--gray); margin: 0; }
+    .file-drop-text strong { color: var(--blue); }
+    .file-input { display: none; }
 
-    .eyebrow { margin: 0 0 12px; color: var(--blue); font-size: 12px; font-weight: bold; letter-spacing: .04em; }
-    .text { color: var(--blue); font-weight: bold; }
-    .form-page { min-height: 100vh; background: var(--soft); }
-    .form-head { padding: 55px 0 35px; background: var(--pale); }
-    .form-head h1 { margin: 0 0 8px; color: var(--navy); font-size: 42px; }
-    .form-head p { margin: 0; color: var(--muted); }
-    .form-wrap { display: grid; grid-template-columns: 270px minmax(0, 570px); justify-content: center; gap: 35px; padding: 50px 0 75px; }
-    .side, .formcard { padding: 25px; border: 1px solid var(--line); border-radius: 10px; background: #fff; }
-    .side { height: max-content; background: var(--pale); }
-    .side h2, .formcard h2 { margin-top: 0; color: var(--navy); font-size: 20px; }
-    .side p { color: var(--muted); font-size: 14px; }
+    footer { background: #0f172a; padding: 30px 0; color: #94a3b8; text-align: center; font-size: 14px; }
     
-    .field { margin-bottom: 17px; }
-    .field label { display: block; margin-bottom: 6px; font-size: 13px; font-weight: bold; }
-    .field input, .field textarea, .field select { width: 100%; min-height: 45px; padding: 10px; border: 1px solid #c7d0dc; border-radius: 7px; background: #fff; font-family: inherit; }
-    .field textarea { min-height: 130px; resize: vertical; }
-    .field input:focus, .field textarea:focus, .field select:focus { outline: 3px solid #2875d133; border-color: var(--blue); }
-    
-    .error { display: block; min-height: 16px; color: #a22626; font-size: 12px; font-weight: bold; }
-    .alert { margin-bottom: 15px; padding: 12px; border: 1px solid #f0aaaa; border-radius: 7px; color: #8b1f1f; background: #fff3f3; font-size: 13px; }
-    .alert.ok { border-color: #9ad9b5; color: #17683a; background: #effbf4; }
-    .check { display: flex; gap: 10px; align-items: flex-start; margin: 18px 0; font-size: 13px; cursor: pointer; }
-    
-    .modal { width: min(700px, calc(100% - 28px)); max-height: calc(100vh - 28px); padding: 0; border: 1px solid var(--line); border-radius: 10px; }
-    .modal::backdrop { background: #0b1f4ab8; }
-    .modal header { display: flex; justify-content: space-between; align-items: center; padding: 20px; border-bottom: 1px solid var(--line); background: var(--pale); }
-    .modal h2 { margin: 0; color: var(--navy); }
-    .modal main { max-height: 55vh; padding: 22px; overflow: auto; }
-    .modal footer { padding: 14px 22px; text-align: right; background: var(--soft); }
-
-    .nav-user { display: flex; align-items: center; gap: 12px; }
-    .user-badge { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: bold; color: var(--navy); background: var(--pale); padding: 6px 12px; border-radius: 20px; border: 1px solid var(--line); }
-
-    @media(max-width: 800px) {
-      .form-wrap { grid-template-columns: 1fr; }
-      .side { display: none; }
-      .form-head h1 { font-size: 32px; }
+    @media (max-width: 600px) {
+      .nav-links { display: none; }
+      .report-card { padding: 24px; border-radius: 0; border-left: none; border-right: none; }
     }
   </style>
 </head>
-<body class="form-page">
+<body>
+
   <header>
-    <div class="container nav">
+    <div class="container nav-container">
       <a class="brand" href="index.html">
-        <span class="shield">
-          <svg viewBox="0 0 24 24" width="46%" height="46%" aria-hidden="true" focusable="false">
-            <rect x="9" y="2" width="6" height="20" rx="2" fill="#fff"/>
-            <rect x="2" y="9" width="20" height="6" rx="2" fill="#fff"/>
-          </svg>
+        <svg class="brand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" fill="#0f1f46" stroke="#0f1f46"/>
+          <circle cx="15.5" cy="13" r="2.5" fill="#fff" stroke="#fff"/>
+          <circle cx="8.5" cy="13" r="2.5" fill="#fff" stroke="#fff"/>
+          <path d="M8.5 13h2M4 11h16" stroke="#fff" stroke-width="2"/>
+          <path d="M7 8l2.5-3 5 3" stroke="#fff"/>
+        </svg>
+        <span class="brand-text">
+          <strong>Elige Tu Vida</strong>
+          <small>Reporte Seguro</small>
         </span>
-        <span><strong>Elige Tu Vida</strong><small>Reporte protegido</small></span>
       </a>
       
-      <div class="nav-user" id="navUserSection">
-        <!-- Dinámico con JavaScript según sesión -->
-        <a href="index.html" class="button outline" style="margin: 0; min-height: 36px; padding: 6px 14px; font-size: 13px;">Volver al inicio</a>
-      </div>
+      <nav id="nav-options" class="nav-links">
+        <a href="index.html">Inicio</a>
+        <a href="chat.html">Chat de apoyo</a>
+        <a href="login.html" id="nav-login" class="btn btn-outline" style="padding: 8px 16px;">Volver al panel</a>
+      </nav>
     </div>
   </header>
 
   <main>
-    <section class="form-head">
-      <div class="container">
-        <p class="eyebrow">REPORTE SEGURO</p>
-        <h1>Cuéntanos lo que está pasando.</h1>
-        <p>Avanza a tu ritmo. Puedes usar una ruta anónima.</p>
+    <div class="container">
+      <div class="report-card">
+        <div class="report-header">
+          <h1>Crear un reporte</h1>
+          <p>Este espacio es seguro y confidencial. Cuéntanos qué está pasando.</p>
+        </div>
+        
+        <!-- Apuntando al backend en PHP que procesará el formulario -->
+        <form action="procesar_reporte.php" method="POST" enctype="multipart/form-data">
+          
+          <div class="form-group">
+            <label class="form-label" for="tipo_reporte">¿De qué trata la situación?</label>
+            <select class="form-control" id="tipo_reporte" name="tipo_reporte" required>
+              <option value="" disabled selected>Selecciona una categoría...</option>
+              <option value="acoso">Acoso escolar (Bullying)</option>
+              <option value="ciberacoso">Ciberacoso o problemas digitales</option>
+              <option value="violencia">Violencia física o verbal</option>
+              <option value="emocional">Bienestar emocional / Depresión</option>
+              <option value="otro">Otra situación</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="lugar_fecha">Lugar y Fecha aproximada</label>
+            <input type="text" class="form-control" id="lugar_fecha" name="lugar_fecha" placeholder="Ej: En el descanso, ayer por la mañana" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="descripcion">Describe lo que sucedió</label>
+            <textarea class="form-control" id="descripcion" name="descripcion" placeholder="Explica con tus palabras qué pasó, quiénes están involucrados y cómo te sientes al respecto..." required></textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Evidencia (Opcional)</label>
+            <label class="file-drop-area" for="evidencia">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21.2 15c.7-1.2 1-2.5.7-3.9-.6-2-2.4-3.5-4.4-3.5h-1.2c-.7-3-3.2-5.2-6.2-5.6-3-.3-5.9 1.3-7.3 4-1.2 2.5-1 6.5.5 8.8m8.7-1.6V21"/>
+                <path d="M16 16l-4-4-4 4"/>
+              </svg>
+              <p class="file-drop-text"><strong>Haz clic para subir un archivo</strong> o arrástralo aquí</p>
+              <p class="file-drop-text" style="font-size: 12px; margin-top: 4px;">PNG, JPG, PDF o MP4 (Max. 10MB)</p>
+              <input type="file" id="evidencia" name="evidencia" class="file-input" accept="image/*,.pdf,video/mp4">
+            </label>
+          </div>
+
+          <div class="anonymous-toggle">
+            <input type="checkbox" id="anonimo" name="anonimo" value="si">
+            <label for="anonimo">
+              Quiero que este reporte sea anónimo
+              <span>Tus datos de usuario no serán visibles para quien revise el caso.</span>
+            </label>
+          </div>
+
+          <button type="submit" class="btn btn-primary">Enviar reporte de forma segura</button>
+        </form>
       </div>
-    </section>
-
-    <section class="form-wrap">
-      <aside class="side">
-        <h2>Espacio seguro.</h2>
-        <p>No tienes que escribir nada que te haga sentir peor. Si existe peligro inmediato, busca un adulto de confianza cercano.</p>
-        <a class="text" href="chat.html">Hablar con alguien ahora &gt;</a>
-      </aside>
-
-      <form class="formcard" id="reportForm" novalidate>
-        <h2>Crear reporte</h2>
-        <div id="reportAlert" class="alert" role="status" aria-live="polite" hidden></div>
-
-        <div class="field">
-          <label for="route">Ruta</label>
-          <select id="route" name="route">
-            <option value="anonymous">Reporte anónimo</option>
-            <option value="identified">Reporte con seguimiento</option>
-          </select>
-          <small id="routeError" class="error"></small>
-        </div>
-
-        <div class="field">
-          <label for="description">¿Qué está ocurriendo?</label>
-          <textarea id="description" name="description" required maxlength="2500" placeholder="Describe lo que recuerdes con tus propias palabras..."></textarea>
-          <small id="descriptionError" class="error"></small>
-        </div>
-
-        <div id="triage" class="side" style="margin-bottom: 17px;">
-          <strong>Orientación inicial pendiente.</strong>
-          <p>Al escribir, el sistema identifica una ruta orientativa. No reemplaza una evaluación profesional.</p>
-        </div>
-
-        <div class="field">
-          <label for="location">¿Dónde ocurrió? (Opcional)</label>
-          <input id="location" name="location" maxlength="190" placeholder="Salón, patio, redes sociales...">
-          <small id="locationError" class="error"></small>
-        </div>
-
-        <div class="field">
-          <label for="date">¿Cuándo ocurrió? (Opcional)</label>
-          <input id="date" name="date" type="date">
-          <small id="dateError" class="error"></small>
-        </div>
-
-        <label class="check">
-          <input id="confirmReport" name="confirmed" type="checkbox"> 
-          <span>Confirmo que la información corresponde a lo que conozco.</span>
-        </label>
-        <small id="confirmReportError" class="error"></small>
-
-        <button class="button" id="reportSubmit" type="submit" data-loading-text="Enviando reporte...">Enviar reporte seguro</button>
-      </form>
-    </section>
+    </div>
   </main>
 
-  <dialog class="modal" id="reportDone">
-    <header>
-      <h2>Reporte recibido</h2>
-      <button type="button" class="button outline" data-modal-close style="min-height: 32px; padding: 4px 10px; font-size: 12px;">Cerrar</button>
-    </header>
-    <main><p id="reportDoneText"></p></main>
-    <footer><button class="button" type="button" data-modal-close>Entendido</button></footer>
-  </dialog>
+  <footer>
+    <div class="container">
+      <p>© 2026 Elige Tu Vida - Plataforma de prevención y convivencia escolar.</p>
+    </div>
+  </footer>
 
-  <!-- Integración con Supabase y Lógica de Sesión -->
-  <script type="module">
-    import { supabase } from "./conexion.js";
+  <script>
+    // Manejo visual del input de archivo
+    const fileInput = document.getElementById('evidencia');
+    const dropText = document.querySelector('.file-drop-text strong');
 
-    function setupModals() {
-      document.querySelectorAll("[data-modal-close]").forEach((btn) => {
-        btn.addEventListener("click", () => btn.closest("dialog")?.close());
-      });
-    }
-
-    function setError(id, message) {
-      const element = document.getElementById(id);
-      if (element) element.textContent = message;
-    }
-
-    function setAlert(id, message, success) {
-      const element = document.getElementById(id);
-      if (!element) return;
-      element.hidden = false;
-      element.textContent = message;
-      element.classList.toggle("ok", success);
-    }
-
-    function setBusy(button, busy) {
-      if (!button) return;
-      if (!button.dataset.defaultText) button.dataset.defaultText = button.textContent.trim();
-      button.disabled = busy;
-      button.textContent = busy ? button.dataset.loadingText : button.dataset.defaultText;
-    }
-
-    function generateTicket() {
-      return 'TK-' + Math.floor(100000 + Math.random() * 900000);
-    }
-
-    // Comprobar estado de autenticación para mostrar la cuenta en el header
-    async function checkUserSession() {
-      const navUserSection = document.getElementById("navUserSection");
-      try {
-        const { data: { session } } = await supabase.auth.getSession();
-        const localUser = localStorage.getItem("usuario") || sessionStorage.getItem("usuario");
-
-        if (session?.user || localUser) {
-          let email = session?.user?.email;
-          if (!email && localUser) {
-            try { email = JSON.parse(localUser).correo || JSON.parse(localUser).email; } catch(e){}
-          }
-          
-          navUserSection.innerHTML = `
-            <div class="user-badge">
-              <span>👤 ${email ? email.split('@')[0] : 'Cuenta Activa'}</span>
-            </div>
-            <a href="index.html" class="button outline" style="margin: 0; min-height: 36px; padding: 6px 14px; font-size: 13px;">Inicio</a>
-          `;
-        }
-      } catch (e) {
-        console.error("Error verificando sesión:", e);
+    fileInput.addEventListener('change', function(e) {
+      if (this.files && this.files.length > 0) {
+        dropText.textContent = `Archivo seleccionado: ${this.files[0].name}`;
+        dropText.style.color = 'var(--success)';
+      } else {
+        dropText.textContent = 'Haz clic para subir un archivo';
+        dropText.style.color = 'var(--blue)';
       }
-    }
+    });
 
-    document.addEventListener("DOMContentLoaded", async () => {
-      setupModals();
-      await checkUserSession();
+    // Validar sesión local para mostrar el usuario en el header (Opcional, igual que el index)
+    document.addEventListener("DOMContentLoaded", () => {
+        const localUserObj = JSON.parse(localStorage.getItem("usuario") || sessionStorage.getItem("usuario") || "null");
+        const navContainer = document.getElementById("nav-options");
+        const navLogin = document.getElementById("nav-login");
 
-      const form = document.getElementById("reportForm");
-      const description = document.getElementById("description");
-      if (!form || !description) return;
-
-      description.addEventListener("input", () => {
-        const normalized = description.value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-        const critical = /suicid|arma|abuso|violacion|matar|peligro inmediato/.test(normalized);
-        const serious = /acoso|bullying|amenaza|violencia|chantaje|golpe/.test(normalized);
-        const panel = document.getElementById("triage");
-        panel.querySelector("strong").textContent = critical ? "Posible situación crítica" : serious ? "Atención prioritaria" : "Orientación escolar";
-        panel.querySelector("p").textContent = critical
-          ? "Busca ahora a un adulto de confianza cercano y las líneas de emergencia de tu localidad."
-          : serious ? "Esta situación puede requerir acompañamiento institucional prioritario."
-          : "Continúa cuando te sientas preparado o preparada.";
-      });
-
-      form.addEventListener("submit", async (event) => {
-        event.preventDefault();
-        const button = document.getElementById("reportSubmit");
-        ["routeError", "descriptionError", "locationError", "dateError", "confirmReportError"].forEach((id) => setError(id, ""));
-
-        const confirmed = document.getElementById("confirmReport").checked;
-        const textVal = description.value.trim();
-        let valid = true;
-
-        if (textVal.length < 10) { setError("descriptionError", "Escribe al menos una frase significativa (mínimo 10 caracteres)."); valid = false; }
-        if (!confirmed) { setError("confirmReportError", "Debes confirmar la información."); valid = false; }
-        if (!valid) { setAlert("reportAlert", "Revisa los campos señalados.", false); return; }
-
-        setBusy(button, true);
-
-        try {
-          const routeVal = document.getElementById("route").value;
-          const locationVal = document.getElementById("location").value.trim();
-          const dateVal = document.getElementById("date").value;
-
-          const ticketCode = generateTicket();
-          const normalized = textVal.toLowerCase();
-          const riskLevel = /suicid|arma|abuso|violacion|matar/.test(normalized) ? "Crítico" : /acoso|bullying|amenaza|golpe/.test(normalized) ? "Alto" : "Medio";
-
-          let userId = null;
-          const localUser = localStorage.getItem("usuario") || sessionStorage.getItem("usuario");
-          if (localUser && routeVal === "identified") {
-            try { userId = JSON.parse(localUser).id; } catch(e){}
-          }
-
-          if (!userId && routeVal === "identified") {
-            const { data: sessionData } = await supabase.auth.getSession();
-            if (sessionData?.session?.user) {
-              userId = sessionData.session.user.id;
-            }
-          }
-
-          const { data, error } = await supabase.from('reportes').insert([
-            {
-              ticket: ticketCode,
-              ruta: routeVal,
-              descripcion: textVal,
-              ubicacion: locationVal || null,
-              fecha_suceso: dateVal || null,
-              riesgo: riskLevel,
-              usuario_id: userId,
-              creado_en: new Date().toISOString()
-            }
-          ]);
-
-          if (error) throw error;
-
-          document.getElementById("reportDoneText").textContent =
-            `Tu código de seguimiento es ${ticketCode}. Nivel de riesgo detectado: ${riskLevel}. El reporte ha sido guardado con éxito.`;
-          
-          form.reset();
-          document.getElementById("reportDone").showModal();
-          setAlert("reportAlert", "Reporte enviado correctamente.", true);
-
-        } catch (err) {
-          console.error("Error al guardar en Supabase:", err);
-          setAlert("reportAlert", "Ocurrió un error al enviar el reporte: " + (err.message || "Error de conexión"), false);
-        } finally {
-          setBusy(button, false);
+        if (localUserObj && localUserObj.nombre) {
+            if (navLogin) navLogin.remove();
+            
+            const userBadge = document.createElement("div");
+            userBadge.className = "user-badge-container";
+            const initial = localUserObj.nombre.charAt(0).toUpperCase();
+            
+            userBadge.innerHTML = `
+              <div class="user-avatar-circle">${initial}</div>
+              <span style="font-size: 13px; font-weight: 700; color: var(--navy);">${localUserObj.nombre}</span>
+            `;
+            navContainer.appendChild(userBadge);
         }
-      });
     });
   </script>
 </body>
