@@ -283,13 +283,13 @@
       <div class="form-head">
         <span style="color: var(--etv-blue); font-size: 12px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; display: block; margin-bottom: 8px;">COMUNICACIÓN INSTITUCIONAL</span>
         <h1>Ponte en contacto</h1>
-        <p>¿Tienes dudas, sugerencias o requieres soporte sobre la plataforma? Escríbenos.</p>
+        <p>¿Tienes dudas, sugerencias o requieres soporte sobre la plataforma? Escríbenos[cite: 4].</p>
       </div>
 
       <div class="form-wrap">
         <aside class="side">
           <h2>Información de apoyo</h2>
-          <p>Estamos comprometidos con la convivencia escolar y la correcta orientación a la comunidad académica.</p>
+          <p>Estamos comprometidos con la convivencia escolar y la correcta orientación a la comunidad académica[cite: 4].</p>
           
           <div class="contact-info-list">
             <div class="contact-item">
@@ -301,7 +301,7 @@
             <div class="contact-item">
               <div>
                 <strong>Canal Institucional</strong>
-                <span>Bogotá D.C., Colombia</span>
+                <span>Bogotá D.C., Colombia[cite: 4]</span>
               </div>
             </div>
           </div>
@@ -347,15 +347,54 @@
     </div>
   </footer>
 
-  <!-- Sincronización en tiempo real con onAuthStateChange -->
+  <!-- Sincronización en tiempo real y limpieza instantánea al cerrar sesión -->
   <script type="module">
     import { supabase } from './conexion.js';
 
     document.addEventListener("DOMContentLoaded", () => {
-        const loginLink = document.getElementById("nav-login");
-        const registerLink = document.getElementById("nav-register");
         const navContainer = document.getElementById("nav-options");
         const contactCardContainer = document.getElementById("contact-card-container");
+
+        function renderLoggedOutState() {
+            if (contactCardContainer) {
+                contactCardContainer.innerHTML = `
+                  <div class="auth-required-box">
+                    <div style="font-size: 48px; margin-bottom: 12px;">🔒</div>
+                    <h3>Inicio de sesión requerido</h3>
+                    <p>Para enviar un mensaje a través de nuestro canal de contacto institucional, es necesario que inicies sesión en tu cuenta de Elige Tu Vida o te registres si aún no la tienes[cite: 4].</p>
+                    <div class="auth-buttons-flex">
+                      <a href="login.html" class="button button-small" style="padding: 10px 20px; font-size: 14px;">Ingresar ahora</a>
+                      <a href="registro.html" class="button button-outline button-small" style="padding: 10px 20px; font-size: 14px; color: var(--etv-navy);">Registrarse</a>
+                    </div>
+                  </div>
+                `;
+            }
+
+            if (!navContainer) return;
+            const existingBadge = navContainer.querySelector(".user-badge-container");
+            const existingLogout = navContainer.querySelector("#nav-logout-btn");
+            if (existingBadge) existingBadge.remove();
+            if (existingLogout) existingLogout.remove();
+
+            if (!document.getElementById("nav-login")) {
+                const loginLink = document.createElement("a");
+                loginLink.href = "login.html";
+                loginLink.id = "nav-login";
+                loginLink.className = "button button-outline button-small";
+                loginLink.style.color = "var(--etv-navy)";
+                loginLink.textContent = "Ingresar";
+                navContainer.appendChild(loginLink);
+            }
+
+            if (!document.getElementById("nav-register")) {
+                const registerLink = document.createElement("a");
+                registerLink.href = "registro.html";
+                registerLink.id = "nav-register";
+                registerLink.className = "button button-small";
+                registerLink.textContent = "Registrarse";
+                navContainer.appendChild(registerLink);
+            }
+        }
 
         supabase.auth.onAuthStateChange(async (event, session) => {
             const user = session?.user;
@@ -377,8 +416,9 @@
                     console.error("Error al obtener perfil:", err);
                 }
 
-                // Actualizar barra de navegación si no se ha pintado la insignia
                 if (navContainer && !document.querySelector(".user-badge-container")) {
+                    const loginLink = document.getElementById("nav-login");
+                    const registerLink = document.getElementById("nav-register");
                     if (loginLink) loginLink.remove();
                     if (registerLink) registerLink.remove();
 
@@ -392,19 +432,23 @@
                     `;
 
                     const logoutButton = document.createElement("button");
+                    logoutButton.id = "nav-logout-btn";
                     logoutButton.textContent = "Cerrar sesión";
                     logoutButton.className = "button button-small button-outline";
+                    logoutButton.style.color = "var(--etv-navy)";
                     logoutButton.style.marginLeft = "4px";
 
                     logoutButton.addEventListener("click", async () => {
+                        renderLoggedOutState();
                         await supabase.auth.signOut();
+                        localStorage.clear();
+                        sessionStorage.clear();
                     });
 
                     navContainer.appendChild(userBadge);
                     navContainer.appendChild(logoutButton);
                 }
 
-                // Pintar formulario de contacto si no existe
                 if (contactCardContainer && !document.getElementById("contact-form")) {
                     contactCardContainer.innerHTML = `
                       <h2>Envíanos un mensaje</h2>
@@ -451,26 +495,7 @@
                 }
 
             } else {
-                // Si el usuario cierra sesión, recargar la página para bloquear el formulario y limpiar el menú
-                if (event === 'SIGN_OUT') {
-                    window.location.reload();
-                    return;
-                }
-
-                // Estado inicial sin sesión
-                if (contactCardContainer) {
-                    contactCardContainer.innerHTML = `
-                      <div class="auth-required-box">
-                        <div style="font-size: 48px; margin-bottom: 12px;">🔒</div>
-                        <h3>Inicio de sesión requerido</h3>
-                        <p>Para enviar un mensaje a través de nuestro canal de contacto institucional, es necesario que inicies sesión en tu cuenta de Elige Tu Vida o te registres si aún no la tienes.</p>
-                        <div class="auth-buttons-flex">
-                          <a href="login.html" class="button button-small" style="padding: 10px 20px; font-size: 14px;">Ingresar ahora</a>
-                          <a href="registro.html" class="button button-outline button-small" style="padding: 10px 20px; font-size: 14px; color: var(--etv-navy);">Registrarse</a>
-                        </div>
-                      </div>
-                    `;
-                }
+                renderLoggedOutState();
             }
         });
     });
