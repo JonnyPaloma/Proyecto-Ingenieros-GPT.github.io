@@ -305,7 +305,7 @@
     </div>
   </main>
 
-  <!-- Footer -->
+ <!-- Footer -->
   <footer class="professional-footer">
     <div class="container footer-main">
       <div class="footer-brand">
@@ -333,6 +333,24 @@
       <span>Proyecto de convivencia escolar y prevención integral</span>
     </div>
   </footer>
+
+  <style>
+    .professional-footer p, 
+    .professional-footer a, 
+    .professional-footer small, 
+    .professional-footer span, 
+    .professional-footer strong {
+      transition: color 0.25s ease, text-shadow 0.25s ease;
+    }
+    .professional-footer a:hover, 
+    .professional-footer p:hover, 
+    .professional-footer strong:hover, 
+    .professional-footer span:hover, 
+    .professional-footer small:hover {
+      color: #ffffff;
+      text-shadow: 0 0 5px rgba(147, 197, 253, 0.4);
+    }
+  </style>
 
   <!-- Lógica modular conectada a Supabase Auth -->
   <script type="module">
