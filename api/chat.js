@@ -16,8 +16,10 @@ export default async function handler(req, res) {
       return res.status(500).json({ error: 'Falta configurar la API Key en Vercel' });
     }
 
-    // Instrucción estricta para respuestas breves, humanas, sin asteriscos y enfocadas en la escucha rápida
-    const systemInstructionText = "Eres 'Elige Tu Vida', un asistente escolar muy cálido, empático y protector. Responde SIEMPRE de forma muy breve (máximo 3 frases cortas), directa y cercana. NO uses asteriscos, negritas ni formato markdown. Valida la emoción del estudiante de inmediato y guíale con suavidad a reportar o buscar apoyo seguro si hay agresión.";
+    // Prompt directo y estricto integrado en el flujo de usuario para evitar que repita instrucciones
+    const promptText = `Actúa estrictamente como 'Elige Tu Vida', un asistente escolar súper cálido, empático y breve. Responde al estudiante con máximo 2 o 3 frases cortas, sin usar asteriscos ni markdown, validando su emoción y guiándolo con cariño. 
+    
+    Estudiante dice: "${message}"`;
 
     let data = null;
     let success = false;
@@ -27,18 +29,14 @@ export default async function handler(req, res) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          system_instruction: {
-            parts: [{ text: systemInstructionText }]
-          },
           contents: [
             {
               role: "user",
-              parts: [{ text: message }]
+              parts: [{ text: promptText }]
             }
           ],
-          // Esto limita la longitud máxima de la respuesta para que responda mucho más rápido y sea breve
           generationConfig: {
-            maxOutputTokens: 150,
+            maxOutputTokens: 120,
             temperature: 0.7
           }
         })
@@ -55,24 +53,32 @@ export default async function handler(req, res) {
 
     if (!success) {
       return res.status(200).json({ 
-        reply: "Lamento mucho lo que me cuentas. Tu seguridad es primero. Por favor, usa la sección de Reporte Seguro de la página para que te ayudemos de inmediato. 💙" 
+        reply: "Lamento mucho lo que pasas. Tu seguridad es primero, usa la sección de Reporte Seguro para ayudarte. 💙" 
       });
     }
 
     let botReply = data.candidates?.[0]?.content?.parts?.[0]?.text;
 
     if (!botReply) {
-      return res.status(200).json({ reply: "Te escucho. ¿Cómo te sientes con esto que pasa?" });
+      return res.status(200).json({ reply: "Te escucho atentamente. ¿Cómo te sientes?" });
     }
 
-    // Limpieza de seguridad por si acaso manda asteriscos
-    botReply = botReply.replace(/[*_#]/g, '').trim();
+    // Limpieza profunda de cualquier símbolo o texto raro de instrucciones
+    botReply = botReply
+      .replace(/[*_#]/g, '')
+      .replace(/Gently guide to.*$/i, '')
+      .replace(/Actúa estrictamente.*?:/i, '')
+      .trim();
+
+    if (!botReply) {
+      botReply = "Estoy contigo. No estás solo, cuéntame un poco más para apoyarte. 💙";
+    }
 
     return res.status(200).json({ reply: botReply });
 
   } catch (error) {
     return res.status(200).json({ 
-      reply: "Estoy contigo. No estás solo, acércate a un docente de confianza o usa nuestro reporte seguro. 💙" 
+      reply: "Estoy contigo. No estás solo, acércate a un docente o usa nuestro reporte seguro. 💙" 
     });
   }
 }
