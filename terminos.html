@@ -299,14 +299,41 @@
     </div>
   </footer>
 
-  <!-- Sincronización en tiempo real con onAuthStateChange -->
+  <!-- Sincronización en tiempo real y limpieza instantánea al cerrar sesión -->
   <script type="module">
     import { supabase } from './conexion.js';
 
+    document.jsdelivr = window.jsdelivr || {};
+
     document.addEventListener("DOMContentLoaded", () => {
-        const loginLink = document.getElementById("nav-login");
-        const registerLink = document.getElementById("nav-register");
         const navContainer = document.getElementById("nav-options");
+
+        function renderLoggedOutState() {
+            if (!navContainer) return;
+            const existingBadge = navContainer.querySelector(".user-badge-container");
+            const existingLogout = navContainer.querySelector("#nav-logout-btn");
+            if (existingBadge) existingBadge.remove();
+            if (existingLogout) existingLogout.remove();
+
+            if (!document.getElementById("nav-login")) {
+                const loginLink = document.createElement("a");
+                loginLink.href = "login.html";
+                loginLink.id = "nav-login";
+                loginLink.className = "button button-outline button-small";
+                loginLink.style.color = "var(--etv-navy)";
+                loginLink.textContent = "Ingresar";
+                navContainer.appendChild(loginLink);
+            }
+
+            if (!document.getElementById("nav-register")) {
+                const registerLink = document.createElement("a");
+                registerLink.href = "registro.html";
+                registerLink.id = "nav-register";
+                registerLink.className = "button button-small";
+                registerLink.textContent = "Registrarse";
+                navContainer.appendChild(registerLink);
+            }
+        }
 
         supabase.auth.onAuthStateChange(async (event, session) => {
             const user = session?.user;
@@ -329,6 +356,8 @@
                 }
 
                 if (navContainer && !document.querySelector(".user-badge-container")) {
+                    const loginLink = document.getElementById("nav-login");
+                    const registerLink = document.getElementById("nav-register");
                     if (loginLink) loginLink.remove();
                     if (registerLink) registerLink.remove();
 
@@ -342,18 +371,25 @@
                     `;
 
                     const logoutButton = document.createElement("button");
+                    logoutButton.id = "nav-logout-btn";
                     logoutButton.textContent = "Cerrar sesión";
                     logoutButton.className = "button button-small button-outline";
+                    logoutButton.style.color = "var(--etv-navy)";
                     logoutButton.style.marginLeft = "4px";
 
                     logoutButton.addEventListener("click", async () => {
+                        renderLoggedOutState();
                         await supabase.auth.signOut();
+                        localStorage.clear();
+                        sessionStorage.clear();
+                        window.location.reload();
                     });
 
                     navContainer.appendChild(userBadge);
                     navContainer.appendChild(logoutButton);
                 }
             } else {
+                renderLoggedOutState();
                 if (event === 'SIGN_OUT') {
                     window.location.reload();
                 }
