@@ -155,33 +155,16 @@
     .text { color: var(--etv-blue); font-weight: 700; transition: color 0.2s; }
     .text:hover { color: #2563eb; text-decoration: underline; }
 
-    /* Footer con efecto lumínico (brillo al pasar el cursor) */
+    /* Footer estándar idéntico al resto de la plataforma */
     .professional-footer { padding: 40px 0 20px; background: #101a2d; color: #aebdd1; margin-top: auto; }
     .footer-main { display: grid; grid-template-columns: 1.6fr .7fr .7fr; gap: 60px; padding-bottom: 30px; }
-    .footer-main p { max-width: 430px; margin: 14px 0 0; color: #9eafc6; font-size: 13px; line-height: 1.6; transition: all 0.3s ease; }
-    .professional-footer .brand strong { color: #fff; transition: all 0.3s ease; }
-    .professional-footer .brand small { color: #91a5c0; transition: all 0.3s ease; }
+    .footer-main p { max-width: 430px; margin: 14px 0 0; color: #9eafc6; font-size: 13px; line-height: 1.6; }
+    .professional-footer .brand strong { color: #fff; }
+    .professional-footer .brand small { color: #91a5c0; }
     .footer-main > div:not(.footer-brand) { display: flex; flex-direction: column; gap: 10px; }
-    .footer-main > div:not(.footer-brand) > strong { margin-bottom: 4px; color: #fff; font-size: 13px; transition: all 0.3s ease; }
-    
-    /* Efecto "alumbrar letra" (brillo/glow) al pasar el cursor por los textos del footer */
-    .footer-main a, 
-    .footer-main p, 
-    .footer-main strong, 
-    .footer-main small,
-    .footer-bottom span {
-      transition: color 0.3s ease, text-shadow 0.3s ease;
-    }
-    
-    .footer-main a:hover,
-    .footer-main p:hover,
-    .footer-main strong:hover,
-    .footer-main small:hover,
-    .footer-bottom span:hover {
-      color: #ffffff !important;
-      text-shadow: 0 0 10px rgba(59, 130, 246, 0.8), 0 0 20px rgba(96, 165, 250, 0.5);
-    }
-
+    .footer-main > div:not(.footer-brand) > strong { margin-bottom: 4px; color: #fff; font-size: 13px; }
+    .footer-main a { color: #aebdd1; font-size: 13px; transition: color 0.2s; }
+    .footer-main a:hover { color: #ffffff; }
     .footer-bottom { display: flex; justify-content: space-between; gap: 20px; padding-top: 18px; border-top: 1px solid rgba(255,255,255,.12); color: #7e91ad; font-size: 11px; }
 
     @media(max-width:880px){
@@ -255,36 +238,36 @@
 
       <div class="form-wrap">
         <aside class="side">
-          <h2>Documento local</h2>
-          <p>Este texto es una base informativa para la demostración estática y el cumplimiento normativo institucional.</p>
+          <h2>Marco normativo</h2>
+          <p>Este documento establece los lineamientos institucionales y los estándares de uso responsable que rigen la plataforma de apoyo escolar.</p>
           <a class="text" href="privacidad.html">Política de privacidad &rarr;</a>
         </aside>
 
         <article class="formcard">
-          <h2>1. Propósito</h2>
-          <p>Elige Tu Vida es una plataforma de orientación y convivencia escolar. Su objetivo es facilitar una primera escucha y rutas de apoyo para estudiantes y comunidades educativas[cite: 10].</p>
+          <h2>1. Propósito institucional</h2>
+          <p>Elige Tu Vida es un entorno digital enfocado en la orientación y la convivencia escolar. Su misión principal es proveer canales eficientes de primera escucha y establecer rutas de apoyo integrales para los estudiantes y la comunidad educativa.</p>
           
-          <h2>2. Uso responsable</h2>
-          <p>La plataforma debe utilizarse con respeto y buena fe[cite: 10]. No debe usarse para acosar, intimidar, suplantar identidades, difundir información privada ni crear reportes deliberadamente falsos[cite: 10].</p>
+          <h2>2. Normas de uso responsable</h2>
+          <p>Los usuarios se comprometen a emplear la plataforma bajo estrictos principios de respeto mutuo y buena fe. Queda prohibido utilizar el sistema para cometer actos de acoso, intimidación, suplantación de identidad, divulgación de información confidencial o emisión deliberada de reportes falsos.</p>
           
-          <h2>3. Alcance</h2>
-          <p>Las respuestas guiadas son informativas[cite: 10]. No realizan diagnósticos psicológicos, jurídicos o médicos y no reemplazan los protocolos institucionales[cite: 10].</p>
+          <h2>3. Alcance y limitaciones</h2>
+          <p>Las orientaciones y respuestas automatizadas ofrecidas poseen un carácter estrictamente informativo y de acompañamiento preventivo. No constituyen dictámenes psicológicos, médicos ni jurídicos, y no sustituyen los protocolos formales de atención institucional.</p>
           
-          <h2>4. Emergencias</h2>
-          <p>Si existe riesgo inmediato para la vida o integridad de una persona, busca un adulto de confianza cercano y usa las líneas de emergencia disponibles en tu localidad[cite: 10].</p>
+          <h2>4. Protocolos de emergencia</h2>
+          <p>Ante situaciones que representen un peligro inminente para la integridad física o emocional de un individuo, se exhorta a contactar de manera inmediata a un adulto responsable de confianza y a recurrir a las líneas oficiales de emergencia locales.</p>
           
-          <h2>5. Versión local</h2>
-          <p>Esta versión funciona sin servidor[cite: 10]. Los datos de formularios se guardan solo en el navegador y no llegan a un colegio, autoridad o equipo de atención[cite: 10].</p>
+          <h2>5. Entorno y privacidad local</h2>
+          <p>Esta aplicación opera bajo una arquitectura estática orientada a la protección de datos. Los registros generados mediante los módulos interactivos se gestionan de manera local y transitoria, garantizando la confidencialidad y evitando la exposición a servidores externos no autorizados.</p>
           
-          <h2>6. Contacto</h2>
-          <p>Para consultas generales usa la página de <a class="text" href="contacto.html">contacto institucional</a>[cite: 10].</p>
+          <h2>6. Canales de contacto</h2>
+          <p>Para resolver inquietudes adicionales sobre las normativas de la plataforma, consulte nuestra sección de <a class="text" href="contacto.html">contacto institucional</a>.</p>
         </article>
       </div>
 
     </div>
   </main>
 
-  <!-- Footer con efecto lumínico interactivo -->
+  <!-- Footer estándar -->
   <footer class="professional-footer">
     <div class="container footer-main">
       <div class="footer-brand">
