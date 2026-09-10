@@ -215,7 +215,32 @@ header{position:sticky;top:0;z-index:10;border-bottom:1px solid var(--line);back
     }
 
     function validEmail(value) {
-        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
+        const email = value.trim().toLowerCase();
+        
+        // 1. Validar estructura general del correo electrónico
+        const emailRegex = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/;
+        if (!emailRegex.test(email)) return false;
+
+        // 2. Extraer el dominio (lo que está después del @)
+        const domain = email.split('@')[1];
+
+        // 3. Lista de dominios comunes falsos o de prueba que se deben bloquear
+        const dominiosBloqueados = [
+            'test.com', 'example.com', 'correo.com', 'mail.com', 
+            'asdf.com', 'fake.com', 'abc.com', 'xyz.com', 'prueba.com'
+        ];
+
+        if (dominiosBloqueados.includes(domain)) {
+            return false;
+        }
+
+        // 4. Bloquear nombres de usuario demasiado cortos o con caracteres repetidos (ej: aaaa@gmail.com, 1111@gmail.com)
+        const userPart = email.split('@')[0];
+        if (userPart.length < 3 || /^(.)\1+$/.test(userPart)) {
+            return false;
+        }
+
+        return true;
     }
 
     function setError(id, message) {
@@ -263,7 +288,7 @@ header{position:sticky;top:0;z-index:10;border-bottom:1px solid var(--line);back
 
             let valid = true;
             if (data.name.length < 3) { setError("nameError", "Escribe tu nombre completo."); valid = false; }
-            if (!validEmail(data.email)) { setError("registerEmailError", "Escribe un correo válido."); valid = false; }
+            if (!validEmail(data.email)) { setError("registerEmailError", "Por favor, ingresa un correo electrónico real y válido."); valid = false; }
             if (data.school.length < 3) { setError("schoolError", "Escribe tu institución."); valid = false; }
             if (data.password.length < 6) { setError("registerPasswordError", "Usa al menos 6 caracteres."); valid = false; }
             if (data.confirmation !== data.password) { setError("confirmError", "Las contraseñas no coinciden."); valid = false; }
@@ -273,8 +298,7 @@ header{position:sticky;top:0;z-index:10;border-bottom:1px solid var(--line);back
             setBusy(button, true);
 
             try {
-                // 1. Crear el usuario en Supabase Auth
-                // Enviamos 'nombre' y 'colegio' para que el disparador SQL los capture
+                // Crear el usuario en Supabase Auth y enviar metadatos para el disparador SQL
                 const { data: authData, error: authError } = await supabase.auth.signUp({
                     email: data.email,
                     password: data.password,
@@ -297,9 +321,7 @@ header{position:sticky;top:0;z-index:10;border-bottom:1px solid var(--line);back
                     return;
                 }
 
-                // (Se omitió el paso 2 de inserción manual porque el disparador en SQL ya lo hace de fondo)
-
-                // 3. Guardar datos en el almacenamiento local para sincronización fluida
+                // Guardar datos en el almacenamiento local para sincronización fluida
                 localStorage.setItem("usuario", JSON.stringify({
                     id: authData.user?.id,
                     nombre: data.name,
@@ -308,7 +330,7 @@ header{position:sticky;top:0;z-index:10;border-bottom:1px solid var(--line);back
                 }));
 
                 form.reset();
-                setAlert("registerAlert", "¡Cuenta creada con éxito! Redirigiendo al inicio de sesión...", true);
+                setAlert("registerAlert", "¡Cuenta creada con éxito! Redirigiendo...", true);
 
                 setTimeout(() => {
                     window.location.href = "login.html";
