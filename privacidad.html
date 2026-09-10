@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Política de privacidad de la plataforma Elige Tu Vida, protección de datos y confidencialidad escolar.">
-  <title>Política de privacidad | Elige Tu Vida</title>
+  <meta name="description" content="Política de privacidad de Elige Tu Vida, tratamiento seguro de datos y protección institucional.">
+  <title>Política de Privacidad | Elige Tu Vida</title>
 
   <link rel="icon" href="assets/images/Favicon Hack.png" type="image/svg+xml">
   <link rel="icon" href="assets/images/Favicon Hack.png" sizes="32x32" type="image/png">
@@ -125,7 +125,7 @@
     .button-outline { border-color: #cbd5e1; color: var(--etv-navy); background: #fff; }
     .button-outline:hover { border-color: var(--etv-blue); background: #eff6ff; color: var(--etv-blue); }
 
-    /* Estilos de insignia de usuario moderna en la nav */
+    /* Insignia de usuario */
     .user-badge-container {
       display: flex;
       align-items: center;
@@ -156,24 +156,20 @@
       margin-left: auto;
     }
 
-    /* Estructura Legal Split */
-    .form-page { flex: 1; display: flex; flex-direction: column; padding: 40px 0 60px; }
-    .form-head { padding: 40px 0 30px; text-align: center; }
-    .form-head h1 { color: var(--etv-navy); font-size: 34px; font-weight: 800; margin-bottom: 8px; }
-    .form-head p { color: var(--etv-muted); font-size: 15px; }
+    /* Estructura del Contenido Legal */
+    .legal-page { flex: 1; padding: 50px 0 80px; }
+    .legal-card {
+      max-width: 840px; margin: 0 auto; padding: 48px;
+      background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(16px);
+      border: 1px solid var(--etv-line); border-radius: 20px; box-shadow: var(--shadow-lg);
+    }
+    .legal-head { margin-bottom: 35px; border-bottom: 1px solid var(--etv-line); padding-bottom: 24px; }
+    .legal-head h1 { color: var(--etv-navy); font-size: 30px; font-weight: 800; margin-bottom: 8px; }
+    .legal-head p { color: var(--etv-muted); font-size: 14px; }
 
-    .form-wrap { display: grid; grid-template-columns: 280px minmax(0, 1fr); gap: 35px; align-items: start; }
-    .side, .formcard { padding: 32px; border: 1px solid var(--etv-line); border-radius: 20px; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(16px); box-shadow: var(--shadow-lg); }
-    .side { height: max-content; background: linear-gradient(135deg, rgba(239,246,255,0.9) 0%, rgba(224,242,254,0.9) 100%); }
-    .side h2, .formcard h2 { margin-top: 0; color: var(--etv-navy); font-size: 20px; font-weight: 800; margin-bottom: 12px; }
-    .side p { color: var(--etv-muted); font-size: 14px; line-height: 1.6; margin-bottom: 16px; }
-
-    .formcard h2 { font-size: 22px; margin-top: 28px; margin-bottom: 10px; color: var(--etv-navy); }
-    .formcard h2:first-of-type { margin-top: 0; }
-    .formcard p { color: #334155; font-size: 15px; line-height: 1.7; margin-bottom: 16px; }
-
-    .text { color: var(--etv-blue); font-weight: 700; transition: color 0.2s; }
-    .text:hover { color: #2563eb; text-decoration: underline; }
+    .legal-content h2 { color: var(--etv-navy); font-size: 18px; font-weight: 800; margin-top: 28px; margin-bottom: 10px; }
+    .legal-content p, .legal-content li { color: #334155; font-size: 14px; line-height: 1.7; margin-bottom: 14px; }
+    .legal-content ul { padding-left: 20px; margin-bottom: 14px; }
 
     /* Footer estándar */
     .professional-footer { padding: 40px 0 20px; background: #101a2d; color: #aebdd1; margin-top: auto; }
@@ -188,8 +184,7 @@
     .footer-bottom { display: flex; justify-content: space-between; gap: 20px; padding-top: 18px; border-top: 1px solid rgba(255,255,255,.12); color: #7e91ad; font-size: 11px; }
 
     @media(max-width:880px){
-      .form-wrap{grid-template-columns:1fr}
-      .side{display:none}
+      .legal-card { padding: 24px; }
       .site-nav nav { display: none; }
       .site-nav nav.open {
         position: absolute; top: 78px; right: 0; left: 0;
@@ -248,43 +243,35 @@
     </div>
   </header>
 
-  <main class="form-page">
+  <main class="legal-page">
     <div class="container">
-      
-      <div class="form-head">
-        <span style="color: var(--etv-blue); font-size: 12px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; display: block; margin-bottom: 8px;">INFORMACIÓN LEGAL</span>
-        <h1>Política de privacidad</h1>
-        <p>Última actualización: septiembre de 2026.</p>
-      </div>
+      <article class="legal-card">
+        <div class="legal-head">
+          <h1>Política de Privacidad</h1>
+          <p>Última actualización: Agosto de 2026</p>
+        </div>
 
-      <div class="form-wrap">
-        <aside class="side">
-          <h2>Privacidad primero</h2>
-          <p>La ruta anónima prioriza la confidencialidad evitando solicitar datos de identificación personal.</p>
-          <a class="text" href="reporte-seguro.html">Usar reporte seguro &rarr;</a>
-        </aside>
+        <div class="legal-content">
+          <p>En <strong>Elige Tu Vida</strong> valoramos y protegemos la privacidad de todos los miembros de nuestra comunidad académica. Esta política describe cómo recopilamos, utilizamos y salvaguardamos la información personal dentro de nuestra plataforma institucional.</p>
 
-        <article class="formcard">
-          <h2>1. Alcance de la política</h2>
-          <p>Esta política describe los lineamientos de tratamiento de información aplicados en la plataforma Elige Tu Vida. En escenarios de implantación institucional formal, la entidad educativa responsable definirá los canales y protocolos específicos bajo la normativa aplicable.</p>
-          
-          <h2>2. Información tratada</h2>
-          <p>Los módulos de autenticación y registro local pueden gestionar de forma temporal campos como nombre, correo electrónico, institución asociada y credenciales de acceso cifradas. Asimismo, los reportes recopilan descripciones de incidentes, fechas y niveles de orientación requeridos.</p>
-          
-          <h2>3. Finalidad del tratamiento</h2>
-          <p>En el marco de un sistema institucional seguro, los datos recopilados se emplean exclusivamente para propósitos de autenticación de usuarios, orientación preventiva, seguimiento autorizado y la debida protección integral de los estudiantes.</p>
-          
-          <h2>4. Mecanismo de ruta anónima</h2>
-          <p>El sistema cuenta con un canal de ruta anónima diseñado para no solicitar nombres, correos ni datos de contacto. Se recomienda abstenerse de ingresar información personal identificable en este módulo si el usuario desea preservar absoluta confidencialidad.</p>
-          
-          <h2>5. Derechos de los titulares</h2>
-          <p>Conforme a los lineamientos generales de la Ley 1581 de 2012 de Colombia, se reconocen los derechos de consulta, actualización, rectificación y supresión de datos cuando proceda. Toda gestión sobre información de menores de edad salvaguarda de manera prioritaria su interés superior.</p>
-          
-          <h2>6. Arquitectura de almacenamiento local</h2>
-          <p>Esta versión opera bajo un entorno de almacenamiento local en el navegador del usuario, evitando la transmisión de información hacia servidores externos no autorizados. No constituye un canal oficial de denuncia legal o atención de emergencias críticas.</p>
-        </article>
-      </div>
+          <h2>1. Información que recopilamos</h2>
+          <p>Para garantizar el acceso seguro a los servicios de orientación y convivencia, podemos recopilar datos básicos de registro tales como:</p>
+          <ul>
+            <li>Nombre completo y datos de identificación institucional.</li>
+            <li>Correo electrónico de contacto.</li>
+            <li>Registros de interacción con los módulos de orientación y reportes seguros.</li>
+          </ul>
 
+          <h2>2. Uso de la información</h2>
+          <p>Los datos recopilados son utilizados exclusivamente con fines de gestión institucional, soporte técnico, prevención integral de la convivencia escolar y garantía de acceso seguro a los perfiles de usuario.</p>
+
+          <h2>3. Confidencialidad y Seguridad</h2>
+          <p>Implementamos estrictos protocolos de seguridad tecnológica y cifrado a través de infraestructura especializada (Supabase) para salvaguardar la integridad de la información frente a accesos no autorizados.</p>
+
+          <h2>4. Derechos del usuario</h2>
+          <p>Como usuario registrado, tienes derecho a consultar, actualizar o solicitar la revisión de tus datos personales a través de nuestros canales oficiales de soporte institucional.</p>
+        </div>
+      </article>
     </div>
   </main>
 
@@ -317,62 +304,66 @@
     </div>
   </footer>
 
-  <!-- Verificación de sesión dinámica conectada a Supabase Auth -->
+  <!-- Sincronización en tiempo real con onAuthStateChange -->
   <script type="module">
     import { supabase } from './conexion.js';
 
-    document.addEventListener("DOMContentLoaded", async () => {
+    document.addEventListener("DOMContentLoaded", () => {
         const loginLink = document.getElementById("nav-login");
         const registerLink = document.getElementById("nav-register");
         const navContainer = document.getElementById("nav-options");
 
-        if (!navContainer) return;
-
-        try {
-            const { data: { session } } = await supabase.auth.getSession();
+        supabase.auth.onAuthStateChange(async (event, session) => {
             const user = session?.user;
 
             if (user) {
                 let userName = user.user_metadata?.nombre || user.user_metadata?.full_name || user.email.split('@')[0];
 
-                const { data: perfilData } = await supabase
-                    .from('perfiles')
-                    .select('nombre')
-                    .eq('id', user.id)
-                    .single();
+                try {
+                    const { data: perfilData } = await supabase
+                        .from('perfiles')
+                        .select('nombre')
+                        .eq('id', user.id)
+                        .single();
 
-                if (perfilData?.nombre) {
-                    userName = perfilData.nombre;
+                    if (perfilData?.nombre) {
+                        userName = perfilData.nombre;
+                    }
+                } catch (err) {
+                    console.error("Error al obtener perfil:", err);
                 }
 
-                if (loginLink) loginLink.remove();
-                if (registerLink) registerLink.remove();
+                if (navContainer && !document.querySelector(".user-badge-container")) {
+                    if (loginLink) loginLink.remove();
+                    if (registerLink) registerLink.remove();
 
-                const userBadge = document.createElement("div");
-                userBadge.className = "user-badge-container";
-                
-                const initial = (userName ? userName.charAt(0) : "U").toUpperCase();
-                userBadge.innerHTML = `
-                  <div class="user-avatar-circle">${initial}</div>
-                  <span class="user-name-text">${userName}</span>
-                `;
+                    const userBadge = document.createElement("div");
+                    userBadge.className = "user-badge-container";
+                    
+                    const initial = (userName ? userName.charAt(0) : "U").toUpperCase();
+                    userBadge.innerHTML = `
+                      <div class="user-avatar-circle">${initial}</div>
+                      <span class="user-name-text">${userName}</span>
+                    `;
 
-                const logoutButton = document.createElement("button");
-                logoutButton.textContent = "Cerrar sesión";
-                logoutButton.className = "button button-small button-outline";
-                logoutButton.style.marginLeft = "4px";
+                    const logoutButton = document.createElement("button");
+                    logoutButton.textContent = "Cerrar sesión";
+                    logoutButton.className = "button button-small button-outline";
+                    logoutButton.style.marginLeft = "4px";
 
-                logoutButton.addEventListener("click", async () => {
-                    await supabase.auth.signOut();
+                    logoutButton.addEventListener("click", async () => {
+                        await supabase.auth.signOut();
+                    });
+
+                    navContainer.appendChild(userBadge);
+                    navContainer.appendChild(logoutButton);
+                }
+            } else {
+                if (event === 'SIGN_OUT') {
                     window.location.reload();
-                });
-
-                navContainer.appendChild(userBadge);
-                navContainer.appendChild(logoutButton);
+                }
             }
-        } catch (e) {
-            console.error("Error al verificar la sesión con Supabase:", e);
-        }
+        });
     });
   </script>
 </body>
