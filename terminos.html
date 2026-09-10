@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Términos y condiciones de uso de la plataforma Elige Tu Vida, normas de convivencia y pautas institucionales.">
-  <title>Términos y condiciones | Elige Tu Vida</title>
+  <title>Términos de Uso | Elige Tu Vida</title>
 
   <link rel="icon" href="assets/images/Favicon Hack.png" type="image/svg+xml">
   <link rel="icon" href="assets/images/Favicon Hack.png" sizes="32x32" type="image/png">
@@ -156,24 +156,20 @@
       margin-left: auto;
     }
 
-    /* Estructura Legal Split */
-    .form-page { flex: 1; display: flex; flex-direction: column; padding: 40px 0 60px; }
-    .form-head { padding: 40px 0 30px; text-align: center; }
-    .form-head h1 { color: var(--etv-navy); font-size: 34px; font-weight: 800; margin-bottom: 8px; }
-    .form-head p { color: var(--etv-muted); font-size: 15px; }
+    /* Estructura del Contenido Legal */
+    .legal-page { flex: 1; padding: 50px 0 80px; }
+    .legal-card {
+      max-width: 840px; margin: 0 auto; padding: 48px;
+      background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(16px);
+      border: 1px solid var(--etv-line); border-radius: 20px; box-shadow: var(--shadow-lg);
+    }
+    .legal-head { margin-bottom: 35px; border-bottom: 1px solid var(--etv-line); padding-bottom: 24px; }
+    .legal-head h1 { color: var(--etv-navy); font-size: 30px; font-weight: 800; margin-bottom: 8px; }
+    .legal-head p { color: var(--etv-muted); font-size: 14px; }
 
-    .form-wrap { display: grid; grid-template-columns: 280px minmax(0, 1fr); gap: 35px; align-items: start; }
-    .side, .formcard { padding: 32px; border: 1px solid var(--etv-line); border-radius: 20px; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(16px); box-shadow: var(--shadow-lg); }
-    .side { height: max-content; background: linear-gradient(135deg, rgba(239,246,255,0.9) 0%, rgba(224,242,254,0.9) 100%); }
-    .side h2, .formcard h2 { margin-top: 0; color: var(--etv-navy); font-size: 20px; font-weight: 800; margin-bottom: 12px; }
-    .side p { color: var(--etv-muted); font-size: 14px; line-height: 1.6; margin-bottom: 16px; }
-
-    .formcard h2 { font-size: 22px; margin-top: 28px; margin-bottom: 10px; color: var(--etv-navy); }
-    .formcard h2:first-of-type { margin-top: 0; }
-    .formcard p { color: #334155; font-size: 15px; line-height: 1.7; margin-bottom: 16px; }
-
-    .text { color: var(--etv-blue); font-weight: 700; transition: color 0.2s; }
-    .text:hover { color: #2563eb; text-decoration: underline; }
+    .legal-content h2 { color: var(--etv-navy); font-size: 18px; font-weight: 800; margin-top: 28px; margin-bottom: 10px; }
+    .legal-content p, .legal-content li { color: #334155; font-size: 14px; line-height: 1.7; margin-bottom: 14px; }
+    .legal-content ul { padding-left: 20px; margin-bottom: 14px; }
 
     /* Footer estándar */
     .professional-footer { padding: 40px 0 20px; background: #101a2d; color: #aebdd1; margin-top: auto; }
@@ -188,8 +184,7 @@
     .footer-bottom { display: flex; justify-content: space-between; gap: 20px; padding-top: 18px; border-top: 1px solid rgba(255,255,255,.12); color: #7e91ad; font-size: 11px; }
 
     @media(max-width:880px){
-      .form-wrap{grid-template-columns:1fr}
-      .side{display:none}
+      .legal-card { padding: 24px; }
       .site-nav nav { display: none; }
       .site-nav nav.open {
         position: absolute; top: 78px; right: 0; left: 0;
@@ -248,43 +243,30 @@
     </div>
   </header>
 
-  <main class="form-page">
+  <main class="legal-page">
     <div class="container">
-      
-      <div class="form-head">
-        <span style="color: var(--etv-blue); font-size: 12px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; display: block; margin-bottom: 8px;">MARCO NORMATIVO</span>
-        <h1>Términos y condiciones de uso</h1>
-        <p>Última actualización: septiembre de 2026.</p>
-      </div>
+      <article class="legal-card">
+        <div class="legal-head">
+          <h1>Términos y Condiciones de Uso</h1>
+          <p>Última actualización: Agosto de 2026</p>
+        </div>
 
-      <div class="form-wrap">
-        <aside class="side">
-          <h2>Uso responsable</h2>
-          <p>Esta plataforma promueve la convivencia escolar pacífica y el bienestar de la comunidad académica.</p>
-          <a class="text" href="contacto.html">Resolución de dudas &rarr;</a>
-        </aside>
+        <div class="legal-content">
+          <p>Bienvenido a <strong>Elige Tu Vida</strong>. Al acceder, registrarte o utilizar nuestra plataforma web, aceptas cumplir con los siguientes términos y condiciones institucionales orientados a salvaguardar la convivencia y el bienestar escolar.</p>
 
-        <article class="formcard">
-          <h2>1. Aceptación de los términos</h2>
-          <p>Al acceder, navegar o utilizar la plataforma web Elige Tu Vida, el usuario acepta de manera expresa los presentes términos y condiciones, comprometiéndose a hacer un uso adecuado, ético y conforme a los objetivos institucionales de la herramienta.</p>
-          
-          <h2>2. Naturaleza del servicio</h2>
-          <p>Elige Tu Vida es una plataforma digital orientada a la prevención integral, la orientación guiada y la gestión segura de reportes escolares. No sustituye canales oficiales de emergencia crítica o atención judicial directa, sirviendo como un puente de apoyo preventivo y comunitario.</p>
-          
-          <h2>3. Obligaciones del usuario</h2>
-          <p>El usuario se compromete a no utilizar la plataforma para difundir contenido falso, ofensivo, malintencionado o que vulnere la integridad de terceros. El uso indebido de los canales de reporte o del chat de orientación podrá derivar en la restricción de acceso al sistema.</p>
-          
-          <h2>4. Propiedad intelectual</h2>
-          <p>Todos los diseños, interfaces, logotipos, códigos fuente y textos integrados en este sitio web están protegidos por las normativas aplicables de propiedad intelectual. Su reproducción total o parcial sin autorización previa se encuentra estrictamente prohibida.</p>
-          
-          <h2>5. Limitación de responsabilidad</h2>
-          <p>La administración del proyecto propende por la disponibilidad continua y la seguridad de los datos; sin embargo, no asume responsabilidad absoluta por fallas técnicas imprevistas derivadas de servicios de terceros, proveedores de alojamiento o redes de internet externas.</p>
-          
-          <h2>6. Modificaciones de los términos</h2>
-          <p>Nos reservamos el derecho de modificar, actualizar o complementar estos términos en cualquier momento con el propósito de adaptarlos a mejoras tecnológicas o normativas institucionales vigentes.</p>
-        </article>
-      </div>
+          <h2>1. Aceptación de las normas</h2>
+          <p>El uso de los servicios interactivos de orientación y canales de contacto implica la aceptación total de estas directrices. Si no estás de acuerdo con alguna de las disposiciones, te sugerimos abstenerte de utilizar las herramientas institucionales.</p>
 
+          <h2>2. Uso responsable de los servicios</h2>
+          <p>Te comprometes a utilizar las herramientas de la plataforma (como el chat de orientación, reportes seguros y formularios de contacto) de manera ética, veraz y respetuosa, evitando cualquier uso malintencionado que vulnere la integridad de la comunidad académica.</p>
+
+          <h2>3. Cuentas y acceso de usuario</h2>
+          <p>El acceso a determinadas secciones requiere la creación de una cuenta con credenciales válidas. Eres responsable de mantener la confidencialidad de tu acceso y de notificar cualquier anomalía a soporte técnico.</p>
+
+          <h2>4. Modificaciones de la plataforma</h2>
+          <p>La administración se reserva el derecho de actualizar, modificar o suspender temporal o definitivamente las características del sitio web con el propósito de optimizar los servicios de apoyo escolar.</p>
+        </div>
+      </article>
     </div>
   </main>
 
@@ -317,62 +299,66 @@
     </div>
   </footer>
 
-  <!-- Verificación de sesión dinámica conectada a Supabase Auth -->
+  <!-- Sincronización en tiempo real con onAuthStateChange -->
   <script type="module">
     import { supabase } from './conexion.js';
 
-    document.addEventListener("DOMContentLoaded", async () => {
+    document.addEventListener("DOMContentLoaded", () => {
         const loginLink = document.getElementById("nav-login");
         const registerLink = document.getElementById("nav-register");
         const navContainer = document.getElementById("nav-options");
 
-        if (!navContainer) return;
-
-        try {
-            const { data: { session } } = await supabase.auth.getSession();
+        supabase.auth.onAuthStateChange(async (event, session) => {
             const user = session?.user;
 
             if (user) {
                 let userName = user.user_metadata?.nombre || user.user_metadata?.full_name || user.email.split('@')[0];
 
-                const { data: perfilData } = await supabase
-                    .from('perfiles')
-                    .select('nombre')
-                    .eq('id', user.id)
-                    .single();
+                try {
+                    const { data: perfilData } = await supabase
+                        .from('perfiles')
+                        .select('nombre')
+                        .eq('id', user.id)
+                        .single();
 
-                if (perfilData?.nombre) {
-                    userName = perfilData.nombre;
+                    if (perfilData?.nombre) {
+                        userName = perfilData.nombre;
+                    }
+                } catch (err) {
+                    console.error("Error al obtener perfil:", err);
                 }
 
-                if (loginLink) loginLink.remove();
-                if (registerLink) registerLink.remove();
+                if (navContainer && !document.querySelector(".user-badge-container")) {
+                    if (loginLink) loginLink.remove();
+                    if (registerLink) registerLink.remove();
 
-                const userBadge = document.createElement("div");
-                userBadge.className = "user-badge-container";
-                
-                const initial = (userName ? userName.charAt(0) : "U").toUpperCase();
-                userBadge.innerHTML = `
-                  <div class="user-avatar-circle">${initial}</div>
-                  <span class="user-name-text">${userName}</span>
-                `;
+                    const userBadge = document.createElement("div");
+                    userBadge.className = "user-badge-container";
+                    
+                    const initial = (userName ? userName.charAt(0) : "U").toUpperCase();
+                    userBadge.innerHTML = `
+                      <div class="user-avatar-circle">${initial}</div>
+                      <span class="user-name-text">${userName}</span>
+                    `;
 
-                const logoutButton = document.createElement("button");
-                logoutButton.textContent = "Cerrar sesión";
-                logoutButton.className = "button button-small button-outline";
-                logoutButton.style.marginLeft = "4px";
+                    const logoutButton = document.createElement("button");
+                    logoutButton.textContent = "Cerrar sesión";
+                    logoutButton.className = "button button-small button-outline";
+                    logoutButton.style.marginLeft = "4px";
 
-                logoutButton.addEventListener("click", async () => {
-                    await supabase.auth.signOut();
+                    logoutButton.addEventListener("click", async () => {
+                        await supabase.auth.signOut();
+                    });
+
+                    navContainer.appendChild(userBadge);
+                    navContainer.appendChild(logoutButton);
+                }
+            } else {
+                if (event === 'SIGN_OUT') {
                     window.location.reload();
-                });
-
-                navContainer.appendChild(userBadge);
-                navContainer.appendChild(logoutButton);
+                }
             }
-        } catch (e) {
-            console.error("Error al verificar la sesión con Supabase:", e);
-        }
+        });
     });
   </script>
 </body>
