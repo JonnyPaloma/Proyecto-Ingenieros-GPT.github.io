@@ -131,12 +131,12 @@
     }
     .user-name-text { font-size: 13px; font-weight: 700; color: var(--etv-navy); }
 
-    /* Hero Centrado y Equilibrado */
+    /* Hero Compacto y Centrado */
     .hero-section {
       position: relative;
       background: var(--etv-gradient-hero);
       color: white;
-      padding: 50px 0 70px;
+      padding: 32px 0 55px; /* Reducido para dar espacio inmediato al formulario */
       overflow: hidden;
       text-align: center;
     }
@@ -163,46 +163,46 @@
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      padding: 6px 16px;
+      padding: 4px 14px;
       border-radius: 20px;
       background: rgba(255, 255, 255, 0.12);
       backdrop-filter: blur(8px);
       border: 1px solid rgba(255, 255, 255, 0.2);
-      font-size: 12px;
+      font-size: 11.5px;
       font-weight: 800;
       letter-spacing: .05em;
       text-transform: uppercase;
-      margin-bottom: 18px;
+      margin-bottom: 12px;
       color: #e0f2fe;
     }
     .hero-section h1 {
-      margin: 0 0 12px;
-      font-size: clamp(30px, 3.8vw, 44px);
+      margin: 0 0 10px;
+      font-size: clamp(26px, 3.2vw, 38px);
       font-weight: 900;
       line-height: 1.18;
       letter-spacing: -0.02em;
     }
     .hero-section p {
-      margin: 0 0 20px;
+      margin: 0 0 16px;
       color: #cbd5e1;
-      font-size: 16px;
+      font-size: 15px;
       max-width: 640px;
-      line-height: 1.6;
+      line-height: 1.5;
     }
 
-    /* Imagen Sutil Integrada */
+    /* Imagen Principal Reducida */
     .hero-subtle-image {
-      width: 90px;
-      height: 90px;
-      margin-bottom: 14px;
-      filter: drop-shadow(0 10px 15px rgba(0,0,0,0.25));
+      width: 70px; /* Tamaño más pequeño para evitar opacar el formulario */
+      height: 70px;
+      margin-bottom: 10px;
+      filter: drop-shadow(0 6px 12px rgba(0,0,0,0.2));
       opacity: 0.95;
       transition: transform 0.3s ease;
     }
     .hero-subtle-image:hover { transform: scale(1.05); }
 
     /* Layout del Formulario */
-    main { flex: 1; margin-top: -30px; position: relative; z-index: 10; }
+    main { flex: 1; margin-top: -25px; position: relative; z-index: 10; }
     .form-wrap {
       display: grid;
       grid-template-columns: 320px minmax(0, 720px);
@@ -319,13 +319,14 @@
     
     .error { display: block; min-height: 18px; margin-top: 5px; color: var(--etv-red); font-size: 12px; font-weight: 600; }
     
+    /* Regla corregida: Oculta por defecto para no mostrar un contenedor rojo vacío */
     .alert {
+      display: none;
       margin-bottom: 24px;
       padding: 14px 18px;
       border-radius: 10px;
       font-size: 14px;
       font-weight: 600;
-      display: flex;
       align-items: center;
       gap: 10px;
     }
@@ -460,12 +461,12 @@
     </div>
   </header>
 
-  <!-- Hero Principal Centrado y Sobrio -->
+  <!-- Hero Principal Compacto -->
   <section class="hero-section">
     <div class="hero-glow"></div>
     <div class="container">
       <div class="hero-centered-content">
-        <!-- Logo/Imagen compacta e integrada -->
+        <!-- Logo/Imagen más pequeña (70px) -->
         <img src="assets/images/Escudo Elige Tu Vida Hack.png" alt="Insignia Elige Tu Vida" class="hero-subtle-image">
         
         <div class="hero-badge">
@@ -497,6 +498,7 @@
       <!-- Formulario Principal -->
       <form class="formcard" id="reportForm" novalidate>
         <h2>Formular un reporte</h2>
+        <!-- Div de alerta con atributo hidden e invisibilizado por CSS -->
         <div id="reportAlert" class="alert" role="status" aria-live="polite" hidden></div>
 
         <div class="field">
@@ -513,7 +515,7 @@
 
         <div class="field">
           <label for="description">
-            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 2 2h14a2 2 0 0 2 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
             ¿Qué está ocurriendo?
           </label>
           <textarea id="description" name="description" required maxlength="2500" placeholder="Escribe de manera detallada lo sucedido, personas involucradas o cómo te sientes..."></textarea>
@@ -616,7 +618,7 @@
     </div>
   </footer>
 
-  <!-- Script con integración Supabase y Manejo de Evidencias -->
+  <!-- Script con manejo dinámico de alertas y Supabase Storage -->
   <script type="module">
     import { supabase } from "./conexion.js";
 
@@ -634,7 +636,8 @@
     function setAlert(id, message, success) {
       const element = document.getElementById(id);
       if (!element) return;
-      element.hidden = false;
+      element.hidden = !message;
+      element.style.display = message ? "flex" : "none";
       element.textContent = message;
       element.className = success ? "alert ok" : "alert";
     }
@@ -759,7 +762,7 @@
           }
         });
 
-        // Envío con Supabase Storage opcional
+        // Envío con Supabase
         form.addEventListener("submit", async (event) => {
           event.preventDefault();
           const button = document.getElementById("reportSubmit");
@@ -783,7 +786,6 @@
             
             let imageUrl = null;
 
-            // Subir archivo a Supabase Storage si se adjuntó alguno
             if (selectedFile) {
               const fileExt = selectedFile.name.split('.').pop();
               const filePath = `evidencias/${ticketCode}_${Date.now()}.${fileExt}`;
