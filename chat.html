@@ -397,7 +397,7 @@
           }
       });
 
-      // 2. Lógica del Chat con IA / Modo Híbrido Amigable
+      // 2. Lógica del Chat conectado a la IA mediante la Serverless Function de Vercel
       const chatForm = document.getElementById("chatForm");
       const chatInput = document.getElementById("chatInput");
       const chatMessages = document.getElementById("chatMessages");
@@ -412,49 +412,23 @@
         return msgDiv;
       }
 
-      // --- RESPUESTAS EMPÁTICAS MEJORADAS (Fallback local robusto) ---
-      function getFriendlyLocalResponse(text) {
-        const lower = text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-        
-        if (/hola|buenos dias|buenas tardes|saludos|que tal/.test(lower)) {
-          return "¡Hola de nuevo! Me alegra mucho saludarte. ¿Cómo ha ido tu día? Estoy aquí para escucharte en lo que necesites.";
-        }
-        if (/triste|mal|deprimid|solo|ansios|preocupad|llorar|estresad|abrumad/.test(lower)) {
-          return "Siento mucho que estés atravesando por un momento tan pesado. Es completamente válido sentirse así a veces, pero quiero recordarte que no estás solo o sola en esto. ¿Te gustaría contarme un poco más sobre qué te tiene así?";
-        }
-        if (/acoso|bullying|amenaza|golpe|molestia|insegur|miedo/.test(lower)) {
-          return "Lo que me comentas es una situación muy delicada y quiero que sepas que tu seguridad es lo más importante. Te animo profundamente a utilizar nuestra sección de **Reporte seguro** para activar el acompañamiento institucional de forma protegida.";
-        }
-        if (/gracias|muchas gracias|te agradezco/.test(lower)) {
-          return "De corazón, no tienes que agradecer. Para eso estoy aquí, para darte un espacio seguro donde escucharte y apoyarte. 💙";
-        }
-        if (/adios|chao|hasta luego|nos vemos/.test(lower)) {
-          return "Cuídate muchísimo. Recuerda que este espacio siempre estará disponible para ti cuando lo requieras. ¡Que tengas un excelente descanso!";
-        }
-        
-        return "Comprendo perfectamente lo que me compartes. A veces las situaciones escolares o personales nos desafían, pero darles un espacio para hablarlo ayuda mucho. ¿Hay algo específico sobre lo que te gustaría recibir orientación?";
-      }
-
-      // --- CONEXIÓN CON IA REAL (API externa) ---
+      // --- CONEXIÓN CON LA IA REAL (Vía función serverless /api/chat) ---
       async function fetchAIResponse(userMessage) {
-        // AQUÍ CONECTAS TU IA REAL:
-        // Opción A: Llamar a tu propio backend en PHP/Node (Recomendado para proteger claves de API)
-        /*
-        const response = await fetch('api/chat.php', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ message: userMessage })
-        });
-        const data = await response.json();
-        return data.reply;
-        */
+        try {
+          const response = await fetch('/api/chat', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ message: userMessage })
+          });
 
-        // Opción B: Si prefieres simular una respuesta de IA altamente empática mientras configuras tu backend:
-        return new Promise((resolve) => {
-          setTimeout(() => {
-            resolve(getFriendlyLocalResponse(userMessage));
-          }, 1000);
-        });
+          const data = await response.json();
+          return data.reply || "Lo siento, ocurrió un error inesperado al procesar tu mensaje.";
+        } catch (error) {
+          console.error("Error al conectar con la API:", error);
+          return "Tengo problemas de conexión en este momento, pero recuerda que no estás solo o sola. 💙";
+        }
       }
 
       chatForm.addEventListener("submit", async (e) => {
@@ -470,7 +444,7 @@
         const typingIndicator = appendMessage("bot", "El asistente está escribiendo...", true);
 
         try {
-          // Llamada al motor de IA (o fallback inteligente)
+          // Llamada a la función serverless conectada a Gemini
           const aiReply = await fetchAIResponse(text);
           
           typingIndicator.remove();
