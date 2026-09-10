@@ -153,7 +153,7 @@
     .formcard p.sub { margin-bottom: 20px; color: var(--etv-muted); font-size: 14px; }
 
     .field { margin-bottom: 16px; }
-    .field label { display: block; margin-bottom: 6px; font-size: 13px; font-weight: 700; color: var(--etv-navy); }
+    .field label { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; font-size: 13px; font-weight: 700; color: var(--etv-navy); }
     .field input, .field textarea, .field select { width: 100%; min-height: 46px; padding: 10px 16px; border: 1.5px solid var(--etv-line); border-radius: 12px; background: #f8fafc; font-size: 14px; transition: all 0.2s; }
     .field input:focus { outline: none; border-color: var(--etv-blue); background: #fff; box-shadow: 0 0 0 4px rgba(21, 89, 183, 0.12); }
 
@@ -161,7 +161,6 @@
     .alert { margin-bottom: 15px; padding: 12px 16px; border-radius: 10px; font-size: 13px; font-weight: 600; border: 1px solid #fca5a5; color: #991b1b; background: #fef2f2; }
     .alert.ok { border-color: #86efac; color: #166534; background: #f0fdf4; }
 
-    .check { display: flex; gap: 10px; align-items: flex-start; margin: 16px 0; font-size: 13px; color: var(--etv-ink); }
     .muted { color: var(--etv-muted); font-size: 14px; margin-top: 18px; text-align: center; }
 
     .text-link { color: var(--etv-blue); font-weight: 700; background: none; border: none; padding: 0; cursor: pointer; }
@@ -284,17 +283,15 @@
           </div>
 
           <div class="field">
-            <label for="password">Contraseña</label>
+            <label for="password">
+              <span>Contraseña</span>
+              <button type="button" class="text-link" id="forgotPasswordBtn" style="font-size: 12px; font-weight: 600;">¿Olvidaste tu contraseña?</button>
+            </label>
             <input id="password" name="password" type="password" autocomplete="current-password" required placeholder="••••••••">
             <small id="passwordError" class="error"></small>
           </div>
 
-          <label class="check">
-            <input type="checkbox" id="rememberMe" style="width:18px; height:18px; margin-top:2px; accent-color: var(--etv-blue);"> 
-            <span>Recordar mi sesión en este dispositivo</span>
-          </label>
-
-          <button class="button button-primary" id="loginSubmit" type="submit" data-loading-text="Ingresando..." style="width: 100%;">
+          <button class="button button-primary" id="loginSubmit" type="submit" data-loading-text="Ingresando..." style="width: 100%; margin-top: 10px;">
             Iniciar Sesión
           </button>
 
@@ -305,7 +302,7 @@
     </div>
   </main>
 
- <!-- Footer -->
+  <!-- Footer -->
   <footer class="professional-footer">
     <div class="container footer-main">
       <div class="footer-brand">
@@ -334,25 +331,7 @@
     </div>
   </footer>
 
-  <style>
-    .professional-footer p, 
-    .professional-footer a, 
-    .professional-footer small, 
-    .professional-footer span, 
-    .professional-footer strong {
-      transition: color 0.25s ease, text-shadow 0.25s ease;
-    }
-    .professional-footer a:hover, 
-    .professional-footer p:hover, 
-    .professional-footer strong:hover, 
-    .professional-footer span:hover, 
-    .professional-footer small:hover {
-      color: #ffffff;
-      text-shadow: 0 0 5px rgba(147, 197, 253, 0.4);
-    }
-  </style>
-
-  <!-- Lógica modular conectada a Supabase Auth -->
+  <!-- Lógica modular conectada a Supabase Auth con Autoredirección y Restablecimiento -->
   <script type="module">
     import { supabase } from './conexion.js';
 
@@ -381,8 +360,41 @@
         button.textContent = busy ? button.dataset.loadingText : button.dataset.defaultText;
     }
 
-    document.addEventListener("DOMContentLoaded", () => {
+    document.addEventListener("DOMContentLoaded", async () => {
+        // Redirigir si ya existe una sesión activa
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session) {
+            window.location.href = "index.html";
+            return;
+        }
+
         const form = document.getElementById("loginForm");
+        const forgotBtn = document.getElementById("forgotPasswordBtn");
+
+        if (forgotBtn) {
+            forgotBtn.addEventListener("click", async () => {
+                const emailInput = document.getElementById("email");
+                const email = emailInput.value.trim().toLowerCase();
+                setError("emailError", "");
+                setAlert("loginAlert", "", false);
+
+                if (!validEmail(email)) {
+                    setError("emailError", "Ingresa tu correo arriba para enviarte el enlace.");
+                    return;
+                }
+
+                const { error } = await supabase.auth.resetPasswordForEmail(email, {
+                    redirectTo: 'https://eligetuvida.site/login.html'
+                });
+
+                if (error) {
+                    setAlert("loginAlert", "No se pudo enviar el correo de recuperación.", false);
+                } else {
+                    setAlert("loginAlert", "Te hemos enviado un enlace para restablecer tu contraseña a tu correo.", true);
+                }
+            });
+        }
+
         if (!form) return;
 
         form.addEventListener("submit", async (event) => {
