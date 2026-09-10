@@ -16,9 +16,14 @@ export default async function handler(req, res) {
       return res.status(500).json({ error: 'Falta configurar la API Key en Vercel' });
     }
 
-    // Prompt directo y estricto integrado en el flujo de usuario para evitar que repita instrucciones
-    const promptText = `Actúa estrictamente como 'Elige Tu Vida', un asistente escolar súper cálido, empático y breve. Responde al estudiante con máximo 2 o 3 frases cortas, sin usar asteriscos ni markdown, validando su emoción y guiándolo con cariño. 
-    
+    // Prompt equilibrado para escucha activa, empatía profunda y extensión justa (ni seca ni larga)
+    const promptText = `Eres 'Elige Tu Vida', un asistente escolar muy cálido, humano, empático y protector. Tu misión es escuchar activamente al estudiante. 
+    Responde con un párrafo equilibrado (de 3 a 4 oraciones): 
+    1. Valida y comprende profundamente lo que siente.
+    2. Transmitile tranquilidad y apoyo incondicional.
+    3. Hazle una pregunta de apoyo amable para entender mejor lo que pasa o guiarlo con suavidad.
+    No uses asteriscos, negritas ni formato markdown. Habla con naturalidad y cercanía sincera.
+
     Estudiante dice: "${message}"`;
 
     let data = null;
@@ -36,7 +41,7 @@ export default async function handler(req, res) {
             }
           ],
           generationConfig: {
-            maxOutputTokens: 120,
+            maxOutputTokens: 220,
             temperature: 0.7
           }
         })
@@ -53,32 +58,24 @@ export default async function handler(req, res) {
 
     if (!success) {
       return res.status(200).json({ 
-        reply: "Lamento mucho lo que pasas. Tu seguridad es primero, usa la sección de Reporte Seguro para ayudarte. 💙" 
+        reply: "Lamento mucho que estés pasando por esto y entiendo lo difícil que debe ser. No estás solo en esto. ¿Te gustaría contarme un poco más de lo que sucede o prefieres que veamos cómo hacer un reporte seguro para protegerte? 💙" 
       });
     }
 
     let botReply = data.candidates?.[0]?.content?.parts?.[0]?.text;
 
     if (!botReply) {
-      return res.status(200).json({ reply: "Te escucho atentamente. ¿Cómo te sientes?" });
+      return res.status(200).json({ reply: "Te escucho con atención. Cuéntame un poco más sobre cómo te sientes con esto, estoy aquí para apoyarte. 💙" });
     }
 
-    // Limpieza profunda de cualquier símbolo o texto raro de instrucciones
-    botReply = botReply
-      .replace(/[*_#]/g, '')
-      .replace(/Gently guide to.*$/i, '')
-      .replace(/Actúa estrictamente.*?:/i, '')
-      .trim();
-
-    if (!botReply) {
-      botReply = "Estoy contigo. No estás solo, cuéntame un poco más para apoyarte. 💙";
-    }
+    // Limpieza de símbolos extraños
+    botReply = botReply.replace(/[*_#]/g, '').trim();
 
     return res.status(200).json({ reply: botReply });
 
   } catch (error) {
     return res.status(200).json({ 
-      reply: "Estoy contigo. No estás solo, acércate a un docente o usa nuestro reporte seguro. 💙" 
+      reply: "Siento mucho que estés experimentando esto. Estoy aquí contigo y me importa mucho tu bienestar. ¿Quieres contarme cómo ha sido el ambiente en el salón últimamente? 💙" 
     });
   }
 }
