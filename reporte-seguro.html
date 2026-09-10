@@ -231,7 +231,7 @@
     /* Layout */
     main { flex: 1; margin-top: -30px; position: relative; z-index: 10; }
     
-    /* Tarjeta de Requisito de Autenticación */
+    /* Tarjeta de Requisito de Autenticación Superior */
     .auth-notice-card {
       display: flex;
       align-items: center;
@@ -289,7 +289,7 @@
       padding-bottom: 80px;
     }
     
-    .side, .formcard {
+    .side, .formcard, .locked-card {
       padding: 36px;
       border: 1px solid var(--etv-line);
       border-radius: 16px;
@@ -303,7 +303,7 @@
       background: linear-gradient(135deg, rgba(239,246,255,0.9) 0%, rgba(224,242,254,0.9) 100%);
       border-color: #cbd5e1;
     }
-    .side h2, .formcard h2 { margin-top: 0; margin-bottom: 12px; color: var(--etv-navy); font-size: 22px; font-weight: 800; }
+    .side h2, .formcard h2, .locked-card h2 { margin-top: 0; margin-bottom: 12px; color: var(--etv-navy); font-size: 22px; font-weight: 800; }
     .side p { color: var(--etv-muted); font-size: 14px; line-height: 1.6; margin-bottom: 20px; }
     .side-link {
       display: inline-flex;
@@ -318,6 +318,34 @@
       transition: all 0.2s;
     }
     .side-link:hover { background: var(--etv-blue); color: white; }
+
+    /* Estado Bloqueado */
+    .locked-card {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 50px 36px;
+    }
+    .locked-icon-wrap {
+      width: 72px;
+      height: 72px;
+      background: #e0f2fe;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+      border: 1px solid #bae6fd;
+    }
+    .locked-card p {
+      color: #64748b;
+      max-width: 480px;
+      margin: 0 auto 28px;
+      font-size: 15px;
+      line-height: 1.6;
+    }
 
     /* Form UI */
     .field { margin-bottom: 22px; }
@@ -666,7 +694,7 @@
 
   <main>
     <div class="container">
-      <!-- Tarjeta Informativa de Requisito Obligatorio -->
+      <!-- Banner Informativo Superior (Visible solo si NO ha iniciado sesión) -->
       <div class="auth-notice-card" id="authNoticeBanner">
         <div class="auth-notice-main">
           <div class="auth-notice-icon">
@@ -677,7 +705,7 @@
           </div>
           <div class="auth-notice-content">
             <h3>Inicio de sesión obligatorio para reportar</h3>
-            <p>Para enviar un reporte y garantizar la validez institucional del seguimiento, <strong>debes contar con una sesión activa</strong> en la plataforma. Si aún no tienes una cuenta, puedes crearte una en pocos segundos.</p>
+            <p>Para formular un reporte y garantizar el seguimiento institucional del caso, <strong>debes contar con una sesión activa</strong>.</p>
           </div>
         </div>
         <div class="auth-notice-actions">
@@ -701,8 +729,24 @@
           </div>
         </aside>
 
-        <!-- Formulario Principal -->
-        <form class="formcard" id="reportForm" novalidate>
+        <!-- ESTADO BLOQUEADO: Se muestra si NO hay sesión activa -->
+        <div class="locked-card" id="formLockedCard">
+          <div class="locked-icon-wrap">
+            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="var(--etv-blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+          </div>
+          <h2>Formulario Protegido</h2>
+          <p>Para enviar un reporte y permitir que las directivas realicen el seguimiento correspondiente, es indispensable iniciar sesión o registrarte previamente.</p>
+          <div style="display: flex; gap: 12px; flex-wrap: wrap; justify-content: center;">
+            <a href="login.html" class="button button-primary">Iniciar sesión</a>
+            <a href="registro.html" class="button button-outline">Crear una cuenta</a>
+          </div>
+        </div>
+
+        <!-- FORMULARIO PRINCIPAL: Se muestra únicamente si SÍ hay sesión activa -->
+        <form class="formcard" id="reportForm" novalidate style="display: none;">
           <h2>Formular un reporte</h2>
           <div id="reportAlert" class="alert" role="status" aria-live="polite" hidden></div>
 
@@ -886,9 +930,14 @@
 
       const navContainer = document.getElementById("nav-options");
       const authNoticeBanner = document.getElementById("authNoticeBanner");
+      const reportForm = document.getElementById("reportForm");
+      const formLockedCard = document.getElementById("formLockedCard");
 
       function renderLoggedOutState() {
           if (authNoticeBanner) authNoticeBanner.style.display = "flex";
+          if (formLockedCard) formLockedCard.style.display = "flex";
+          if (reportForm) reportForm.style.display = "none";
+
           if (!navContainer) return;
           const existingBadge = navContainer.querySelector(".user-badge-container");
           const existingLogout = navContainer.querySelector("#nav-logout-btn");
@@ -919,7 +968,10 @@
           const user = session?.user;
 
           if (user) {
+              // Muestra el formulario y oculta los avisos de restricción
               if (authNoticeBanner) authNoticeBanner.style.display = "none";
+              if (formLockedCard) formLockedCard.style.display = "none";
+              if (reportForm) reportForm.style.display = "block";
 
               let userName = user.user_metadata?.nombre || user.user_metadata?.full_name || user.email.split('@')[0];
 
@@ -1014,13 +1066,12 @@
       }
 
       // Triaje interactivo
-      const form = document.getElementById("reportForm");
       const description = document.getElementById("description");
       const triageBox = document.getElementById("triage");
       const triageTitle = document.getElementById("triageTitle");
       const triageDesc = document.getElementById("triageDesc");
 
-      if (form && description) {
+      if (reportForm && description) {
         description.addEventListener("input", () => {
           const normalized = description.value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
           const critical = /suicid|arma|abuso|violacion|matar|peligro inmediato/.test(normalized);
@@ -1043,18 +1094,15 @@
         });
 
         // Envío con Supabase
-        form.addEventListener("submit", async (event) => {
+        reportForm.addEventListener("submit", async (event) => {
           event.preventDefault();
           const button = document.getElementById("reportSubmit");
           ["routeError", "descriptionError", "locationError", "dateError", "confirmReportError", "evidenceError"].forEach((id) => setError(id, ""));
 
-          // Validación obligatoria de inicio de sesión
           const { data: { session: currentSession } } = await supabase.auth.getSession();
           if (!currentSession) {
-            setAlert("reportAlert", "Debes iniciar sesión para poder enviar un reporte seguro. Redirigiendo al inicio de sesión...", false);
-            setTimeout(() => {
-              window.location.href = "login.html";
-            }, 2000);
+            setAlert("reportAlert", "Debes iniciar sesión para poder enviar un reporte seguro.", false);
+            renderLoggedOutState();
             return;
           }
 
@@ -1118,7 +1166,7 @@
             riskBadge.textContent = riskLevel;
             riskBadge.className = `ticket-badge ${riskLevel}`;
             
-            form.reset();
+            reportForm.reset();
             if (removeFileBtn) removeFileBtn.click();
             triageBox.className = "triage-box";
             triageTitle.textContent = "Orientación de prioridad en desarrollo";
