@@ -14,6 +14,8 @@
   <meta name="theme-color" content="#0f1f46">
 
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <!-- SDK oficial de EmailJS -->
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 
   <style>
     :root {
@@ -125,7 +127,6 @@
     .button-outline { border-color: #cbd5e1; color: var(--etv-navy); background: #fff; }
     .button-outline:hover { border-color: var(--etv-blue); background: #eff6ff; color: var(--etv-blue); }
 
-    /* Insignia de usuario */
     .user-badge-container {
       display: flex;
       align-items: center;
@@ -185,27 +186,17 @@
 
     .button-primary { width: 100%; background: var(--etv-blue); color: #fff; font-size: 15px; font-weight: 700; padding: 12px 24px; border-radius: 10px; border: none; cursor: pointer; transition: background 0.2s; }
     .button-primary:hover { background: var(--etv-blue-dark); }
+    .button-primary:disabled { opacity: 0.6; cursor: not-allowed; }
 
-    .alert-success {
-      display: none; padding: 14px 18px; border-radius: 10px; background: #ecfdf5; border: 1px solid #10b981;
-      color: #065f46; font-size: 14px; font-weight: 600; margin-bottom: 20px; text-align: center;
-    }
-
-    /* Estado protegido (cuando no ha iniciado sesión) */
-    .auth-required-box {
-      text-align: center; padding: 30px 20px;
-    }
-    .auth-required-box h3 {
-      color: var(--etv-navy); font-size: 20px; font-weight: 800; margin-bottom: 10px;
-    }
-    .auth-required-box p {
-      color: var(--etv-muted); font-size: 14px; line-height: 1.6; margin-bottom: 20px;
-    }
-    .auth-buttons-flex {
-      display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
+    .alert-status {
+      display: none; padding: 14px 18px; border-radius: 10px; font-size: 14px; font-weight: 600; margin-bottom: 20px; text-align: center;
     }
 
-    /* Footer estándar */
+    .auth-required-box { text-align: center; padding: 30px 20px; }
+    .auth-required-box h3 { color: var(--etv-navy); font-size: 20px; font-weight: 800; margin-bottom: 10px; }
+    .auth-required-box p { color: var(--etv-muted); font-size: 14px; line-height: 1.6; margin-bottom: 20px; }
+    .auth-buttons-flex { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
     .professional-footer { padding: 40px 0 20px; background: #101a2d; color: #aebdd1; margin-top: auto; }
     .footer-main { display: grid; grid-template-columns: 1.6fr .7fr .7fr; gap: 60px; padding-bottom: 30px; }
     .footer-main p { max-width: 430px; margin: 14px 0 0; color: #9eafc6; font-size: 13px; line-height: 1.6; }
@@ -256,7 +247,6 @@
     <div class="shape"></div>
   </div>
 
-  <!-- Header Consistente -->
   <header class="site-header">
     <div class="container site-nav">
       <a class="brand" href="index.html" aria-label="Elige Tu Vida, página de inicio">
@@ -271,6 +261,7 @@
         <a href="index.html">Inicio</a>
         <a href="chat.html">Orientación guiada</a>
         <a href="reporte-seguro.html">Reporte seguro</a>
+        <a href="contacto.html" style="color:var(--etv-blue);">Contacto</a>
         <a href="login.html" id="nav-login" class="button button-outline button-small" style="color:var(--etv-navy);">Ingresar</a>
         <a href="registro.html" id="nav-register" class="button button-small">Registrarse</a>
       </nav>
@@ -283,13 +274,13 @@
       <div class="form-head">
         <span style="color: var(--etv-blue); font-size: 12px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; display: block; margin-bottom: 8px;">COMUNICACIÓN INSTITUCIONAL</span>
         <h1>Ponte en contacto</h1>
-        <p>¿Tienes dudas, sugerencias o requieres soporte sobre la plataforma? Escríbenos[cite: 4].</p>
+        <p>¿Tienes dudas, sugerencias o requieres soporte sobre la plataforma? Escríbenos.</p>
       </div>
 
       <div class="form-wrap">
         <aside class="side">
           <h2>Información de apoyo</h2>
-          <p>Estamos comprometidos con la convivencia escolar y la correcta orientación a la comunidad académica[cite: 4].</p>
+          <p>Estamos comprometidos con la convivencia escolar y la correcta orientación a la comunidad académica.</p>
           
           <div class="contact-info-list">
             <div class="contact-item">
@@ -301,13 +292,12 @@
             <div class="contact-item">
               <div>
                 <strong>Canal Institucional</strong>
-                <span>Bogotá D.C., Colombia[cite: 4]</span>
+                <span>Bogotá D.C., Colombia</span>
               </div>
             </div>
           </div>
         </aside>
 
-        <!-- Contenedor dinámico del formulario / estado de autenticación -->
         <article class="formcard" id="contact-card-container">
           <div style="text-align: center; padding: 20px; color: var(--etv-muted);">
             Verificando estado de sesión...
@@ -318,7 +308,6 @@
     </div>
   </main>
 
-  <!-- Footer estándar -->
   <footer class="professional-footer">
     <div class="container footer-main">
       <div class="footer-brand">
@@ -347,9 +336,17 @@
     </div>
   </footer>
 
-  <!-- Sincronización en tiempo real y limpieza instantánea al cerrar sesión -->
   <script type="module">
     import { supabase } from './conexion.js';
+
+    // CONFIGURACIÓN DE EMAILJS (Reemplaza con tus llaves reales)
+    const EMAILJS_PUBLIC_KEY = "TU_PUBLIC_KEY_AQUI"; 
+    const EMAILJS_SERVICE_ID = "TU_SERVICE_ID_AQUI"; 
+    const EMAILJS_TEMPLATE_ID = "TU_TEMPLATE_ID_AQUI"; 
+
+    if (typeof emailjs !== "undefined" && EMAILJS_PUBLIC_KEY !== "TU_PUBLIC_KEY_AQUI") {
+      emailjs.init(EMAILJS_PUBLIC_KEY);
+    }
 
     document.addEventListener("DOMContentLoaded", () => {
         const navContainer = document.getElementById("nav-options");
@@ -361,7 +358,7 @@
                   <div class="auth-required-box">
                     <div style="font-size: 48px; margin-bottom: 12px;">🔒</div>
                     <h3>Inicio de sesión requerido</h3>
-                    <p>Para enviar un mensaje a través de nuestro canal de contacto institucional, es necesario que inicies sesión en tu cuenta de Elige Tu Vida o te registres si aún no la tienes[cite: 4].</p>
+                    <p>Para enviar un mensaje a través de nuestro canal de contacto institucional, es necesario que inicies sesión en tu cuenta de Elige Tu Vida o te registres si aún no la tienes.</p>
                     <div class="auth-buttons-flex">
                       <a href="login.html" class="button button-small" style="padding: 10px 20px; font-size: 14px;">Ingresar ahora</a>
                       <a href="registro.html" class="button button-outline button-small" style="padding: 10px 20px; font-size: 14px; color: var(--etv-navy);">Registrarse</a>
@@ -454,9 +451,7 @@
                       <h2>Envíanos un mensaje</h2>
                       <p>Hola <strong>${userName}</strong>. Completa el formulario a continuación y nos pondremos en contacto contigo.</p>
 
-                      <div id="alert-success" class="alert-success">
-                        ¡Mensaje enviado con éxito! Gracias por comunicarte con nosotros.
-                      </div>
+                      <div id="alert-status" class="alert-status"></div>
 
                       <form id="contact-form">
                         <div class="form-group">
@@ -470,25 +465,82 @@
                         </div>
 
                         <div class="form-group">
+                          <label class="form-label" for="asunto">Asunto</label>
+                          <input class="form-input" type="text" id="asunto" name="asunto" placeholder="Escribe el motivo del mensaje..." required>
+                        </div>
+
+                        <div class="form-group">
                           <label class="form-label" for="mensaje">Mensaje o consulta</label>
                           <textarea class="form-textarea" id="mensaje" name="mensaje" placeholder="Escribe detalladamente tu solicitud..." required></textarea>
                         </div>
 
-                        <button type="submit" class="button-primary">Enviar mensaje</button>
+                        <button type="submit" id="btn-submit" class="button-primary">Enviar mensaje ahora</button>
                       </form>
                     `;
 
                     const contactForm = document.getElementById("contact-form");
-                    const alertSuccess = document.getElementById("alert-success");
+                    const alertStatus = document.getElementById("alert-status");
+                    const btnSubmit = document.getElementById("btn-submit");
+
                     if (contactForm) {
-                        contactForm.addEventListener("submit", (e) => {
+                        contactForm.addEventListener("submit", async (e) => {
                             e.preventDefault();
-                            contactForm.reset();
-                            document.getElementById("nombre").value = userName;
-                            document.getElementById("correo").value = user.email || '';
-                            if (alertSuccess) {
-                                alertSuccess.style.display = "block";
-                                setTimeout(() => { alertSuccess.style.display = "none"; }, 5000);
+                            
+                            const nameVal = document.getElementById("nombre").value;
+                            const emailVal = document.getElementById("correo").value;
+                            const subjectVal = document.getElementById("asunto").value.trim();
+                            const messageVal = document.getElementById("mensaje").value.trim();
+
+                            if (!subjectVal || !messageVal) return;
+
+                            btnSubmit.disabled = true;
+                            btnSubmit.textContent = "Enviando mensaje...";
+                            alertStatus.style.display = "none";
+
+                            try {
+                                // 1. Guardar copia de respaldo en Supabase
+                                const { error: dbError } = await supabase.from('contactos').insert([
+                                    {
+                                        usuario_id: user.id,
+                                        nombre: nameVal,
+                                        correo: emailVal,
+                                        asunto: subjectVal,
+                                        mensaje: messageVal,
+                                        creado_en: new Date().toISOString()
+                                    }
+                                ]);
+                                if (dbError) console.warn("Aviso al guardar en Supabase:", dbError.message);
+
+                                // 2. Enviar correo directo a tu cuenta vía EmailJS
+                                if (typeof emailjs !== "undefined" && EMAILJS_PUBLIC_KEY !== "TU_PUBLIC_KEY_AQUI") {
+                                    await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+                                        from_name: nameVal,
+                                        from_email: emailVal,
+                                        subject: subjectVal,
+                                        message: messageVal
+                                    });
+                                }
+
+                                alertStatus.style.background = "#ecfdf5";
+                                alertStatus.style.border = "1px solid #10b981";
+                                alertStatus.style.color = "#065f46";
+                                alertStatus.textContent = "¡Mensaje enviado con éxito! Nos pondremos en contacto contigo pronto.";
+                                alertStatus.style.display = "block";
+
+                                contactForm.reset();
+                                document.getElementById("nombre").value = userName;
+                                document.getElementById("correo").value = user.email || '';
+
+                            } catch (err) {
+                                console.error("Error al enviar el mensaje:", err);
+                                alertStatus.style.background = "#fef2f2";
+                                alertStatus.style.border = "1px solid #ef4444";
+                                alertStatus.style.color = "#991b1b";
+                                alertStatus.textContent = "Hubo un problema al enviar tu mensaje. Inténtalo nuevamente.";
+                                alertStatus.style.display = "block";
+                            } finally {
+                                btnSubmit.disabled = false;
+                                btnSubmit.textContent = "Enviar mensaje ahora";
                             }
                         });
                     }
