@@ -16,15 +16,8 @@ export default async function handler(req, res) {
       return res.status(500).json({ error: 'Falta configurar la API Key en Vercel' });
     }
 
-    // Prompt equilibrado para escucha activa, empatía profunda y extensión justa (ni seca ni larga)
-    const promptText = `Eres 'Elige Tu Vida', un asistente escolar muy cálido, humano, empático y protector. Tu misión es escuchar activamente al estudiante. 
-    Responde con un párrafo equilibrado (de 3 a 4 oraciones): 
-    1. Valida y comprende profundamente lo que siente.
-    2. Transmitile tranquilidad y apoyo incondicional.
-    3. Hazle una pregunta de apoyo amable para entender mejor lo que pasa o guiarlo con suavidad.
-    No uses asteriscos, negritas ni formato markdown. Habla con naturalidad y cercanía sincera.
-
-    Estudiante dice: "${message}"`;
+    // Instrucción de sistema experta, natural y profundamente empática para un orientador escolar
+    const systemInstructionText = "Eres el orientador virtual de 'Elige Tu Vida', un profesional experto en convivencia escolar, empatía y apoyo emocional para jóvenes. Tu tono debe ser cálido, maduro, cercano, absolutamente humano y profesional. Nunca suenes robótico ni uses fórmulas repetitivas. Escucha activamente lo que dice el estudiante, valida sus emociones con respeto y hazle una pregunta orientadora o de apoyo sincera que le invite a sentirse seguro y comprendido. No uses asteriscos ni markdown.";
 
     let data = null;
     let success = false;
@@ -34,15 +27,18 @@ export default async function handler(req, res) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          system_instruction: {
+            parts: [{ text: systemInstructionText }]
+          },
           contents: [
             {
               role: "user",
-              parts: [{ text: promptText }]
+              parts: [{ text: message }]
             }
           ],
           generationConfig: {
-            maxOutputTokens: 220,
-            temperature: 0.7
+            maxOutputTokens: 250,
+            temperature: 0.8
           }
         })
       });
@@ -58,24 +54,24 @@ export default async function handler(req, res) {
 
     if (!success) {
       return res.status(200).json({ 
-        reply: "Lamento mucho que estés pasando por esto y entiendo lo difícil que debe ser. No estás solo en esto. ¿Te gustaría contarme un poco más de lo que sucede o prefieres que veamos cómo hacer un reporte seguro para protegerte? 💙" 
+        reply: "Comprendo lo difícil que es atravesar por una situación así, y lamento mucho que tengas que vivirlo. Quiero recordarte que no estás solo y que tu bienestar es lo más importante. ¿Te sientes cómodo conversando un poco más sobre lo que ocurre, o prefieres que revisemos juntos la opción de hacer un reporte seguro? 💙" 
       });
     }
 
     let botReply = data.candidates?.[0]?.content?.parts?.[0]?.text;
 
     if (!botReply) {
-      return res.status(200).json({ reply: "Te escucho con atención. Cuéntame un poco más sobre cómo te sientes con esto, estoy aquí para apoyarte. 💙" });
+      return res.status(200).json({ reply: "Te escucho con total atención. Cuéntame un poco más de lo que estás experimentando para poder comprenderlo mejor. 💙" });
     }
 
-    // Limpieza de símbolos extraños
+    // Limpieza de símbolos de formato
     botReply = botReply.replace(/[*_#]/g, '').trim();
 
     return res.status(200).json({ reply: botReply });
 
   } catch (error) {
     return res.status(200).json({ 
-      reply: "Siento mucho que estés experimentando esto. Estoy aquí contigo y me importa mucho tu bienestar. ¿Quieres contarme cómo ha sido el ambiente en el salón últimamente? 💙" 
+      reply: "Lamento mucho que estés pasando por esto. Estoy aquí para escucharte y buscar la manera de protegerte. ¿Hay algo específico de lo que ocurra en el salón que te gustaría compartirme? 💙" 
     });
   }
 }
