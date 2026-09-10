@@ -1,4 +1,5 @@
 export default async function handler(req, res) {
+  // Permitir solo peticiones POST
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Método no permitido' });
   }
@@ -18,7 +19,8 @@ export default async function handler(req, res) {
 
     const systemInstruction = "Eres un asistente virtual escolar altamente empático, cálido, amigable y protector llamado 'Elige Tu Vida'. Tu objetivo es escuchar a los estudiantes, validar sus emociones con respeto y sugerirles reportar situaciones graves de convivencia de forma segura.";
 
-    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.7-flash:generateContent?key=${apiKey}`, {
+    // Usamos el modelo gemini-1.5-flash que es el más estable y compatible para llamadas directas por fetch
+    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -33,9 +35,9 @@ export default async function handler(req, res) {
     });
 
     const data = await response.json();
-    
+
     if (!response.ok) {
-      console.error("Error de la API de Google:", data);
+      console.error("Error devuelto por la API de Google:", data);
       return res.status(500).json({ reply: 'Lo siento, la IA no pudo procesar la solicitud en este momento.' });
     }
 
@@ -44,7 +46,7 @@ export default async function handler(req, res) {
     return res.status(200).json({ reply: botReply.trim() });
 
   } catch (error) {
-    console.error("Error en la función de IA:", error);
+    console.error("Excepción en la función serverless:", error);
     return res.status(500).json({ reply: 'Lo siento, tuve un problema de conexión con el servicio de IA.' });
   }
 }
