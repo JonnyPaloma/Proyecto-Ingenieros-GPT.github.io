@@ -15,48 +15,23 @@
   <meta name="theme-color" content="#0f1f46">
   
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <script>
-    window.tailwind = window.tailwind || {};
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            primary: { 50:"#eff6ff", 100:"#dbeafe", 200:"#bfdbfe", 300:"#93c5fd", 400:"#60a5fa", 500:"#3b82f6", 600:"#2563eb", 700:"#1d4ed8", 800:"#1e40af", 900:"#1e3a8a", 950:"#172554" },
-            trust: { cyan:"#dff7ff", indigo:"#3730a3", navy:"#0f1f46", gray:"#64748b" }
-          }
-        }
-      }
-    };
-  </script>
-  
-  <script>
-    "use strict";
-    document.addEventListener("DOMContentLoaded", () => {
-        const button = document.querySelector(".menu");
-        const navigation = document.querySelector(".site-nav nav");
-        if (!button || !navigation) return;
-
-        button.addEventListener("click", () => {
-            const open = button.getAttribute("aria-expanded") === "true";
-            button.setAttribute("aria-expanded", String(!open));
-            navigation.classList.toggle("open", !open);
-        });
-    });
-  </script>
   
   <style>
     :root {
       --etv-navy: #0b1f48;
       --etv-blue: #1559b7;
       --etv-blue-dark: #103c81;
-      --etv-sky: #dff3ff;
+      --etv-sky: #e0f2fe;
       --etv-indigo: #3730a3;
       --etv-ink: #1c2b43;
-      --etv-muted: #5f6f85;
-      --etv-line: #dbe5ef;
-      --etv-soft: #f5f8fb;
-      --etv-white: #fff;
-      --etv-green: #0f9f6e;
+      --etv-muted: #64748b;
+      --etv-line: #e2e8f0;
+      --etv-soft: #f8fafc;
+      --etv-white: #ffffff;
+      --etv-green: #10b981;
+      --etv-amber: #f59e0b;
+      --etv-red: #ef4444;
+      --etv-gradient-hero: linear-gradient(135deg, #0b1f48 0%, #1559b7 55%, #1d4ed8 100%);
     }
 
     * { box-sizing: border-box; }
@@ -81,7 +56,7 @@
       z-index: 50;
       top: 0;
       border-bottom: 1px solid var(--etv-line);
-      background: rgba(255, 255, 255, 0.97);
+      background: rgba(255, 255, 255, 0.95);
       backdrop-filter: blur(14px);
     }
     .site-nav {
@@ -99,39 +74,41 @@
     .site-nav nav { display: flex; align-items: center; gap: 10px; }
     .site-nav nav > a:not(.button), .site-nav nav > span {
       padding: 10px 12px;
-      border-radius: 6px;
-      color: #52647c;
-      font-size: 13px;
-      font-weight: 750;
+      border-radius: 8px;
+      color: #475569;
+      font-size: 14px;
+      font-weight: 700;
+      transition: all 0.2s;
     }
-    .site-nav nav > a:not(.button):hover { color: var(--etv-blue-dark); background: #eff6ff; }
+    .site-nav nav > a:not(.button):hover { color: var(--etv-blue); background: #eff6ff; }
 
     .button {
       display: inline-flex;
       align-items: center;
       justify-content: center;
+      gap: 8px;
       min-height: 44px;
-      padding: 10px 18px;
+      padding: 10px 20px;
       border: 1px solid transparent;
       border-radius: 10px;
       font-size: 14px;
       font-weight: 700;
       line-height: 1.2;
-      transition: all .2s ease;
+      transition: all .2s cubic-bezier(0.4, 0, 0.2, 1);
       cursor: pointer;
     }
-    .button:hover { transform: translateY(-1px); }
-    .button-small { min-height: 38px; padding: 8px 14px; font-size: 13px; color: #fff; background: var(--etv-blue); box-shadow: 0 4px 12px rgba(21,89,183,.15); }
-    .button-primary { color: #fff; background: var(--etv-blue); box-shadow: 0 8px 20px rgba(21,89,183,.18); }
-    .button-primary:hover, .button-small:hover { background: var(--etv-blue-dark); box-shadow: 0 6px 15px rgba(16,60,129,.25); }
-    .button-outline { border-color: #cbd5e1; color: var(--etv-blue-dark); background: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
+    .button:hover { transform: translateY(-2px); box-shadow: 0 10px 20px -5px rgba(21,89,183,0.3); }
+    .button-small { min-height: 38px; padding: 8px 14px; font-size: 13px; color: #fff; background: var(--etv-blue); }
+    .button-primary { color: #fff; background: var(--etv-blue); box-shadow: 0 4px 14px rgba(21,89,183,.3); }
+    .button-primary:hover { background: var(--etv-blue-dark); }
+    .button-outline { border-color: #cbd5e1; color: var(--etv-navy); background: #fff; }
     .button-outline:hover { border-color: var(--etv-blue); background: #eff6ff; color: var(--etv-blue); }
 
     .menu {
       display: none;
       padding: 8px 12px;
       border: 1px solid var(--etv-line);
-      border-radius: 6px;
+      border-radius: 8px;
       background: #fff;
       font-weight: bold;
       cursor: pointer;
@@ -144,111 +121,248 @@
       align-items: center;
       gap: 10px;
       background: #f1f5f9;
-      padding: 5px 12px 5px 6px;
+      padding: 5px 14px 5px 6px;
       border-radius: 30px;
       border: 1px solid #e2e8f0;
     }
     .user-avatar-circle {
-      width: 30px; height: 30px; background: var(--etv-blue); color: white;
+      width: 32px; height: 32px; background: var(--etv-blue); color: white;
       border-radius: 50%; display: flex; align-items: center; justify-content: center;
       font-size: 13px; font-weight: bold;
     }
     .user-name-text { font-size: 13px; font-weight: 700; color: var(--etv-navy); }
 
-    /* Layout del Formulario */
-    main { flex: 1; }
-    .form-head {
-      padding: 50px 0 30px;
-      background: #edf4f8;
-      border-bottom: 1px solid var(--etv-line);
+    /* Hero Dinámico Estilo Index */
+    .hero-section {
+      position: relative;
+      background: var(--etv-gradient-hero);
+      color: white;
+      padding: 64px 0 80px;
+      overflow: hidden;
     }
-    .eyebrow { margin: 0 0 10px; color: var(--etv-blue-dark); font-size: 12px; font-weight: 850; text-transform: uppercase; letter-spacing: .04em; }
-    .form-head h1 { margin: 0 0 8px; color: var(--etv-navy); font-size: clamp(32px, 3.5vw, 46px); font-weight: 880; line-height: 1.1; }
-    .form-head p { margin: 0; color: var(--etv-muted); font-size: 16px; }
+    .hero-glow {
+      position: absolute;
+      top: -100px;
+      right: -100px;
+      width: 450px;
+      height: 450px;
+      background: radial-gradient(circle, rgba(56,189,248,0.25) 0%, rgba(255,255,255,0) 70%);
+      pointer-events: none;
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      align-items: center;
+      gap: 40px;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+      color: #e0f2fe;
+    }
+    .hero-section h1 {
+      margin: 0 0 16px;
+      font-size: clamp(32px, 4vw, 48px);
+      font-weight: 900;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+    }
+    .hero-section p {
+      margin: 0;
+      color: #cbd5e1;
+      font-size: 17px;
+      max-width: 580px;
+      line-height: 1.6;
+    }
 
+    /* Imagen Ilustrativa Hero */
+    .hero-image-wrapper {
+      position: relative;
+      display: flex;
+      justify-content: center;
+    }
+    .hero-image-card {
+      position: relative;
+      width: 100%;
+      max-width: 360px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(12px);
+      padding: 24px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
+      text-align: center;
+    }
+    .hero-image-card img {
+      width: 100%;
+      height: auto;
+      border-radius: 12px;
+      object-fit: cover;
+    }
+    .floating-chip {
+      position: absolute;
+      bottom: -15px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #ffffff;
+      color: var(--etv-navy);
+      padding: 8px 18px;
+      border-radius: 30px;
+      font-size: 13px;
+      font-weight: 800;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+    }
+
+    /* Layout del Formulario */
+    main { flex: 1; margin-top: -30px; position: relative; z-index: 10; }
     .form-wrap {
       display: grid;
-      grid-template-columns: 300px minmax(0, 680px);
+      grid-template-columns: 320px minmax(0, 720px);
       justify-content: center;
-      gap: 40px;
-      padding: 50px 0 80px;
+      gap: 32px;
+      padding-bottom: 80px;
     }
+    
     .side, .formcard {
-      padding: 32px;
+      padding: 36px;
       border: 1px solid var(--etv-line);
-      border-radius: 12px;
-      background: #fff;
-      box-shadow: 0 10px 30px rgba(15, 31, 70, 0.04);
+      border-radius: 16px;
+      background: #ffffff;
+      box-shadow: 0 20px 40px -15px rgba(15, 31, 70, 0.07);
     }
+
     .side {
       height: max-content;
-      background: #f1f7fd;
-      border-color: #dceeff;
+      background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+      border-color: #cbd5e1;
     }
     .side h2, .formcard h2 { margin-top: 0; margin-bottom: 12px; color: var(--etv-navy); font-size: 22px; font-weight: 800; }
-    .side p { color: var(--etv-muted); font-size: 14px; line-height: 1.6; margin-bottom: 16px; }
-    .side-link { color: var(--etv-blue-dark); font-weight: 750; font-size: 14px; display: inline-flex; align-items: center; gap: 4px; }
-    .side-link:hover { color: var(--etv-blue); text-decoration: underline; }
+    .side p { color: var(--etv-muted); font-size: 14px; line-height: 1.6; margin-bottom: 20px; }
+    .side-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--etv-blue);
+      font-weight: 750;
+      font-size: 14px;
+      padding: 10px 14px;
+      background: #eff6ff;
+      border-radius: 8px;
+      transition: all 0.2s;
+    }
+    .side-link:hover { background: var(--etv-blue); color: white; }
 
-    .field { margin-bottom: 22px; }
-    .field label { display: block; margin-bottom: 8px; font-size: 14px; font-weight: 700; color: var(--etv-navy); }
+    /* Form UI Vistosa */
+    .field { margin-bottom: 24px; }
+    .field label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 8px;
+      font-size: 14px;
+      font-weight: 750;
+      color: var(--etv-navy);
+    }
     .field input, .field textarea, .field select {
       width: 100%;
-      min-height: 46px;
-      padding: 12px 14px;
-      border: 1px solid var(--etv-line);
-      border-radius: 8px;
+      min-height: 48px;
+      padding: 12px 16px;
+      border: 1.5px solid var(--etv-line);
+      border-radius: 10px;
       background: #fff;
       font-family: inherit;
       font-size: 14px;
       color: var(--etv-ink);
-      transition: all .2s;
+      transition: all 0.2s ease;
     }
     .field textarea { min-height: 140px; resize: vertical; }
     .field input:focus, .field textarea:focus, .field select:focus {
       outline: none;
       border-color: var(--etv-blue);
-      box-shadow: 0 0 0 3px rgba(21, 89, 183, 0.15);
+      box-shadow: 0 0 0 4px rgba(21, 89, 183, 0.12);
     }
-    .error { display: block; min-height: 18px; margin-top: 4px; color: #dc2626; font-size: 12px; font-weight: 600; }
+    .error { display: block; min-height: 18px; margin-top: 5px; color: var(--etv-red); font-size: 12px; font-weight: 600; }
     
     .alert {
-      margin-bottom: 20px;
-      padding: 12px 16px;
-      border: 1px solid #fca5a5;
-      border-radius: 8px;
-      color: #991b1b;
-      background: #fef2f2;
+      margin-bottom: 24px;
+      padding: 14px 18px;
+      border-radius: 10px;
       font-size: 14px;
       font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
-    .alert.ok { border-color: #86efac; color: #166534; background: #f0fdf4; }
+    .alert:not(.ok) { border: 1px solid #fca5a5; color: #991b1b; background: #fef2f2; }
+    .alert.ok { border: 1px solid #86efac; color: #166534; background: #f0fdf4; }
 
+    /* Triaje Dinámico Reaccionario */
     .triage-box {
-      margin: 20px 0;
-      padding: 16px;
-      border-radius: 8px;
-      background: #eef7ff;
-      border-left: 4px solid var(--etv-blue);
+      margin: 24px 0;
+      padding: 18px 20px;
+      border-radius: 12px;
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-left: 5px solid var(--etv-blue);
+      transition: all 0.3s ease;
     }
-    .triage-box strong { display: block; color: var(--etv-navy); font-size: 14px; margin-bottom: 4px; }
-    .triage-box p { margin: 0; color: var(--etv-muted); font-size: 13px; line-height: 1.5; }
+    .triage-box.critical {
+      background: #fef2f2;
+      border-color: #fca5a5;
+      border-left-color: var(--etv-red);
+    }
+    .triage-box.serious {
+      background: #fffbeeb;
+      border-color: #fde68a;
+      border-left-color: var(--etv-amber);
+    }
+    .triage-header { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+    .triage-box strong { color: var(--etv-navy); font-size: 15px; font-weight: 800; }
+    .triage-box p { margin: 0; color: #475569; font-size: 13.5px; line-height: 1.5; }
 
-    .check { display: flex; gap: 10px; align-items: flex-start; margin: 22px 0; font-size: 13px; color: var(--etv-ink); cursor: pointer; }
+    .check {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      margin: 24px 0;
+      padding: 12px 14px;
+      background: #f8fafc;
+      border-radius: 8px;
+      border: 1px solid var(--etv-line);
+      font-size: 13px;
+      color: var(--etv-ink);
+      cursor: pointer;
+    }
     .check input[type="checkbox"] { width: 18px; height: 18px; margin-top: 1px; accent-color: var(--etv-blue); }
 
-    /* Estilos del Modal */
+    /* Modal Estilizado */
     .modal {
-      width: min(600px, calc(100% - 32px));
-      border: 1px solid var(--etv-line);
-      border-radius: 12px;
+      width: min(540px, calc(100% - 32px));
+      border: none;
+      border-radius: 16px;
       padding: 0;
-      box-shadow: 0 20px 50px rgba(15, 31, 70, 0.2);
+      box-shadow: 0 25px 50px -12px rgba(15, 31, 70, 0.3);
+      overflow: hidden;
     }
-    .modal::backdrop { background: rgba(11, 31, 72, 0.6); backdrop-filter: blur(4px); }
-    .modal header { display: flex; align-items: center; justify-content: space-between; padding: 20px 24px; border-bottom: 1px solid var(--etv-line); background: #f8fafc; }
+    .modal::backdrop { background: rgba(11, 31, 72, 0.65); backdrop-filter: blur(6px); }
+    .modal header { display: flex; align-items: center; justify-content: space-between; padding: 20px 24px; background: #f8fafc; border-bottom: 1px solid var(--etv-line); }
     .modal h2 { margin: 0; color: var(--etv-navy); font-size: 20px; font-weight: 800; }
-    .modal main { padding: 24px; color: var(--etv-ink); font-size: 15px; line-height: 1.6; }
+    .modal main { padding: 28px 24px; color: var(--etv-ink); font-size: 15px; line-height: 1.6; }
     .modal footer { padding: 16px 24px; text-align: right; background: #f8fafc; border-top: 1px solid var(--etv-line); }
 
     /* Footer idéntico al index */
@@ -262,6 +376,14 @@
     .footer-main > div:not(.footer-brand) > a { color: #aebdd1; font-size: 13px; }
     .footer-main a:hover { color: #fff; }
     .footer-bottom { display: flex; justify-content: space-between; gap: 20px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,.12); color: #7e91ad; font-size: 11px; }
+
+    @media(max-width:900px) {
+      .hero-grid { grid-template-columns: 1fr; text-align: center; }
+      .hero-section p { margin-inline: auto; }
+      .hero-image-wrapper { display: none; }
+      .form-wrap { grid-template-columns: 1fr; }
+      .side { display: none; }
+    }
 
     @media(max-width:850px) {
       .site-nav nav { display: none; }
@@ -278,12 +400,25 @@
       .site-nav nav.open a { padding: 12px; border-bottom: 1px solid var(--etv-line); }
       .site-nav nav.open a.button { margin-top: 10px; text-align: center; }
       .menu { display: block; }
-      .form-wrap { grid-template-columns: 1fr; }
-      .side { display: none; }
       .footer-main { grid-template-columns: 1fr; gap: 30px; }
       .footer-bottom { flex-direction: column; }
     }
   </style>
+
+  <script>
+    "use strict";
+    document.addEventListener("DOMContentLoaded", () => {
+        const button = document.querySelector(".menu");
+        const navigation = document.querySelector(".site-nav nav");
+        if (!button || !navigation) return;
+
+        button.addEventListener("click", () => {
+            const open = button.getAttribute("aria-expanded") === "true";
+            button.setAttribute("aria-expanded", String(!open));
+            navigation.classList.toggle("open", !open);
+        });
+    });
+  </script>
 </head>
 <body>
 
@@ -291,7 +426,7 @@
   <header class="site-header">
     <div class="container site-nav">
       <a class="brand" href="index.html" aria-label="Elige Tu Vida, página de inicio">
-        <img src="assets/images/Escudo Elige Tu Vida Hack.png" alt="Logo Elige Tu Vida" width="55" height="55" style="object-fit: contain;">
+        <img src="assets/images/Escudo Elige Tu Vida Hack.png" alt="Logo Elige Tu Vida" width="52" height="52" style="object-fit: contain;">
         <span>
           <strong>Elige Tu Vida</strong>
           <small>Bienestar y protección escolar</small>
@@ -307,71 +442,111 @@
     </div>
   </header>
 
-  <main>
-    <section class="form-head">
-      <div class="container">
-        <p class="eyebrow">REPORTE SEGURO</p>
-        <h1>Cuéntanos lo que está pasando</h1>
-        <p>Avanza a tu ritmo. Tu información está protegida y puedes usar una ruta anónima.</p>
+  <!-- Hero Principal Dinámico -->
+  <section class="hero-section">
+    <div class="hero-glow"></div>
+    <div class="container hero-grid">
+      <div>
+        <div class="hero-badge">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Espacio 100% Protegido y Confidencial
+        </div>
+        <h1>Cuéntanos lo que ocurre, te escuchamos.</h1>
+        <p>Tu tranquilidad es lo primero. Puedes expresarte libremente, solicitar orientación o enviar una alerta con total confidencialidad.</p>
       </div>
-    </section>
+      <div class="hero-image-wrapper">
+        <div class="hero-image-card">
+          <!-- Imagen de respaldo o insignia del sistema -->
+          <img src="assets/images/Escudo Elige Tu Vida Hack.png" alt="Ilustración Protección Escolar" style="max-height: 180px; object-fit: contain; margin: 0 auto;">
+          <div class="floating-chip">
+            <svg width="18" height="18" fill="none" stroke="#10b981" stroke-width="2.5" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            Entorno de reporte seguro
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
+  <main>
     <section class="form-wrap container">
+      <!-- Tarjeta Lateral de Información -->
       <aside class="side">
-        <h2>Espacio protegido</h2>
-        <p>No tienes que escribir nada que te haga sentir incómodo. Si te encuentras en peligro inmediato, busca a un adulto de confianza o profesional cercano.</p>
-        <a class="side-link" href="chat.html">Hablar con alguien ahora →</a>
+        <h2>Acompañamiento activo</h2>
+        <p>No estás solo/a en esto. Puedes realizar la solicitud de forma anónima o iniciar sesión para dar un seguimiento directo a tu caso.</p>
+        
+        <div style="margin: 24px 0; border-top: 1px solid var(--etv-line); padding-top: 20px;">
+          <p style="font-size: 13px; font-weight: 700; color: var(--etv-navy); margin-bottom: 8px;">¿Necesitas orientación inmediata?</p>
+          <a class="side-link" href="chat.html">
+            Hablar con asistente de apoyo
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </a>
+        </div>
       </aside>
 
+      <!-- Formulario Principal -->
       <form class="formcard" id="reportForm" novalidate>
-        <h2>Crear reporte</h2>
+        <h2>Formular un reporte</h2>
         <div id="reportAlert" class="alert" role="status" aria-live="polite" hidden></div>
 
         <div class="field">
-          <label for="route">Modo de envío</label>
+          <label for="route">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/></svg>
+            Modo de envío
+          </label>
           <select id="route" name="route">
-            <option value="anonymous">Reporte anónimo (Sin datos personales)</option>
-            <option value="identified">Reporte con seguimiento personal</option>
+            <option value="anonymous">Reporte anónimo (No guarda tus datos personales)</option>
+            <option value="identified">Reporte con seguimiento personal registrado</option>
           </select>
           <small id="routeError" class="error"></small>
         </div>
 
         <div class="field">
-          <label for="description">¿Qué está ocurriendo?</label>
-          <textarea id="description" name="description" required maxlength="2500" placeholder="Describe lo que recuerdes o lo que sientas con tus propias palabras..."></textarea>
+          <label for="description">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            ¿Qué está ocurriendo?
+          </label>
+          <textarea id="description" name="description" required maxlength="2500" placeholder="Escribe aquí de manera detallada lo que recuerdes o cómo te sientes..."></textarea>
           <small id="descriptionError" class="error"></small>
         </div>
 
+        <!-- Panel Interactivo de Triaje Automático -->
         <div id="triage" class="triage-box">
-          <strong>Orientación inicial pendiente</strong>
-          <p>Al escribir, la plataforma identifica el nivel de prioridad orientativo para direccionar la ayuda.</p>
+          <div class="triage-header">
+            <svg id="triageIcon" width="18" height="18" fill="none" stroke="var(--etv-blue)" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+            <strong id="triageTitle">Orientación de prioridad en desarrollo</strong>
+          </div>
+          <p id="triageDesc">Mientras redactas, el sistema evaluará el nivel de prioridad sugerido para dar el trámite adecuado.</p>
         </div>
 
-        <div class="field">
-          <label for="location">¿Dónde ocurrió? (Opcional)</label>
-          <input id="location" name="location" maxlength="190" placeholder="Ej: Salón de clases, patio, redes sociales...">
-          <small id="locationError" class="error"></small>
-        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+          <div class="field">
+            <label for="location">¿Dónde ocurrió? (Opcional)</label>
+            <input id="location" name="location" maxlength="190" placeholder="Ej: Aula, patio, redes sociales...">
+            <small id="locationError" class="error"></small>
+          </div>
 
-        <div class="field">
-          <label for="date">¿Cuándo ocurrió? (Opcional)</label>
-          <input id="date" name="date" type="date">
-          <small id="dateError" class="error"></small>
+          <div class="field">
+            <label for="date">¿Cuándo ocurrió? (Opcional)</label>
+            <input id="date" name="date" type="date">
+            <small id="dateError" class="error"></small>
+          </div>
         </div>
 
         <label class="check">
-          <input id="confirmReport" name="confirmed" type="checkbox"> Confirmo que la información ingresada corresponde a lo que conozco.
+          <input id="confirmReport" name="confirmed" type="checkbox"> Confirmo que la información suministrada refleja la situación conocida.
         </label>
         <small id="confirmReportError" class="error"></small>
 
-        <button class="button button-primary" id="reportSubmit" type="submit" data-loading-text="Enviando reporte..." style="width: 100%; margin-top: 10px;">Enviar reporte seguro</button>
+        <button class="button button-primary" id="reportSubmit" type="submit" data-loading-text="Registrando reporte..." style="width: 100%; min-height: 50px; font-size: 15px;">
+          Enviar reporte seguro
+        </button>
       </form>
     </section>
   </main>
 
   <dialog class="modal" id="reportDone">
     <header>
-      <h2>Reporte recibido con éxito</h2>
+      <h2>Reporte Registrado</h2>
       <button type="button" class="button button-outline button-small" data-modal-close>✕</button>
     </header>
     <main><p id="reportDoneText"></p></main>
@@ -409,7 +584,7 @@
     </div>
   </footer>
 
-  <!-- Lógica e integración con Supabase y estado de sesión -->
+  <!-- Lógica e integración con Supabase -->
   <script type="module">
     import { supabase } from "./conexion.js";
 
@@ -429,7 +604,7 @@
       if (!element) return;
       element.hidden = false;
       element.textContent = message;
-      element.classList.toggle("ok", success);
+      element.className = success ? "alert ok" : "alert";
     }
 
     function setBusy(button, busy) {
@@ -446,7 +621,7 @@
     document.addEventListener("DOMContentLoaded", async () => {
       setupModals();
 
-      // Control de sesión y Badge de Usuario en Header
+      // Control de sesión y Badge de Usuario
       const loginLink = document.getElementById("nav-login");
       const registerLink = document.getElementById("nav-register");
       const navContainer = document.getElementById("nav-options");
@@ -488,83 +663,100 @@
           navContainer.appendChild(logoutButton);
       }
 
-      // Triaje interactivo y envío del formulario
+      // Triaje interactivo dinámico con cambio de colores
       const form = document.getElementById("reportForm");
       const description = document.getElementById("description");
-      if (!form || !description) return;
+      const triageBox = document.getElementById("triage");
+      const triageTitle = document.getElementById("triageTitle");
+      const triageDesc = document.getElementById("triageDesc");
 
-      description.addEventListener("input", () => {
-        const normalized = description.value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-        const critical = /suicid|arma|abuso|violacion|matar|peligro inmediato/.test(normalized);
-        const serious = /acoso|bullying|amenaza|violencia|chantaje|golpe/.test(normalized);
-        
-        const panel = document.getElementById("triage");
-        panel.querySelector("strong").textContent = critical ? "Posible situación crítica" : serious ? "Atención prioritaria" : "Orientación escolar";
-        panel.querySelector("p").textContent = critical
-          ? "Busca ahora a un adulto de confianza cercano y a las líneas de emergencia institucionales."
-          : serious ? "Esta situación puede requerir acompañamiento y seguimiento institucional prioritario."
-          : "Continúa cuando te sientas preparado o preparada.";
-      });
+      if (form && description) {
+        description.addEventListener("input", () => {
+          const normalized = description.value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+          const critical = /suicid|arma|abuso|violacion|matar|peligro inmediato/.test(normalized);
+          const serious = /acoso|bullying|amenaza|violencia|chantaje|golpe/.test(normalized);
 
-      form.addEventListener("submit", async (event) => {
-        event.preventDefault();
-        const button = document.getElementById("reportSubmit");
-        ["routeError", "descriptionError", "locationError", "dateError", "confirmReportError"].forEach((id) => setError(id, ""));
+          triageBox.classList.remove("critical", "serious");
 
-        const confirmed = document.getElementById("confirmReport").checked;
-        const textVal = description.value.trim();
-        let valid = true;
-
-        if (textVal.length < 10) { setError("descriptionError", "Escribe al menos una descripción de mínimo 10 caracteres."); valid = false; }
-        if (!confirmed) { setError("confirmReportError", "Debes confirmar que la información ingresada es real."); valid = false; }
-        if (!valid) { setAlert("reportAlert", "Revisa los campos señalados antes de continuar.", false); return; }
-
-        setBusy(button, true);
-
-        try {
-          const routeVal = document.getElementById("route").value;
-          const locationVal = document.getElementById("location").value.trim();
-          const dateVal = document.getElementById("date").value;
-
-          const ticketCode = generateTicket();
-          const normalized = textVal.toLowerCase();
-          const riskLevel = /suicid|arma|abuso|violacion|matar/.test(normalized) ? "Crítico" : /acoso|bullying|amenaza|golpe/.test(normalized) ? "Alto" : "Medio";
-
-          let userId = null;
-          if (routeVal === "identified") {
-            if (user?.id) userId = user.id;
-            else if (localUserObj?.id) userId = localUserObj.id;
+          if (critical) {
+            triageBox.classList.add("critical");
+            triageTitle.textContent = "Situación de atención prioritaria / urgente";
+            triageDesc.textContent = "Detectamos palabras asociadas a un riesgo alto. Si te sientes en riesgo inminente, recurre inmediatamente a una persona adulta de confianza o red de apoyo local.";
+          } else if (serious) {
+            triageBox.classList.add("serious");
+            triageTitle.textContent = "Seguimiento institucional sugerido";
+            triageDesc.textContent = "La situación descrita requiere revisión por el equipo directivo/orientador para brindarte acompañamiento adecuado.";
+          } else {
+            triageTitle.textContent = "Orientación de convivencia escolar";
+            triageDesc.textContent = "Tu reporte será procesado respetando tu privacidad para activar las medidas institucionales correspondientes.";
           }
+        });
 
-          const { error } = await supabase.from('reportes').insert([
-            {
-              ticket: ticketCode,
-              ruta: routeVal,
-              descripcion: textVal,
-              ubicacion: locationVal || null,
-              fecha_suceso: dateVal || null,
-              riesgo: riskLevel,
-              usuario_id: userId,
-              creado_en: new Date().toISOString()
+        // Envió del Formulario
+        form.addEventListener("submit", async (event) => {
+          event.preventDefault();
+          const button = document.getElementById("reportSubmit");
+          ["routeError", "descriptionError", "locationError", "dateError", "confirmReportError"].forEach((id) => setError(id, ""));
+
+          const confirmed = document.getElementById("confirmReport").checked;
+          const textVal = description.value.trim();
+          let valid = true;
+
+          if (textVal.length < 10) { setError("descriptionError", "Escribe al menos una descripción de mínimo 10 caracteres."); valid = false; }
+          if (!confirmed) { setError("confirmReportError", "Debes confirmar la veracidad del reporte."); valid = false; }
+          if (!valid) { setAlert("reportAlert", "Revisa los datos ingresados antes de enviar.", false); return; }
+
+          setBusy(button, true);
+
+          try {
+            const routeVal = document.getElementById("route").value;
+            const locationVal = document.getElementById("location").value.trim();
+            const dateVal = document.getElementById("date").value;
+
+            const ticketCode = generateTicket();
+            const normalized = textVal.toLowerCase();
+            const riskLevel = /suicid|arma|abuso|violacion|matar/.test(normalized) ? "Crítico" : /acoso|bullying|amenaza|golpe/.test(normalized) ? "Alto" : "Medio";
+
+            let userId = null;
+            if (routeVal === "identified") {
+              if (user?.id) userId = user.id;
+              else if (localUserObj?.id) userId = localUserObj.id;
             }
-          ]);
 
-          if (error) throw error;
+            const { error } = await supabase.from('reportes').insert([
+              {
+                ticket: ticketCode,
+                ruta: routeVal,
+                descripcion: textVal,
+                ubicacion: locationVal || null,
+                fecha_suceso: dateVal || null,
+                riesgo: riskLevel,
+                usuario_id: userId,
+                creado_en: new Date().toISOString()
+              }
+            ]);
 
-          document.getElementById("reportDoneText").textContent =
-            `Tu código de seguimiento es ${ticketCode}. Nivel de prioridad identificado: ${riskLevel}. Tu reporte ha sido registrado de forma protegida.`;
-          
-          form.reset();
-          document.getElementById("reportDone").showModal();
-          setAlert("reportAlert", "Reporte enviado correctamente.", true);
+            if (error) throw error;
 
-        } catch (err) {
-          console.error("Error al guardar en Supabase:", err);
-          setAlert("reportAlert", "Ocurrió un error al enviar el reporte: " + (err.message || "Error de conexión"), false);
-        } finally {
-          setBusy(button, false);
-        }
-      });
+            document.getElementById("reportDoneText").textContent =
+              `Tu código asignado es ${ticketCode}. Nivel asignado: ${riskLevel}. Tu solicitud fue enviada correctamente.`;
+            
+            form.reset();
+            triageBox.className = "triage-box";
+            triageTitle.textContent = "Orientación de prioridad en desarrollo";
+            triageDesc.textContent = "Mientras redactas, el sistema evaluará el nivel de prioridad sugerido para dar el trámite adecuado.";
+            
+            document.getElementById("reportDone").showModal();
+            setAlert("reportAlert", "Reporte enviado satisfactoriamente.", true);
+
+          } catch (err) {
+            console.error("Error Supabase:", err);
+            setAlert("reportAlert", "Ocurrió un inconveniente al guardar: " + (err.message || "Error de conexión"), false);
+          } finally {
+            setBusy(button, false);
+          }
+        });
+      }
     });
   </script>
 </body>
