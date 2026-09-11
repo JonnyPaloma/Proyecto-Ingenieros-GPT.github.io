@@ -3,83 +3,219 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Panel de control del estudiante en Elige Tu Vida.">
   <title>Mi Panel | Elige Tu Vida</title>
+
   <link rel="icon" href="assets/images/Favicon Hack.png" type="image/png">
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
   <style>
     :root {
       --etv-navy: #0b1f48;
       --etv-blue: #1559b7;
-      --etv-soft: #f8fafc;
+      --etv-blue-dark: #103c81;
+      --etv-sky: #e0f2fe;
+      --etv-ink: #1c2b43;
+      --etv-muted: #64748b;
       --etv-line: #e2e8f0;
+      --etv-soft: #f8fafc;
+      --shadow-lg: 0 10px 25px -5px rgba(15, 31, 70, 0.12);
     }
-    body { font-family: Inter, sans-serif; background: var(--etv-soft); color: #1c2b43; min-height: 100vh; display: flex; flex-direction: column; }
-    .site-header { position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,0.95); backdrop-filter: blur(14px); border-bottom: 1px solid var(--etv-line); }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, sans-serif;
+      color: var(--etv-ink);
+      background: var(--etv-soft);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .site-header {
+      position: sticky; top: 0; z-index: 50;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--etv-line);
+    }
+    .site-nav { display: flex; align-items: center; justify-content: space-between; min-height: 78px; }
+    .brand { display: flex; align-items: center; gap: 12px; }
+    .brand strong { color: var(--etv-navy); font-size: 18px; font-weight: 800; }
+    .brand small { color: var(--etv-muted); font-size: 12px; font-weight: 600; display: block; }
+    
     .container { width: min(1240px, calc(100% - 48px)); margin-inline: auto; }
-    .card { background: #fff; border: 1px solid var(--etv-line); border-radius: 16px; padding: 24px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+
+    .card {
+      background: #ffffff;
+      border: 1px solid var(--etv-line);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: var(--shadow-lg);
+      margin-bottom: 24px;
+    }
+
+    .user-badge-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #f1f5f9;
+      padding: 5px 12px 5px 6px;
+      border-radius: 30px;
+      border: 1px solid #e2e8f0;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .user-badge-link:hover { background: #e2e8f0; border-color: var(--etv-blue); }
+
+    .user-avatar-circle {
+      width: 32px; height: 32px; background: var(--etv-blue); color: white;
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: bold;
+    }
+
+    .tab-btn {
+      padding: 10px 16px; font-size: 14px; font-weight: 700; color: var(--etv-muted);
+      border-bottom: 2px solid transparent; cursor: pointer; transition: all 0.2s;
+    }
+    .tab-btn.active { color: var(--etv-blue); border-bottom-color: var(--etv-blue); }
+
+    .form-input {
+      width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1; border-radius: 8px;
+      font-size: 14px; outline: none; background: #fff; transition: border-color 0.2s;
+    }
+    .form-input:focus { border-color: var(--etv-blue); box-shadow: 0 0 0 3px rgba(21, 89, 183, 0.1); }
+    
+    .btn-primary {
+      background: var(--etv-blue); color: white; padding: 10px 20px; border-radius: 8px;
+      font-size: 14px; font-weight: 700; border: none; cursor: pointer; transition: background 0.2s;
+    }
+    .btn-primary:hover { background: var(--etv-blue-dark); }
   </style>
 </head>
 <body>
 
   <header class="site-header">
-    <div class="container flex items-center justify-between min-h-[78px]">
-      <a class="flex items-center gap-3 font-bold text-xl" href="index.html" style="color:var(--etv-navy)">
-        <img src="assets/images/Escudo Elige Tu Vida Hack.png" alt="Logo" width="42" height="42">
-        <span>Elige Tu Vida <small class="text-xs font-normal text-gray-500 block">Panel de Estudiante</small></span>
+    <div class="container site-nav">
+      <a class="brand" href="index.html">
+        <img src="assets/images/Escudo Elige Tu Vida Hack.png" alt="Logo" width="42" height="42" style="object-fit: contain;">
+        <span>
+          <strong>Elige Tu Vida</strong>
+          <small>Panel de Estudiante</small>
+        </span>
       </a>
-      <nav class="flex items-center gap-4" id="nav-options">
+      <nav class="flex items-center gap-4">
         <a href="index.html" class="text-sm font-semibold text-gray-600 hover:text-blue-600">Inicio</a>
         <a href="chat.html" class="text-sm font-semibold text-gray-600 hover:text-blue-600">Orientación</a>
         <a href="contacto.html" class="text-sm font-semibold text-gray-600 hover:text-blue-600">Contacto</a>
+        
+        <!-- Enlace interactivo que redirige al panel al hacer clic en el perfil -->
+        <a href="panel-usuario.html" class="user-badge-link" title="Ir a mi panel">
+          <div class="user-avatar-circle" id="nav-avatar-initial">U</div>
+          <span class="text-xs font-bold text-gray-800" id="nav-username">Cargando...</span>
+        </a>
       </nav>
     </div>
   </header>
 
   <main class="flex-1 py-10 container">
-    <div class="mb-8">
-      <h1 class="text-3xl font-extrabold" style="color: var(--etv-navy);">Bienvenido a tu panel</h1>
-      <p class="text-gray-600 text-sm mt-1">Aquí puedes consultar el estado de tus consultas y mensajes enviados.</p>
+    <div class="mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      <div>
+        <h1 class="text-3xl font-extrabold" style="color: var(--etv-navy);">Bienvenido a tu panel</h1>
+        <p class="text-gray-600 text-sm mt-1">Gestiona tu información personal y consulta tus mensajes institucionales.</p>
+      </div>
+      <button id="btn-logout" class="text-sm font-bold text-red-600 hover:bg-red-50 px-4 py-2 rounded-lg border border-red-200 transition">Cerrar sesión</button>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-      <div class="card">
-        <span class="text-xs font-bold uppercase tracking-wider text-blue-600">Estado de cuenta</span>
-        <h3 class="text-lg font-bold mt-2" id="user-display-name">Cargando...</h3>
-        <p class="text-xs text-gray-500 mt-1" id="user-display-email">...</p>
+    <!-- Pestañas de Navegación del Panel -->
+    <div class="flex border-b border-gray-200 mb-6 gap-4">
+      <button class="tab-btn active" data-target="section-messages">Mis Mensajes</button>
+      <button class="tab-btn" data-target="section-settings">Configuración de Cuenta</button>
+    </div>
+
+    <!-- SECCIÓN 1: MIS MENSAJES -->
+    <div id="section-messages" class="panel-section">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        <div class="card !mb-0">
+          <span class="text-xs font-bold uppercase tracking-wider text-blue-600">Estado de cuenta</span>
+          <h3 class="text-lg font-bold mt-2" id="user-display-name">Cargando...</h3>
+          <p class="text-xs text-gray-500 mt-1" id="user-display-email">...</p>
+        </div>
+        <div class="card !mb-0">
+          <span class="text-xs font-bold uppercase tracking-wider text-indigo-600">Mensajes de Contacto</span>
+          <h3 class="text-2xl font-extrabold mt-2" id="count-contacts">0</h3>
+          <p class="text-xs text-gray-500 mt-1">Enviados al soporte institucional</p>
+        </div>
       </div>
+
       <div class="card">
-        <span class="text-xs font-bold uppercase tracking-wider text-indigo-600">Mensajes de Contacto</span>
-        <h3 class="text-2xl font-extrabold mt-2" id="count-contacts">0</h3>
-        <p class="text-xs text-gray-500 mt-1">Enviados al soporte institucional</p>
+        <h2 class="text-xl font-bold mb-4" style="color: var(--etv-navy);">Historial de Mensajes</h2>
+        <div id="user-contacts-list" class="overflow-x-auto">
+          <p class="text-sm text-gray-500 py-4 text-center">Cargando tus mensajes...</p>
+        </div>
       </div>
     </div>
 
-    <div class="card">
-      <h2 class="text-xl font-bold mb-4" style="color: var(--etv-navy);">Mis Mensajes Recientes</h2>
-      <div id="user-contacts-list" class="overflow-x-auto">
-        <p class="text-sm text-gray-500">Cargando tus mensajes...</p>
+    <!-- SECCIÓN 2: CONFIGURACIÓN DE CUENTA -->
+    <div id="section-settings" class="panel-section" style="display: none;">
+      <div class="card max-w-xl">
+        <h2 class="text-xl font-bold mb-4" style="color: var(--etv-navy);">Actualizar Datos Personales</h2>
+        
+        <div id="settings-alert" class="hidden p-3 rounded-lg text-sm mb-4"></div>
+
+        <form id="form-update-profile" class="space-y-4">
+          <div>
+            <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Nombre completo</label>
+            <input type="text" id="input-nombre" class="form-input" required>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Correo electrónico (Solo lectura)</label>
+            <input type="email" id="input-correo" class="form-input bg-gray-100" readonly>
+          </div>
+          <button type="submit" class="btn-primary">Guardar cambios</button>
+        </form>
+      </div>
+
+      <div class="card max-w-xl mt-6">
+        <h2 class="text-xl font-bold mb-4" style="color: var(--etv-navy);">Cambiar Contraseña</h2>
+        
+        <div id="password-alert" class="hidden p-3 rounded-lg text-sm mb-4"></div>
+
+        <form id="form-update-password" class="space-y-4">
+          <div>
+            <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Nueva contraseña</label>
+            <input type="password" id="input-new-password" class="form-input" placeholder="Mínimo 6 caracteres" required>
+          </div>
+          <button type="submit" class="btn-primary">Actualizar contraseña</button>
+        </form>
       </div>
     </div>
+
   </main>
 
   <script type="module">
     import { supabase } from './conexion.js';
 
     document.addEventListener("DOMContentLoaded", async () => {
-      const { data: { session } } = await supabase.auth.getSession();
+      // 1. Verificar sesión activa
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
       
-      if (!session) {
+      if (sessionError || !session) {
         window.location.href = "login.html";
         return;
       }
 
       const user = session.user;
-      const userName = user.user_metadata?.nombre || user.email.split('@')[0];
-      
+      const userName = user.user_metadata?.nombre || user.user_metadata?.full_name || user.email.split('@')[0];
+
+      // Actualizar elementos de la interfaz con los datos del usuario
+      document.getElementById("nav-username").textContent = userName;
+      document.getElementById("nav-avatar-initial").textContent = userName.charAt(0).toUpperCase();
       document.getElementById("user-display-name").textContent = userName;
       document.getElementById("user-display-email").textContent = user.email;
+      document.getElementById("input-nombre").value = userName;
+      document.getElementById("input-correo").value = user.email;
 
-      // Cargar mensajes del usuario desde la tabla contactos
+      // 2. Cargar mensajes del usuario desde Supabase
       const { data: contactos, error } = await supabase
         .from('contactos')
         .select('*')
@@ -90,32 +226,99 @@
       document.getElementById("count-contacts").textContent = contactos ? contactos.length : 0;
 
       if (error || !contactos || contactos.length === 0) {
-        container.innerHTML = `<p class="text-sm text-gray-500 py-4">No has enviado mensajes de contacto todavía.</p>`;
-        return;
+        container.innerHTML = `<p class="text-sm text-gray-500 py-4 text-center">No has enviado mensajes de contacto todavía.</p>`;
+      } else {
+        let html = `
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="border-b text-xs text-gray-400 uppercase">
+                <th class="py-3 px-4">Asunto</th>
+                <th class="py-3 px-4">Mensaje</th>
+              </tr>
+            </thead>
+            <tbody>
+        `;
+        contactos.forEach(c => {
+          html += `
+            <tr class="border-b hover:bg-gray-50 text-sm">
+              <td class="py-3 px-4 font-semibold text-gray-800">${c.asunto}</td>
+              <td class="py-3 px-4 text-gray-600">${c.mensaje}</td>
+            </tr>
+          `;
+        });
+        html += `</tbody></table>`;
+        container.innerHTML = html;
       }
 
-      let html = `
-        <table class="w-full text-left border-collapse">
-          <thead>
-            <tr class="border-b text-xs text-gray-500 uppercase">
-              <th class="py-3 px-4">Asunto</th>
-              <th class="py-3 px-4">Mensaje</th>
-            </tr>
-          </thead>
-          <tbody>
-      `;
+      // 3. Manejo de pestañas interactivas
+      const tabButtons = document.querySelectorAll(".tab-btn");
+      const panels = document.querySelectorAll(".panel-section");
 
-      contactos.forEach(c => {
-        html += `
-          <tr class="border-b hover:bg-gray-50 text-sm">
-            <td class="py-3 px-4 font-semibold text-gray-800">${c.asunto}</td>
-            <td class="py-3 px-4 text-gray-600">${c.mensaje}</td>
-          </tr>
-        `;
+      tabButtons.forEach(btn => {
+        btn.addEventListener("click", () => {
+          tabButtons.forEach(b => b.classList.remove("active"));
+          panels.forEach(p => p.style.display = "none");
+
+          btn.classList.add("active");
+          document.getElementById(btn.getAttribute("data-target")).style.display = "block";
+        });
       });
 
-      html += `</tbody></table>`;
-      container.innerHTML = html;
+      // 4. Actualizar Nombre de Perfil
+      const profileForm = document.getElementById("form-update-profile");
+      const profileAlert = document.getElementById("settings-alert");
+
+      profileForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const newName = document.getElementById("input-nombre").value.trim();
+
+        const { error: updateError } = await supabase.auth.updateUser({
+          data: { nombre: newName }
+        });
+
+        profileAlert.classList.remove("hidden");
+        if (updateError) {
+          profileAlert.className = "p-3 rounded-lg text-sm mb-4 bg-red-100 text-red-700";
+          profileAlert.textContent = "Error al actualizar: " + updateError.message;
+        } else {
+          profileAlert.className = "p-3 rounded-lg text-sm mb-4 bg-green-100 text-green-700";
+          profileAlert.textContent = "¡Perfil actualizado con éxito!";
+          document.getElementById("nav-username").textContent = newName;
+          document.getElementById("nav-avatar-initial").textContent = newName.charAt(0).toUpperCase();
+          document.getElementById("user-display-name").textContent = newName;
+        }
+      });
+
+      // 5. Actualizar Contraseña
+      const passwordForm = document.getElementById("form-update-password");
+      const passwordAlert = document.getElementById("password-alert");
+
+      passwordForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const newPassword = document.getElementById("input-new-password").value.trim();
+
+        const { error: passError } = await supabase.auth.updateUser({
+          password: newPassword
+        });
+
+        passwordAlert.classList.remove("hidden");
+        if (passError) {
+          passwordAlert.className = "p-3 rounded-lg text-sm mb-4 bg-red-100 text-red-700";
+          passwordAlert.textContent = "Error al cambiar contraseña: " + passError.message;
+        } else {
+          passwordAlert.className = "p-3 rounded-lg text-sm mb-4 bg-green-100 text-green-700";
+          passwordAlert.textContent = "¡Contraseña actualizada correctamente!";
+          passwordForm.reset();
+        }
+      });
+
+      // 6. Cerrar sesión
+      document.getElementById("btn-logout").addEventListener("click", async () => {
+        await supabase.auth.signOut();
+        localStorage.clear();
+        sessionStorage.clear();
+        window.location.href = "login.html";
+      });
     });
   </script>
 </body>
