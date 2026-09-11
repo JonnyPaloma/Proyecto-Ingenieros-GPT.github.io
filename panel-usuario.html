@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="es-CO">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mi Panel | Elige Tu Vida</title>
+  <link rel="icon" href="assets/images/Favicon Hack.png" type="image/png">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --etv-navy: #0b1f48;
+      --etv-blue: #1559b7;
+      --etv-soft: #f8fafc;
+      --etv-line: #e2e8f0;
+    }
+    body { font-family: Inter, sans-serif; background: var(--etv-soft); color: #1c2b43; min-height: 100vh; display: flex; flex-direction: column; }
+    .site-header { position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,0.95); backdrop-filter: blur(14px); border-bottom: 1px solid var(--etv-line); }
+    .container { width: min(1240px, calc(100% - 48px)); margin-inline: auto; }
+    .card { background: #fff; border: 1px solid var(--etv-line); border-radius: 16px; padding: 24px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container flex items-center justify-between min-h-[78px]">
+      <a class="flex items-center gap-3 font-bold text-xl" href="index.html" style="color:var(--etv-navy)">
+        <img src="assets/images/Escudo Elige Tu Vida Hack.png" alt="Logo" width="42" height="42">
+        <span>Elige Tu Vida <small class="text-xs font-normal text-gray-500 block">Panel de Estudiante</small></span>
+      </a>
+      <nav class="flex items-center gap-4" id="nav-options">
+        <a href="index.html" class="text-sm font-semibold text-gray-600 hover:text-blue-600">Inicio</a>
+        <a href="chat.html" class="text-sm font-semibold text-gray-600 hover:text-blue-600">Orientación</a>
+        <a href="contacto.html" class="text-sm font-semibold text-gray-600 hover:text-blue-600">Contacto</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="flex-1 py-10 container">
+    <div class="mb-8">
+      <h1 class="text-3xl font-extrabold" style="color: var(--etv-navy);">Bienvenido a tu panel</h1>
+      <p class="text-gray-600 text-sm mt-1">Aquí puedes consultar el estado de tus consultas y mensajes enviados.</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+      <div class="card">
+        <span class="text-xs font-bold uppercase tracking-wider text-blue-600">Estado de cuenta</span>
+        <h3 class="text-lg font-bold mt-2" id="user-display-name">Cargando...</h3>
+        <p class="text-xs text-gray-500 mt-1" id="user-display-email">...</p>
+      </div>
+      <div class="card">
+        <span class="text-xs font-bold uppercase tracking-wider text-indigo-600">Mensajes de Contacto</span>
+        <h3 class="text-2xl font-extrabold mt-2" id="count-contacts">0</h3>
+        <p class="text-xs text-gray-500 mt-1">Enviados al soporte institucional</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2 class="text-xl font-bold mb-4" style="color: var(--etv-navy);">Mis Mensajes Recientes</h2>
+      <div id="user-contacts-list" class="overflow-x-auto">
+        <p class="text-sm text-gray-500">Cargando tus mensajes...</p>
+      </div>
+    </div>
+  </main>
+
+  <script type="module">
+    import { supabase } from './conexion.js';
+
+    document.addEventListener("DOMContentLoaded", async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (!session) {
+        window.location.href = "login.html";
+        return;
+      }
+
+      const user = session.user;
+      const userName = user.user_metadata?.nombre || user.email.split('@')[0];
+      
+      document.getElementById("user-display-name").textContent = userName;
+      document.getElementById("user-display-email").textContent = user.email;
+
+      // Cargar mensajes del usuario desde la tabla contactos
+      const { data: contactos, error } = await supabase
+        .from('contactos')
+        .select('*')
+        .eq('usuario_id', user.id)
+        .order('id', { ascending: false });
+
+      const container = document.getElementById("user-contacts-list");
+      document.getElementById("count-contacts").textContent = contactos ? contactos.length : 0;
+
+      if (error || !contactos || contactos.length === 0) {
+        container.innerHTML = `<p class="text-sm text-gray-500 py-4">No has enviado mensajes de contacto todavía.</p>`;
+        return;
+      }
+
+      let html = `
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="border-b text-xs text-gray-500 uppercase">
+              <th class="py-3 px-4">Asunto</th>
+              <th class="py-3 px-4">Mensaje</th>
+            </tr>
+          </thead>
+          <tbody>
+      `;
+
+      contactos.forEach(c => {
+        html += `
+          <tr class="border-b hover:bg-gray-50 text-sm">
+            <td class="py-3 px-4 font-semibold text-gray-800">${c.asunto}</td>
+            <td class="py-3 px-4 text-gray-600">${c.mensaje}</td>
+          </tr>
+        `;
+      });
+
+      html += `</tbody></table>`;
+      container.innerHTML = html;
+    });
+  </script>
+</body>
+</html>
