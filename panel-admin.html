@@ -3,9 +3,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Panel de administración de Elige Tu Vida.">
+  <meta name="description" content="Panel de administración de reportes de Elige Tu Vida.">
   <meta name="theme-color" content="#0b1f48">
-  <title>Administración | Elige Tu Vida</title>
+  <title>Administración de reportes | Elige Tu Vida</title>
 
   <link rel="icon" href="assets/images/Favicon Hack.png" type="image/png">
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
@@ -21,22 +21,23 @@
       --etv-muted: #64748b;
       --etv-line: #e2e8f0;
       --etv-soft: #f8fafc;
-      --etv-white: #ffffff;
-      --etv-green: #10b981;
-      --etv-red: #dc2626;
+      --etv-green: #047857;
+      --etv-red: #b91c1c;
       --shadow-lg: 0 14px 34px -18px rgba(11, 31, 72, 0.22);
     }
 
-    * { box-sizing: border-box; }
-
-    body {
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-      background: var(--etv-soft);
-      color: var(--etv-ink);
+    * {
+      box-sizing: border-box;
     }
 
-    [data-app-loading] {
-      visibility: hidden;
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background: var(--etv-soft);
+      color: var(--etv-ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system,
+        "Segoe UI", sans-serif;
     }
 
     .container {
@@ -48,7 +49,6 @@
       position: sticky;
       top: 0;
       z-index: 50;
-      min-height: 78px;
       border-bottom: 1px solid var(--etv-line);
       background: rgba(255, 255, 255, 0.96);
       backdrop-filter: blur(14px);
@@ -63,10 +63,11 @@
     }
 
     .brand {
-      display: inline-flex;
+      display: flex;
       align-items: center;
       gap: 12px;
       min-width: 0;
+      color: inherit;
       text-decoration: none;
     }
 
@@ -96,7 +97,16 @@
     .card {
       border: 1px solid var(--etv-line);
       border-radius: 16px;
-      background: var(--etv-white);
+      background: #fff;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .summary-card {
+      min-width: 145px;
+      padding: 14px 18px;
+      border: 1px solid #bfdbfe;
+      border-radius: 12px;
+      background: #fff;
       box-shadow: var(--shadow-lg);
     }
 
@@ -115,88 +125,59 @@
       text-transform: uppercase;
     }
 
-    .summary-card {
-      min-width: 175px;
-      padding: 14px 18px;
-      border: 1px solid #bfdbfe;
-      border-radius: 12px;
-      background: var(--etv-white);
-      box-shadow: var(--shadow-lg);
-    }
-
-    .tab-btn {
-      padding: 11px 4px;
-      border: none;
-      border-bottom: 3px solid transparent;
-      background: transparent;
-      color: var(--etv-muted);
-      font-size: 14px;
-      font-weight: 800;
-      cursor: pointer;
-    }
-
-    .tab-btn.active,
-    .tab-btn:hover {
-      color: var(--etv-blue);
-      border-bottom-color: var(--etv-blue);
-    }
-
-    .btn-primary,
-    .btn-outline,
-    .btn-danger,
-    .btn-action {
+    .status-badge,
+    .risk-badge {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      min-height: 42px;
-      padding: 10px 16px;
-      border-radius: 9px;
-      font-size: 14px;
+      min-height: 28px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-size: 11px;
       font-weight: 800;
-      cursor: pointer;
-      text-decoration: none;
-      transition: all 0.2s ease;
+      white-space: nowrap;
     }
 
-    .btn-primary,
-    .btn-action {
-      border: 1px solid var(--etv-blue);
-      background: var(--etv-blue);
-      color: #ffffff;
+    .status-pendiente {
+      border: 1px solid #fde68a;
+      background: #fffbeb;
+      color: #a16207;
     }
 
-    .btn-primary:hover,
-    .btn-action:hover {
-      border-color: var(--etv-blue-dark);
-      background: var(--etv-blue-dark);
-    }
-
-    .btn-outline {
+    .status-en_proceso {
       border: 1px solid #bfdbfe;
-      background: #ffffff;
-      color: var(--etv-blue);
+      background: #eff6ff;
+      color: #1d4ed8;
     }
 
-    .btn-outline:hover {
-      background: var(--etv-sky);
+    .status-resuelto {
+      border: 1px solid #a7f3d0;
+      background: #ecfdf5;
+      color: #047857;
     }
 
-    .btn-danger {
+    .status-posible_denuncia_falsa {
       border: 1px solid #fecaca;
-      background: #ffffff;
-      color: var(--etv-red);
-    }
-
-    .btn-danger:hover {
       background: #fef2f2;
+      color: #b91c1c;
     }
 
-    .btn-primary:focus,
-    .btn-outline:focus,
-    .btn-danger:focus,
-    .btn-action:focus {
-      outline: none;
-      box-shadow: 0 0 0 4px rgba(21, 89, 183, 0.14);
+    .risk-Medio {
+      border: 1px solid #cbd5e1;
+      background: #f8fafc;
+      color: #475569;
+    }
+
+    .risk-Alto {
+      border: 1px solid #fed7aa;
+      background: #fff7ed;
+      color: #c2410c;
+    }
+
+    .risk-Crítico {
+      border: 1px solid #fecaca;
+      background: #fef2f2;
+      color: #b91c1c;
     }
 
     .table-container {
@@ -205,15 +186,15 @@
       border-radius: 12px;
     }
 
-    .admin-table {
+    .reports-table {
       width: 100%;
-      min-width: 900px;
+      min-width: 1250px;
       border-collapse: collapse;
       text-align: left;
     }
 
-    .admin-table th {
-      padding: 12px 16px;
+    .reports-table th {
+      padding: 12px 14px;
       background: #f8fafc;
       color: var(--etv-muted);
       font-size: 11px;
@@ -222,16 +203,93 @@
       text-transform: uppercase;
     }
 
-    .admin-table td {
-      padding: 13px 16px;
+    .reports-table td {
+      padding: 14px;
       border-top: 1px solid #f1f5f9;
       vertical-align: top;
       color: #475569;
-      font-size: 14px;
+      font-size: 13px;
     }
 
-    .admin-table tr:hover td {
+    .reports-table tr:hover td {
       background: #f8fafc;
+    }
+
+    .status-select {
+      min-width: 190px;
+      padding: 8px 10px;
+      border-radius: 9px;
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    .status-select:focus {
+      box-shadow: 0 0 0 4px rgba(21, 89, 183, 0.14);
+    }
+
+    .status-select.status-pendiente {
+      color: #a16207;
+    }
+
+    .status-select.status-en_proceso {
+      color: #1d4ed8;
+    }
+
+    .status-select.status-resuelto {
+      color: #047857;
+    }
+
+    .status-select.status-posible_denuncia_falsa {
+      color: #b91c1c;
+    }
+
+    .btn-primary,
+    .btn-danger {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 40px;
+      padding: 9px 14px;
+      border-radius: 9px;
+      font-size: 13px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-primary {
+      border: 1px solid var(--etv-blue);
+      background: var(--etv-blue);
+      color: #fff;
+    }
+
+    .btn-primary:hover {
+      border-color: var(--etv-blue-dark);
+      background: var(--etv-blue-dark);
+    }
+
+    .btn-danger {
+      border: 1px solid #fecaca;
+      background: #fff;
+      color: var(--etv-red);
+    }
+
+    .btn-danger:hover {
+      background: #fef2f2;
+    }
+
+    .btn-primary:focus,
+    .btn-danger:focus,
+    .status-select:focus {
+      outline: none;
+      box-shadow: 0 0 0 4px rgba(21, 89, 183, 0.14);
+    }
+
+    [data-app-loading] {
+      visibility: hidden;
     }
 
     @media (max-width: 700px) {
@@ -257,17 +315,23 @@
       .badge-admin {
         display: none;
       }
+
+      .summary-card {
+        min-width: 0;
+        flex: 1;
+      }
     }
   </style>
 
   <script type="module" src="global-auth.js"></script>
 </head>
 
-<body class="min-h-screen flex flex-col" data-app-loading>
+<body data-app-loading>
   <header class="site-header">
     <div class="container site-nav">
       <a href="index.html" class="brand" aria-label="Ir al inicio de Elige Tu Vida">
         <img src="assets/images/Escudo Elige Tu Vida Hack.png" alt="Logo Elige Tu Vida">
+
         <span>
           <strong>Elige Tu Vida</strong>
           <small>Control institucional</small>
@@ -276,58 +340,96 @@
 
       <div class="flex items-center gap-3">
         <span class="badge-admin">Administrador</span>
-        <button id="logoutButton" type="button" class="btn-danger">Cerrar sesión</button>
+
+        <button id="logoutButton" type="button" class="btn-danger">
+          Cerrar sesión
+        </button>
       </div>
     </div>
   </header>
 
   <main class="container flex-1 py-8 sm:py-10">
-    <section class="mb-8 flex flex-col md:flex-row md:items-end md:justify-between gap-5">
+    <section class="mb-8 flex flex-col justify-between gap-5 md:flex-row md:items-end">
       <div>
         <p class="mb-2 text-xs font-extrabold uppercase tracking-wider" style="color: var(--etv-blue);">
           Administración segura
         </p>
-        <h1 class="text-3xl sm:text-4xl font-extrabold" style="color: var(--etv-navy);">
-          Mensajes institucionales
+
+        <h1 class="text-3xl font-extrabold tracking-tight sm:text-4xl" style="color: var(--etv-navy);">
+          Gestión de reportes
         </h1>
+
         <p id="administratorName" class="mt-2 text-sm leading-6 text-gray-600">
           Verificando sesión...
         </p>
       </div>
 
-      <div class="summary-card">
-        <p class="text-xs font-extrabold uppercase tracking-wide text-gray-400">Total de mensajes</p>
-        <p id="totalCount" class="mt-1 text-2xl font-extrabold" style="color: var(--etv-navy);">0</p>
+      <div class="flex gap-3">
+        <div class="summary-card">
+          <p class="text-xs font-extrabold uppercase tracking-wide text-gray-400">
+            Total
+          </p>
+
+          <p id="totalCount" class="mt-1 text-2xl font-extrabold" style="color: var(--etv-navy);">
+            0
+          </p>
+        </div>
+
+        <div class="summary-card">
+          <p class="text-xs font-extrabold uppercase tracking-wide text-gray-400">
+            Pendientes
+          </p>
+
+          <p id="pendingCount" class="mt-1 text-2xl font-extrabold text-yellow-700">
+            0
+          </p>
+        </div>
       </div>
     </section>
 
-    <div id="pageAlert" class="mb-6 hidden rounded-xl border px-4 py-3 text-sm" role="status" aria-live="polite"></div>
+    <div id="pageAlert"
+      class="mb-6 hidden rounded-xl border px-4 py-3 text-sm"
+      role="status"
+      aria-live="polite">
+    </div>
 
     <section class="card p-5 sm:p-7">
-      <div class="mb-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+      <div class="mb-5 flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
         <div>
-          <h2 class="text-xl font-extrabold" style="color: var(--etv-navy);">Bandeja de contacto</h2>
-          <p class="mt-1 text-sm text-gray-500">Mensajes enviados desde el formulario de contacto.</p>
+          <h2 class="text-xl font-extrabold" style="color: var(--etv-navy);">
+            Todos los reportes
+          </h2>
+
+          <p class="mt-1 text-sm text-gray-500">
+            Actualiza el estado de cada caso sin modificar su contenido ni evidencia.
+          </p>
         </div>
 
-        <button id="refreshButton" type="button" class="btn-primary">Actualizar</button>
+        <button id="refreshButton" type="button" class="btn-primary">
+          Actualizar
+        </button>
       </div>
 
       <div class="table-container">
-        <table class="admin-table">
+        <table class="reports-table">
           <thead>
             <tr>
               <th>Fecha</th>
+              <th>Ticket</th>
               <th>Remitente</th>
-              <th>Correo</th>
-              <th>Asunto</th>
-              <th>Mensaje</th>
-              <th>Acción</th>
+              <th>Categoría</th>
+              <th>Riesgo</th>
+              <th>Descripción</th>
+              <th>Evidencia</th>
+              <th>Estado</th>
             </tr>
           </thead>
-          <tbody id="contactsBody">
+
+          <tbody id="reportsBody">
             <tr>
-              <td colspan="6" class="text-center text-gray-500">Verificando permisos...</td>
+              <td colspan="8" class="text-center text-gray-500">
+                Verificando permisos...
+              </td>
             </tr>
           </tbody>
         </table>
@@ -338,39 +440,321 @@
   <script type="module">
     import { supabase } from './conexion.js';
 
-    function setBusy(button, busy) { if (!button.dataset.label) button.dataset.label = button.textContent.trim(); button.disabled = busy; button.textContent = busy ? 'Actualizando...' : button.dataset.label; }
-    function showAlert(message, type = 'error') { const alert = document.getElementById('pageAlert'); const styles = { error: 'border-red-200 bg-red-50 text-red-800', success: 'border-emerald-200 bg-emerald-50 text-emerald-800' }; alert.className = `mb-6 rounded-xl border px-4 py-3 text-sm ${styles[type]}`; alert.textContent = message; }
-    function clearAlert() { const alert = document.getElementById('pageAlert'); alert.className = 'mb-6 hidden rounded-xl border px-4 py-3 text-sm'; alert.textContent = ''; }
-    function formatDate(value) { if (!value) return 'Sin fecha'; const date = new Date(value); return Number.isNaN(date.getTime()) ? 'Sin fecha' : new Intl.DateTimeFormat('es-CO', { dateStyle: 'medium', timeStyle: 'short' }).format(date); }
-    function cell(text, className = '') { const element = document.createElement('td'); element.className = `px-4 py-3 align-top text-slate-600 ${className}`; element.textContent = text || 'Sin información'; return element; }
+    const categoryLabels = {
+      acoso_escolar: 'Acoso escolar o bullying',
+      violencia_fisica: 'Violencia física',
+      amenazas_intimidacion: 'Amenazas o intimidación',
+      discriminacion: 'Discriminación o exclusión',
+      violencia_sexual: 'Violencia sexual o abuso',
+      salud_emocional: 'Salud emocional o riesgo de vida',
+      conflicto_convivencia: 'Conflicto de convivencia',
+      otro: 'Otra situación'
+    };
 
-    function renderContacts(contactos) {
-      const body = document.getElementById('contactsBody'); body.replaceChildren(); document.getElementById('totalCount').textContent = contactos.length;
-      if (!contactos.length) { const row = document.createElement('tr'); const empty = document.createElement('td'); empty.colSpan = 6; empty.className = 'px-4 py-10 text-center text-slate-500'; empty.textContent = 'No hay mensajes registrados en este momento.'; row.append(empty); body.append(row); return; }
-      contactos.forEach((contacto) => {
-        const row = document.createElement('tr'); row.className = 'transition hover:bg-slate-50';
-        row.append(cell(formatDate(contacto.created_at), 'whitespace-nowrap text-xs'), cell(contacto.nombre, 'min-w-36 font-bold text-slate-800'), cell(contacto.correo, 'min-w-48 break-all text-etv-blue'), cell(contacto.asunto, 'min-w-40 font-semibold text-slate-800'), cell(contacto.mensaje, 'min-w-72 max-w-sm whitespace-pre-wrap leading-6'));
-        const action = document.createElement('td'); action.className = 'px-4 py-3 align-top'; const reply = document.createElement('a'); reply.className = 'inline-flex rounded-lg border border-blue-200 px-3 py-2 text-xs font-extrabold text-etv-blue transition hover:bg-etv-sky focus:outline-none focus:ring-4 focus:ring-blue-100'; reply.textContent = 'Responder'; reply.href = `mailto:${encodeURIComponent(contacto.correo || '')}?subject=${encodeURIComponent(`Respuesta a tu solicitud: ${contacto.asunto || ''}`)}`; action.append(reply); row.append(action); body.append(row);
+    const statusLabels = {
+      pendiente: 'Pendiente',
+      en_proceso: 'En proceso',
+      resuelto: 'Resuelto',
+      posible_denuncia_falsa: 'Posible denuncia falsa'
+    };
+
+    const statusOptions = Object.entries(statusLabels);
+
+    const normalizeStatus = (value) => {
+      const normalized = String(value || 'pendiente')
+        .toLowerCase()
+        .trim()
+        .replaceAll(' ', '_');
+
+      return statusLabels[normalized] ? normalized : 'pendiente';
+    };
+
+    const formatDate = (value) => {
+      if (!value) return 'Sin fecha';
+
+      const date = new Date(value);
+
+      if (Number.isNaN(date.getTime())) {
+        return 'Sin fecha';
+      }
+
+      return new Intl.DateTimeFormat('es-CO', {
+        dateStyle: 'medium',
+        timeStyle: 'short'
+      }).format(date);
+    };
+
+    const cell = (value, className = '') => {
+      const element = document.createElement('td');
+      element.className = className;
+      element.textContent = value || 'Sin información';
+      return element;
+    };
+
+    function showAlert(message, type = 'error') {
+      const alert = document.getElementById('pageAlert');
+
+      const styles = {
+        error: 'border-red-200 bg-red-50 text-red-800',
+        success: 'border-emerald-200 bg-emerald-50 text-emerald-800'
+      };
+
+      alert.className = `mb-6 rounded-xl border px-4 py-3 text-sm ${styles[type]}`;
+      alert.textContent = message;
+    }
+
+    function clearAlert() {
+      const alert = document.getElementById('pageAlert');
+
+      alert.className =
+        'mb-6 hidden rounded-xl border px-4 py-3 text-sm';
+
+      alert.textContent = '';
+    }
+
+    function styleStatusSelect(select, status) {
+      select.className = `status-select status-${status}`;
+    }
+
+    function makeStatusSelect(report) {
+      const select = document.createElement('select');
+      const status = normalizeStatus(report.estado);
+
+      select.dataset.reportId = report.id;
+      select.setAttribute(
+        'aria-label',
+        `Estado del reporte ${report.ticket || report.id}`
+      );
+
+      statusOptions.forEach(([value, label]) => {
+        const option = document.createElement('option');
+
+        option.value = value;
+        option.textContent = label;
+        option.selected = value === status;
+
+        select.append(option);
+      });
+
+      styleStatusSelect(select, status);
+
+      select.addEventListener('change', () => {
+        updateStatus(select, report);
+      });
+
+      return select;
+    }
+
+    function renderReports(reports) {
+      const body = document.getElementById('reportsBody');
+
+      body.replaceChildren();
+
+      document.getElementById('totalCount').textContent = reports.length;
+
+      document.getElementById('pendingCount').textContent =
+        reports.filter(
+          report => normalizeStatus(report.estado) === 'pendiente'
+        ).length;
+
+      if (!reports.length) {
+        const row = document.createElement('tr');
+        const empty = document.createElement('td');
+
+        empty.colSpan = 8;
+        empty.className = 'px-4 py-10 text-center text-gray-500';
+        empty.textContent = 'No hay reportes registrados en este momento.';
+
+        row.append(empty);
+        body.append(row);
+        return;
+      }
+
+      reports.forEach((report) => {
+        const row = document.createElement('tr');
+        const risk = report.riesgo || 'Medio';
+
+        const riskBadge = document.createElement('span');
+        riskBadge.className = `risk-badge risk-${risk}`;
+        riskBadge.textContent = risk;
+
+        const riskCell = document.createElement('td');
+        riskCell.className = 'px-4 py-3';
+        riskCell.append(riskBadge);
+
+        const evidenceCell = document.createElement('td');
+        evidenceCell.className = 'px-4 py-3';
+
+        if (report.evidencia_url) {
+          const link = document.createElement('a');
+
+          link.href = report.evidencia_url;
+          link.target = '_blank';
+          link.rel = 'noopener noreferrer';
+          link.className = 'font-bold text-blue-700 hover:underline';
+          link.textContent = 'Ver evidencia';
+
+          evidenceCell.append(link);
+        } else {
+          evidenceCell.textContent = 'Sin evidencia';
+        }
+
+        const statusCell = document.createElement('td');
+        statusCell.className = 'px-4 py-3';
+        statusCell.append(makeStatusSelect(report));
+
+        row.className = 'transition hover:bg-slate-50';
+
+        row.append(
+          cell(formatDate(report.creado_en), 'whitespace-nowrap text-xs'),
+          cell(report.ticket, 'whitespace-nowrap font-bold text-blue-900'),
+          cell(report.usuario_id, 'max-w-36 break-all text-xs text-gray-500'),
+          cell(
+            categoryLabels[report.categoria] || report.categoria,
+            'min-w-48 font-semibold text-gray-800'
+          ),
+          riskCell,
+          cell(
+            report.descripcion,
+            'min-w-72 max-w-sm whitespace-pre-wrap leading-6'
+          ),
+          evidenceCell,
+          statusCell
+        );
+
+        body.append(row);
       });
     }
 
-    async function loadContacts() {
-      const body = document.getElementById('contactsBody'); body.innerHTML = '<tr><td colspan="6" class="px-4 py-8 text-center text-slate-500">Cargando mensajes...</td></tr>';
-      const { data, error } = await supabase.from('contactos').select('id, nombre, correo, asunto, mensaje, created_at').order('created_at', { ascending: false });
-      if (error) { renderContacts([]); showAlert('No fue posible cargar los mensajes. Verifica las políticas RLS de la tabla contactos.'); console.error('Error al cargar contactos:', error); return; }
-      renderContacts(data || []);
+    async function loadReports() {
+      const body = document.getElementById('reportsBody');
+
+      body.innerHTML = `
+        <tr>
+          <td colspan="8" class="px-4 py-8 text-center text-gray-500">
+            Cargando reportes...
+          </td>
+        </tr>
+      `;
+
+      const { data, error } = await supabase
+        .from('reportes')
+        .select(
+          'id,ticket,ruta,categoria,descripcion,ubicacion,fecha_suceso,riesgo,estado,evidencia_url,usuario_id,creado_en'
+        )
+        .order('creado_en', { ascending: false });
+
+      if (error) {
+        renderReports([]);
+
+        showAlert(
+          'No fue posible cargar los reportes. Ejecuta la migración y revisa las políticas RLS.'
+        );
+
+        console.error('Error al cargar reportes:', error);
+        return;
+      }
+
+      renderReports(data || []);
+    }
+
+    async function updateStatus(select, report) {
+      const previous = normalizeStatus(report.estado);
+      const next = normalizeStatus(select.value);
+
+      if (previous === next) {
+        return;
+      }
+
+      select.disabled = true;
+
+      const { error } = await supabase
+        .from('reportes')
+        .update({ estado: next })
+        .eq('id', report.id);
+
+      if (error) {
+        select.value = previous;
+        styleStatusSelect(select, previous);
+
+        showAlert(
+          'No se pudo actualizar el estado. Verifica que tu perfil tenga rol Admin.'
+        );
+
+        console.error('Error al actualizar estado:', error);
+      } else {
+        report.estado = next;
+        styleStatusSelect(select, next);
+
+        showAlert(
+          `El reporte ${report.ticket || report.id} ahora está: ${statusLabels[next]}.`,
+          'success'
+        );
+
+        const rows = [
+          ...document.querySelectorAll('#reportsBody tr')
+        ];
+
+        document.getElementById('pendingCount').textContent =
+          rows.filter(
+            row => row.querySelector('.status-select')?.value === 'pendiente'
+          ).length;
+      }
+
+      select.disabled = false;
     }
 
     async function bootstrap() {
-      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
-      if (sessionError || !session) { window.location.replace('login.html'); return; }
-      const { data: profile, error: profileError } = await supabase.from('perfiles').select('nombre, rol').eq('id', session.user.id).maybeSingle();
-      if (profileError || profile?.rol !== 'Admin') { console.warn('Acceso administrativo bloqueado:', profileError || 'Rol insuficiente'); window.location.replace('index.html'); return; }
-      const name = profile.nombre || session.user.user_metadata?.nombre || session.user.email; document.getElementById('administratorName').textContent = `Sesión de administrador: ${name}`; document.body.removeAttribute('data-app-loading'); await loadContacts();
+      const {
+        data: { session },
+        error: sessionError
+      } = await supabase.auth.getSession();
+
+      if (sessionError || !session) {
+        window.location.replace('login.html');
+        return;
+      }
+
+      const {
+        data: profile,
+        error: profileError
+      } = await supabase
+        .from('perfiles')
+        .select('nombre,rol')
+        .eq('id', session.user.id)
+        .maybeSingle();
+
+      if (profileError || profile?.rol !== 'Admin') {
+        window.location.replace('index.html');
+        return;
+      }
+
+      document.getElementById('administratorName').textContent =
+        `Sesión de administrador: ${
+          profile.nombre || session.user.email
+        }`;
+
+      document.body.removeAttribute('data-app-loading');
+
+      await loadReports();
     }
 
-    document.getElementById('refreshButton').addEventListener('click', async (event) => { clearAlert(); setBusy(event.currentTarget, true); await loadContacts(); setBusy(event.currentTarget, false); });
-    document.getElementById('logoutButton').addEventListener('click', async () => { await supabase.auth.signOut(); window.location.replace('login.html'); });
+    document.getElementById('refreshButton').addEventListener(
+      'click',
+      async () => {
+        clearAlert();
+        await loadReports();
+      }
+    );
+
+    document.getElementById('logoutButton').addEventListener(
+      'click',
+      async () => {
+        await supabase.auth.signOut();
+        window.location.replace('login.html');
+      }
+    );
+
     bootstrap();
   </script>
 </body>
