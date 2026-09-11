@@ -339,12 +339,13 @@
   <script type="module">
     import { supabase } from './conexion.js';
 
-    // CONFIGURACIÓN DE EMAILJS (Reemplaza con tus códigos reales)
+    // CONFIGURACIÓN DE EMAILJS
     const EMAILJS_PUBLIC_KEY = "TrTI8STLHZjvDjBn7"; 
     const EMAILJS_SERVICE_ID = "service_xe0959k"; 
     const EMAILJS_TEMPLATE_ID = "template_er5qquj"; 
 
-    if (typeof emailjs !== "undefined" && EMAILJS_PUBLIC_KEY !== "TrTI8STLHZjvDjBn7") {
+    // Inicializar EmailJS siempre que el SDK esté disponible
+    if (typeof emailjs !== "undefined") {
       emailjs.init(EMAILJS_PUBLIC_KEY);
     }
 
@@ -402,21 +403,8 @@
             const user = session?.user;
 
             if (user) {
-                let userName = user.user_metadata?.nombre || user.user_metadata?.full_name || user.email.split('@')[0];
-
-                try {
-                    const { data: perfilData } = await supabase
-                        .from('perfiles')
-                        .select('nombre')
-                        .eq('id', user.id)
-                        .single();
-
-                    if (perfilData?.nombre) {
-                        userName = perfilData.nombre;
-                    }
-                } catch (err) {
-                    console.error("Error al obtener perfil:", err);
-                }
+                // Obtener nombre directo de la sesión sin consultar la tabla perfiles (evita el error 406)
+                const userName = user.user_metadata?.nombre || user.user_metadata?.full_name || user.user_metadata?.name || user.email.split('@')[0];
 
                 if (navContainer && !document.querySelector(".user-badge-container")) {
                     const loginLink = document.getElementById("nav-login");
@@ -503,19 +491,20 @@
                             alertStatus.style.display = "none";
 
                             try {
+                                // 1. Guardar en la tabla contactos de Supabase
                                 const { error: dbError } = await supabase.from('contactos').insert([
                                     {
                                         usuario_id: user.id,
                                         nombre: nameVal,
                                         correo: emailVal,
                                         asunto: subjectVal,
-                                        mensaje: messageVal,
-                                        creado_en: new Date().toISOString()
+                                        mensaje: messageVal
                                     }
                                 ]);
                                 if (dbError) console.warn("Aviso al guardar en Supabase:", dbError.message);
 
-                                if (typeof emailjs !== "undefined" && EMAILJS_PUBLIC_KEY !== "TrTI8STLHZjvDjBn7") {
+                                // 2. Enviar correo electrónico mediante EmailJS
+                                if (typeof emailjs !== "undefined") {
                                     await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
                                         from_name: nameVal,
                                         from_email: emailVal,
