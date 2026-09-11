@@ -515,7 +515,7 @@
                                 ]);
                                 if (dbError) console.warn("Aviso al guardar en Supabase:", dbError.message);
 
-                                if (typeof emailjs !== "undefined" && EMAILJS_PUBLIC_KEY !== "TU_PUBLIC_KEY_AQUI") {
+                                if (typeof emailjs !== "undefined" && EMAILJS_PUBLIC_KEY !== "TrTI8STLHZjvDjBn7") {
                                     await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
                                         from_name: nameVal,
                                         from_email: emailVal,
