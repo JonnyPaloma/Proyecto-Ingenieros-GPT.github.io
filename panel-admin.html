@@ -6,41 +6,332 @@
   <meta name="description" content="Panel de administración de Elige Tu Vida.">
   <meta name="theme-color" content="#0b1f48">
   <title>Administración | Elige Tu Vida</title>
+
   <link rel="icon" href="assets/images/Favicon Hack.png" type="image/png">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: { etv: { navy: '#0b1f48', blue: '#1559b7', sky: '#e0f2fe', indigo: '#3730a3' } },
-          boxShadow: { panel: '0 18px 45px -24px rgba(11, 31, 72, .28)' }
-        }
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
+  <style>
+    :root {
+      --etv-navy: #0b1f48;
+      --etv-blue: #1559b7;
+      --etv-blue-dark: #103c81;
+      --etv-sky: #e0f2fe;
+      --etv-indigo: #3730a3;
+      --etv-ink: #1c2b43;
+      --etv-muted: #64748b;
+      --etv-line: #e2e8f0;
+      --etv-soft: #f8fafc;
+      --etv-white: #ffffff;
+      --etv-green: #10b981;
+      --etv-red: #dc2626;
+      --shadow-lg: 0 14px 34px -18px rgba(11, 31, 72, 0.22);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+      background: var(--etv-soft);
+      color: var(--etv-ink);
+    }
+
+    [data-app-loading] {
+      visibility: hidden;
+    }
+
+    .container {
+      width: min(1240px, calc(100% - 40px));
+      margin-inline: auto;
+    }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      min-height: 78px;
+      border-bottom: 1px solid var(--etv-line);
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(14px);
+    }
+
+    .site-nav {
+      min-height: 78px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+      text-decoration: none;
+    }
+
+    .brand img {
+      width: 46px;
+      height: 46px;
+      flex: 0 0 46px;
+      object-fit: contain;
+    }
+
+    .brand strong {
+      display: block;
+      color: var(--etv-navy);
+      font-size: 18px;
+      line-height: 1.2;
+      font-weight: 800;
+    }
+
+    .brand small {
+      display: block;
+      margin-top: 2px;
+      color: var(--etv-muted);
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .card {
+      border: 1px solid var(--etv-line);
+      border-radius: 16px;
+      background: var(--etv-white);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .badge-admin {
+      display: inline-flex;
+      align-items: center;
+      min-height: 29px;
+      padding: 5px 11px;
+      border: 1px solid #bfdbfe;
+      border-radius: 999px;
+      background: var(--etv-sky);
+      color: var(--etv-blue);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .summary-card {
+      min-width: 175px;
+      padding: 14px 18px;
+      border: 1px solid #bfdbfe;
+      border-radius: 12px;
+      background: var(--etv-white);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .tab-btn {
+      padding: 11px 4px;
+      border: none;
+      border-bottom: 3px solid transparent;
+      background: transparent;
+      color: var(--etv-muted);
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .tab-btn.active,
+    .tab-btn:hover {
+      color: var(--etv-blue);
+      border-bottom-color: var(--etv-blue);
+    }
+
+    .btn-primary,
+    .btn-outline,
+    .btn-danger,
+    .btn-action {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 10px 16px;
+      border-radius: 9px;
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .btn-primary,
+    .btn-action {
+      border: 1px solid var(--etv-blue);
+      background: var(--etv-blue);
+      color: #ffffff;
+    }
+
+    .btn-primary:hover,
+    .btn-action:hover {
+      border-color: var(--etv-blue-dark);
+      background: var(--etv-blue-dark);
+    }
+
+    .btn-outline {
+      border: 1px solid #bfdbfe;
+      background: #ffffff;
+      color: var(--etv-blue);
+    }
+
+    .btn-outline:hover {
+      background: var(--etv-sky);
+    }
+
+    .btn-danger {
+      border: 1px solid #fecaca;
+      background: #ffffff;
+      color: var(--etv-red);
+    }
+
+    .btn-danger:hover {
+      background: #fef2f2;
+    }
+
+    .btn-primary:focus,
+    .btn-outline:focus,
+    .btn-danger:focus,
+    .btn-action:focus {
+      outline: none;
+      box-shadow: 0 0 0 4px rgba(21, 89, 183, 0.14);
+    }
+
+    .table-container {
+      overflow-x: auto;
+      border: 1px solid #f1f5f9;
+      border-radius: 12px;
+    }
+
+    .admin-table {
+      width: 100%;
+      min-width: 900px;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    .admin-table th {
+      padding: 12px 16px;
+      background: #f8fafc;
+      color: var(--etv-muted);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .admin-table td {
+      padding: 13px 16px;
+      border-top: 1px solid #f1f5f9;
+      vertical-align: top;
+      color: #475569;
+      font-size: 14px;
+    }
+
+    .admin-table tr:hover td {
+      background: #f8fafc;
+    }
+
+    @media (max-width: 700px) {
+      .container {
+        width: min(100% - 28px, 1240px);
       }
-    };
-  </script>
-  <style>[data-app-loading] { visibility: hidden; }</style>
+
+      .site-nav {
+        min-height: 70px;
+      }
+
+      .brand img {
+        width: 40px;
+        height: 40px;
+        flex-basis: 40px;
+      }
+
+      .brand strong {
+        font-size: 16px;
+      }
+
+      .brand small,
+      .badge-admin {
+        display: none;
+      }
+    }
+  </style>
+
   <script type="module" src="global-auth.js"></script>
 </head>
-<body class="min-h-screen bg-slate-50 font-sans text-slate-800" data-app-loading>
-  <header class="border-b border-slate-200 bg-white/95 backdrop-blur">
-    <div class="mx-auto flex min-h-20 w-[min(1240px,calc(100%-2rem))] items-center justify-between gap-4">
-      <a href="index.html" class="flex min-w-0 items-center gap-3" aria-label="Ir al inicio de Elige Tu Vida">
-        <img src="assets/images/Escudo Elige Tu Vida Hack.png" alt="Logo Elige Tu Vida" class="h-11 w-11 shrink-0 object-contain">
-        <span class="min-w-0"><strong class="block truncate text-base font-extrabold text-etv-navy sm:text-lg">Elige Tu Vida</strong><small class="block truncate text-xs font-medium text-slate-500">Control institucional</small></span>
+
+<body class="min-h-screen flex flex-col" data-app-loading>
+  <header class="site-header">
+    <div class="container site-nav">
+      <a href="index.html" class="brand" aria-label="Ir al inicio de Elige Tu Vida">
+        <img src="assets/images/Escudo Elige Tu Vida Hack.png" alt="Logo Elige Tu Vida">
+        <span>
+          <strong>Elige Tu Vida</strong>
+          <small>Control institucional</small>
+        </span>
       </a>
-      <div class="flex items-center gap-3"><span class="hidden rounded-full bg-etv-sky px-3 py-1.5 text-xs font-extrabold text-etv-blue sm:inline">Administrador</span><button id="logoutButton" type="button" class="rounded-lg border border-red-200 px-3 py-2 text-sm font-bold text-red-700 transition hover:bg-red-50 focus:outline-none focus:ring-4 focus:ring-red-100">Cerrar sesión</button></div>
+
+      <div class="flex items-center gap-3">
+        <span class="badge-admin">Administrador</span>
+        <button id="logoutButton" type="button" class="btn-danger">Cerrar sesión</button>
+      </div>
     </div>
   </header>
 
-  <main class="mx-auto w-[min(1240px,calc(100%-2rem))] py-8 sm:py-10">
-    <section class="mb-8 flex flex-col justify-between gap-5 md:flex-row md:items-end">
-      <div><p class="mb-2 text-xs font-extrabold uppercase tracking-[0.12em] text-etv-blue">Administración segura</p><h1 class="text-3xl font-extrabold tracking-tight text-etv-navy sm:text-4xl">Mensajes institucionales</h1><p id="administratorName" class="mt-2 text-sm leading-6 text-slate-600">Verificando sesión...</p></div>
-      <div class="rounded-xl border border-blue-100 bg-white px-5 py-3 shadow-panel"><p class="text-xs font-bold uppercase tracking-wide text-slate-400">Total de mensajes</p><p id="totalCount" class="mt-1 text-2xl font-extrabold text-etv-navy">0</p></div>
+  <main class="container flex-1 py-8 sm:py-10">
+    <section class="mb-8 flex flex-col md:flex-row md:items-end md:justify-between gap-5">
+      <div>
+        <p class="mb-2 text-xs font-extrabold uppercase tracking-wider" style="color: var(--etv-blue);">
+          Administración segura
+        </p>
+        <h1 class="text-3xl sm:text-4xl font-extrabold" style="color: var(--etv-navy);">
+          Mensajes institucionales
+        </h1>
+        <p id="administratorName" class="mt-2 text-sm leading-6 text-gray-600">
+          Verificando sesión...
+        </p>
+      </div>
+
+      <div class="summary-card">
+        <p class="text-xs font-extrabold uppercase tracking-wide text-gray-400">Total de mensajes</p>
+        <p id="totalCount" class="mt-1 text-2xl font-extrabold" style="color: var(--etv-navy);">0</p>
+      </div>
     </section>
+
     <div id="pageAlert" class="mb-6 hidden rounded-xl border px-4 py-3 text-sm" role="status" aria-live="polite"></div>
-    <section class="rounded-2xl border border-slate-200 bg-white p-5 shadow-panel sm:p-7">
-      <div class="mb-5 flex flex-col justify-between gap-3 sm:flex-row sm:items-center"><div><h2 class="text-xl font-extrabold text-etv-navy">Bandeja de contacto</h2><p class="mt-1 text-sm text-slate-500">Mensajes enviados desde el formulario de contacto.</p></div><button id="refreshButton" type="button" class="inline-flex items-center justify-center rounded-lg bg-etv-blue px-4 py-2.5 text-sm font-extrabold text-white transition hover:bg-etv-navy focus:outline-none focus:ring-4 focus:ring-blue-200 disabled:cursor-not-allowed disabled:opacity-60">Actualizar</button></div>
-      <div class="overflow-x-auto rounded-xl border border-slate-100"><table class="min-w-[880px] w-full divide-y divide-slate-100 text-left text-sm"><thead class="bg-slate-50 text-xs font-bold uppercase tracking-wide text-slate-500"><tr><th class="px-4 py-3">Fecha</th><th class="px-4 py-3">Remitente</th><th class="px-4 py-3">Correo</th><th class="px-4 py-3">Asunto</th><th class="px-4 py-3">Mensaje</th><th class="px-4 py-3">Acción</th></tr></thead><tbody id="contactsBody" class="divide-y divide-slate-100"><tr><td colspan="6" class="px-4 py-8 text-center text-slate-500">Verificando permisos...</td></tr></tbody></table></div>
+
+    <section class="card p-5 sm:p-7">
+      <div class="mb-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        <div>
+          <h2 class="text-xl font-extrabold" style="color: var(--etv-navy);">Bandeja de contacto</h2>
+          <p class="mt-1 text-sm text-gray-500">Mensajes enviados desde el formulario de contacto.</p>
+        </div>
+
+        <button id="refreshButton" type="button" class="btn-primary">Actualizar</button>
+      </div>
+
+      <div class="table-container">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Remitente</th>
+              <th>Correo</th>
+              <th>Asunto</th>
+              <th>Mensaje</th>
+              <th>Acción</th>
+            </tr>
+          </thead>
+          <tbody id="contactsBody">
+            <tr>
+              <td colspan="6" class="text-center text-gray-500">Verificando permisos...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </section>
   </main>
 
