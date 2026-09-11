@@ -764,6 +764,22 @@
           </div>
 
           <div class="field">
+            <label for="category">Categoría del reporte</label>
+            <select id="category" name="category" required>
+              <option value="">Selecciona una categoría</option>
+              <option value="acoso_escolar">Acoso escolar o bullying</option>
+              <option value="violencia_fisica">Violencia física</option>
+              <option value="amenazas_intimidacion">Amenazas o intimidación</option>
+              <option value="discriminacion">Discriminación o exclusión</option>
+              <option value="violencia_sexual">Violencia sexual o abuso</option>
+              <option value="salud_emocional">Salud emocional o riesgo de vida</option>
+              <option value="conflicto_convivencia">Conflicto de convivencia</option>
+              <option value="otro">Otra situación</option>
+            </select>
+            <small id="categoryError" class="error"></small>
+          </div>
+
+          <div class="field">
             <label for="description">
               <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
               ¿Qué está ocurriendo?
@@ -1098,7 +1114,7 @@
         reportForm.addEventListener("submit", async (event) => {
           event.preventDefault();
           const button = document.getElementById("reportSubmit");
-          ["routeError", "descriptionError", "locationError", "dateError", "confirmReportError", "evidenceError"].forEach((id) => setError(id, ""));
+          ["routeError", "categoryError", "descriptionError", "locationError", "dateError", "confirmReportError", "evidenceError"].forEach((id) => setError(id, ""));
 
           const { data: { session: currentSession } } = await supabase.auth.getSession();
           if (!currentSession) {
@@ -1109,8 +1125,10 @@
 
           const confirmed = document.getElementById("confirmReport").checked;
           const textVal = description.value.trim();
+          const categoryVal = document.getElementById("category").value;
           let valid = true;
 
+          if (!categoryVal) { setError("categoryError", "Selecciona una categoría para orientar el seguimiento."); valid = false; }
           if (textVal.length < 10) { setError("descriptionError", "Escribe al menos 10 caracteres."); valid = false; }
           if (!confirmed) { setError("confirmReportError", "Debes confirmar la veracidad del reporte."); valid = false; }
           if (!valid) { setAlert("reportAlert", "Revisa los campos requeridos.", false); return; }
@@ -1150,10 +1168,12 @@
               {
                 ticket: ticketCode,
                 ruta: routeVal,
+                categoria: categoryVal,
                 descripcion: textVal,
                 ubicacion: locationVal || null,
                 fecha_suceso: dateVal || null,
                 riesgo: riskLevel,
+                estado: "pendiente",
                 evidencia_url: imageUrl,
                 usuario_id: userId,
                 creado_en: new Date().toISOString()
