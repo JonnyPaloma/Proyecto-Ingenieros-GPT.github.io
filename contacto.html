@@ -74,7 +74,6 @@
     a { text-decoration: none; color: inherit; }
     .container { width: min(1240px, calc(100% - 48px)); margin-inline: auto; }
 
-    /* Header Consistente */
     .site-header {
       position: sticky;
       z-index: 50;
@@ -157,7 +156,6 @@
       margin-left: auto;
     }
 
-    /* Estructura de Contacto */
     .form-page { flex: 1; display: flex; flex-direction: column; padding: 40px 0 60px; }
     .form-head { padding: 40px 0 30px; text-align: center; }
     .form-head h1 { color: var(--etv-navy); font-size: 34px; font-weight: 800; margin-bottom: 8px; }
@@ -173,7 +171,6 @@
     .contact-item { display: flex; align-items: flex-start; gap: 12px; font-size: 14px; color: #334155; }
     .contact-item strong { display: block; color: var(--etv-navy); font-size: 13px; text-transform: uppercase; letter-spacing: .05em; }
 
-    /* Formulario */
     .form-group { margin-bottom: 20px; }
     .form-label { display: block; font-size: 13px; font-weight: 700; color: var(--etv-navy); margin-bottom: 8px; }
     .form-input, .form-textarea {
@@ -339,12 +336,11 @@
   <script type="module">
     import { supabase } from './conexion.js';
 
-    // CONFIGURACIÓN DE EMAILJS
+    // DATOS EXACTOS DE TUS CAPTURAS DE PANTALLA
     const EMAILJS_PUBLIC_KEY = "TrTI8STLHZjvDjBn7"; 
     const EMAILJS_SERVICE_ID = "service_xe0959k"; 
-    const EMAILJS_TEMPLATE_ID = "template_er5qquj"; 
+    const EMAILJS_TEMPLATE_ID = "template_kiiwfgl"; 
 
-    // Inicializar EmailJS siempre que el SDK esté disponible
     if (typeof emailjs !== "undefined") {
       emailjs.init(EMAILJS_PUBLIC_KEY);
     }
@@ -403,7 +399,6 @@
             const user = session?.user;
 
             if (user) {
-                // Obtener nombre directo de la sesión sin consultar la tabla perfiles (evita el error 406)
                 const userName = user.user_metadata?.nombre || user.user_metadata?.full_name || user.user_metadata?.name || user.email.split('@')[0];
 
                 if (navContainer && !document.querySelector(".user-badge-container")) {
@@ -491,7 +486,7 @@
                             alertStatus.style.display = "none";
 
                             try {
-                                // 1. Guardar en la tabla contactos de Supabase
+                                // 1. Guardar en Supabase
                                 const { error: dbError } = await supabase.from('contactos').insert([
                                     {
                                         usuario_id: user.id,
@@ -503,7 +498,7 @@
                                 ]);
                                 if (dbError) console.warn("Aviso al guardar en Supabase:", dbError.message);
 
-                                // 2. Enviar correo electrónico mediante EmailJS
+                                // 2. Enviar por EmailJS
                                 if (typeof emailjs !== "undefined") {
                                     await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
                                         from_name: nameVal,
