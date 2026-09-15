@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="es-CO">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Asistente conversacional para orientación y reportes seguros de Elige Tu Vida.">
+  <meta name="theme-color" content="#0b1f48">
+  <title>Asistente Inteligente Elige Tu vida</title>
+  <link rel="icon" href="assets/images/Favicon Hack.png" type="image/png">
+  <link rel="stylesheet" href="assistant.css">
+  <script type="module" src="global-auth.js"></script>
+  <script type="module" src="global-nav.js"></script>
+</head>
+<body>
+  <main class="assistant-page">
+    <section class="assistant-intro" aria-labelledby="assistant-title">
+      <p class="eyebrow">Orientación y reporte en un solo lugar</p>
+      <h1 id="assistant-title">Asistente Inteligente Elige Tu vida</h1>
+      <p>Cuéntanos lo ocurrido a tu ritmo. El asistente reunirá contigo la información necesaria y te permitirá adjuntar evidencias antes de registrar el reporte.</p>
+      <div class="privacy-note" role="note">🔒 Tu reporte solo se guardará cuando revises el resumen y pulses “Confirmar y registrar”.</div>
+    </section>
+    <section class="assistant-shell" aria-label="Asistente de reporte">
+      <aside class="progress-panel" aria-label="Progreso del reporte">
+        <h2>Progreso</h2>
+        <ol id="progressSteps">
+          <li data-step="safety"><span>1</span> Seguridad inmediata</li>
+          <li data-step="description"><span>2</span> Qué ocurrió</li>
+          <li data-step="details"><span>3</span> Cuándo y quiénes</li>
+          <li data-step="evidence"><span>4</span> Evidencias</li>
+          <li data-step="review"><span>5</span> Revisar y registrar</li>
+        </ol>
+        <div class="session-state" id="sessionState">Comprobando sesión…</div>
+      </aside>
+      <div class="chat-card">
+        <header class="chat-card__header">
+          <div><span class="online-dot"></span><strong>Asistente disponible</strong><small id="saveStatus">Conversación aún no guardada</small></div>
+          <button id="resetChat" class="secondary-button" type="button">Reiniciar</button>
+        </header>
+        <div id="chatMessages" class="messages" role="log" aria-live="polite" aria-relevant="additions"></div>
+        <div id="quickReplies" class="quick-replies" aria-label="Respuestas rápidas"></div>
+        <section id="attachmentPanel" class="attachment-panel" aria-labelledby="attachmentTitle">
+          <div><strong id="attachmentTitle">Adjuntar evidencias</strong><p>Fotos, imágenes, videos, audio, PDF o documentos. Máximo 5 archivos, 20 MB cada uno.</p></div>
+          <label class="attach-button" for="evidenceInput">📎 Seleccionar archivos</label>
+          <input id="evidenceInput" type="file" multiple accept="image/*,video/*,audio/*,.pdf,.doc,.docx,.txt" hidden>
+          <ul id="attachmentList" class="attachment-list"></ul>
+          <p id="attachmentError" class="field-error" role="alert"></p>
+        </section>
+        <section id="reportSummary" class="report-summary" hidden aria-labelledby="summaryTitle">
+          <h2 id="summaryTitle">Revisa tu reporte</h2>
+          <dl id="summaryDetails"></dl>
+          <label class="truth-check"><input id="truthConfirmation" type="checkbox"> Confirmo que la información refleja lo que conozco de la situación.</label>
+          <div class="summary-actions"><button id="editReport" type="button" class="secondary-button">Seguir conversando</button><button id="submitReport" type="button" class="primary-button" disabled>Confirmar y registrar</button></div>
+        </section>
+        <form id="chatForm" class="composer">
+          <label class="sr-only" for="chatInput">Escribe tu respuesta</label>
+          <textarea id="chatInput" rows="1" maxlength="4000" placeholder="Escribe con tranquilidad…" required></textarea>
+          <button id="sendButton" class="primary-button" type="submit">Enviar</button>
+        </form>
+        <div id="liveStatus" class="sr-only" role="status" aria-live="assertive"></div>
+      </div>
+    </section>
+  </main>
+  <dialog id="successDialog" class="success-dialog">
+    <div class="success-icon">✓</div><h2>Reporte registrado de forma segura</h2>
+    <p>Tu código de seguimiento es <strong id="ticketResult"></strong>.</p><p>Guárdalo para consultar el estado en “Mis reportes”.</p>
+    <a class="primary-button" href="panel-usuario.html">Ver mis reportes</a><button id="closeSuccess" class="secondary-button" type="button">Cerrar</button>
+  </dialog>
+  <script type="module" src="assistant.js"></script>
+</body>
+</html>
