@@ -17,14 +17,15 @@ function request(body, token = 'token-de-prueba') {
   return { method: 'POST', headers: { authorization: `Bearer ${token}` }, body };
 }
 
-async function withMockedServices(callback, { validSession = true, geminiPayload = null } = {}) {
+async function withMockedServices(callback, { validSession = true, geminiPayload = null, geminiApiKey = 'clave-gemini-de-prueba' } = {}) {
   const originalFetch = global.fetch;
   const originalEnvironment = {
     GEMINI_API_KEY: process.env.GEMINI_API_KEY,
     SUPABASE_URL: process.env.SUPABASE_URL,
     SUPABASE_PUBLISHABLE_KEY: process.env.SUPABASE_PUBLISHABLE_KEY
   };
-  process.env.GEMINI_API_KEY = 'clave-gemini-de-prueba';
+  if (geminiApiKey) process.env.GEMINI_API_KEY = geminiApiKey;
+  else delete process.env.GEMINI_API_KEY;
   process.env.SUPABASE_URL = 'https://proyecto-prueba.supabase.co';
   process.env.SUPABASE_PUBLISHABLE_KEY = 'clave-publicable-de-prueba';
   global.fetch = async url => {
@@ -88,6 +89,17 @@ test('valida mensajes vacíos y demasiado largos después de validar la sesión'
     await handler(request({ message: 'x'.repeat(4001) }), long);
     assert.equal(long.code, 413);
   });
+});
+
+test('mantiene el flujo guiado si GEMINI_API_KEY no está configurada', async () => {
+  await withMockedServices(async () => {
+    const res = response();
+    await handler(request({ message: 'Sí, estoy a salvo', history: [], draft: {} }), res);
+    assert.equal(res.code, 200);
+    assert.equal(res.payload.aiAvailable, false);
+    assert.equal(res.payload.nextStep, 'description');
+    assert.match(res.payload.reply, /qué ocurrió/i);
+  }, { geminiApiKey: null });
 });
 
 test('el flujo alternativo completa todos los campos sin inventar datos desconocidos', async () => {
