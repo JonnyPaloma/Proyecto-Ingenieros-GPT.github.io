@@ -40,6 +40,7 @@ let busy = false;
 let session = null;
 let pendingCorrection = '';
 let draft = emptyDraft();
+let guidedFallbackActive = false;
 
 function emptyDraft() {
   return {
@@ -56,6 +57,86 @@ function emptyDraft() {
     additional_answered: false,
     immediate_risk: false
   };
+}
+
+function normalizeText(value) {
+  return String(value || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+}
+
+function inferCategoryLocally(text) {
+  const value = normalizeText(text);
+  if (/bullying|acoso escolar|se burl|hostig/.test(value)) return 'acoso_escolar';
+  if (/golp|agred|pelea|violencia fisica/.test(value)) return 'violencia_fisica';
+  if (/amenaz|intimid|chantaj/.test(value)) return 'amenazas_intimidacion';
+  if (/discrimin|exclu|racis|homofob/.test(value)) return 'discriminacion';
+  if (/abuso sexual|violacion|tocamiento|violencia sexual/.test(value)) return 'violencia_sexual';
+  if (/suicid|autoles|ansiedad|depres|salud emocional/.test(value)) return 'salud_emocional';
+  if (/internet|redes|cuenta|foto|mensaje|seguridad digital|ciber/.test(value)) return 'seguridad_digital';
+  if (/conflicto|discusion|convivencia/.test(value)) return 'conflicto_convivencia';
+  return '';
+}
+
+function guidedReply(step) {
+  const replies = {
+    safety: draft.safe_now === false
+      ? 'Tu seguridad es lo primero. Aléjate si puedes hacerlo sin exponerte y busca a un adulto de confianza o a los servicios de emergencia de tu localidad. ¿Ya estás acompañado o en un lugar seguro?'
+      : 'Antes de continuar, ¿te encuentras a salvo en este momento?',
+    description: 'Estoy aquí para escucharte. ¿Puedes contarme brevemente qué ocurrió?',
+    category: draft.category
+      ? `Por lo que cuentas, la situación podría corresponder a “${CATEGORY_LABELS[draft.category]}”. ¿Es correcto o prefieres elegir otro tipo?`
+      : '¿Qué tipo de situación describe mejor lo ocurrido?',
+    occurred_at: '¿Cuándo ocurrió, aunque sea de forma aproximada?',
+    location: '¿Dónde ocurrió? Si no lo sabes, puedes indicarlo y continuar.',
+    involved: '¿Qué personas estuvieron involucradas? No necesitas dar información que no conozcas.',
+    witnesses: '¿Hubo testigos o alguien más que conozca lo sucedido?',
+    evidence: '¿Tienes alguna evidencia que quieras adjuntar? Es opcional y puedes usar el botón “Seleccionar archivos”.',
+    additional_info: '¿Hay algún otro dato importante que quieras incluir? Puedes continuar sin agregar más información.',
+    review: 'La información esencial está completa. Revisa el resumen, corrige lo que necesites y confirma solo cuando refleje lo que deseas denunciar.'
+  };
+  return replies[step];
+}
+
+// Mantiene el flujo disponible si /api/chat está temporalmente fuera de servicio.
+// No guarda nada: el registro sigue requiriendo sesión y la función protegida de Supabase.
+function localGuidedResponse(message, correctionField = '') {
+  const value = String(message || '').trim();
+  const normalized = normalizeText(value);
+  const step = correctionField || currentDetailStep();
+
+  if (step === 'safety') {
+    if (/\bno\b|peligro|riesgo|urgente|amenaza ahora|no estoy a salvo|necesito ayuda/.test(normalized)) {
+      draft.safe_now = false;
+      draft.immediate_risk = true;
+    } else if (/\bsi\b|estoy a salvo|estoy bien|no hay peligro|lugar seguro|adulto de confianza/.test(normalized)) {
+      draft.safe_now = true;
+    }
+  } else if (step === 'description') {
+    draft.description = value;
+    if (!draft.category) draft.category = inferCategoryLocally(value);
+  } else if (step === 'category') {
+    const selected = Object.hasOwn(CATEGORY_LABELS, value) ? value : inferCategoryLocally(value);
+    if (selected) {
+      draft.category = selected;
+      draft.category_confirmed = true;
+    } else if (/^(si|correcto|asi es|de acuerdo)$/.test(normalized) && draft.category) {
+      draft.category_confirmed = true;
+    } else {
+      draft.category = 'otro';
+      draft.category_confirmed = true;
+    }
+  } else if (step === 'occurred_at') draft.occurred_at = value;
+  else if (step === 'location') draft.location = value;
+  else if (step === 'involved') draft.involved = value;
+  else if (step === 'witnesses') draft.witnesses = value;
+  else if (step === 'evidence') draft.evidence_answered = true;
+  else if (step === 'additional_info') {
+    draft.additional_answered = true;
+    draft.additional_info = /no deseo|nada mas|sin informacion|no tengo mas/.test(normalized) ? '' : value;
+  }
+
+  if (files.length) draft.evidence_answered = true;
+  const nextStep = currentDetailStep();
+  return { reportDraft: draft, nextStep, reply: guidedReply(nextStep) };
 }
 
 function announce(text) {
@@ -301,6 +382,10 @@ async function sendMessage(rawText) {
     pendingCorrection = '';
     elements.chatInput.placeholder = 'Escribe con tranquilidad';
     typing.remove();
+    if (data.aiAvailable === false && !guidedFallbackActive) {
+      addMessage('El servicio de IA está temporalmente no disponible. Continuaré con preguntas guiadas para que no pierdas tu avance.', 'system');
+    }
+    guidedFallbackActive = data.aiAvailable === false;
     addMessage(data.reply, 'bot');
     history.push({ role: 'model', text: data.reply });
     history = history.slice(-18);
@@ -308,7 +393,18 @@ async function sendMessage(rawText) {
     elements.saveStatus.textContent = isReady() ? 'Resumen listo para revisar' : 'Borrador temporal, aún no guardado';
   } catch (error) {
     typing.remove();
-    addMessage('No pude conectarme en este momento. Tu respuesta sigue en pantalla; inténtalo nuevamente.', 'bot error');
+    const backup = localGuidedResponse(text, correctionField);
+    pendingCorrection = '';
+    elements.chatInput.placeholder = 'Escribe con tranquilidad';
+    if (!guidedFallbackActive) {
+      addMessage('No se pudo contactar el servicio remoto. Continuaré con preguntas guiadas para que no pierdas tu avance.', 'system');
+    }
+    guidedFallbackActive = true;
+    addMessage(backup.reply, 'bot');
+    history.push({ role: 'model', text: backup.reply });
+    history = history.slice(-18);
+    updateConversationControls(backup.nextStep);
+    elements.saveStatus.textContent = isReady() ? 'Resumen listo para revisar' : 'Borrador temporal, aún no guardado';
     console.error('Error al consultar el asistente:', error);
   } finally {
     setBusy(false);
@@ -488,6 +584,7 @@ function resetConversation() {
   history = [];
   files = [];
   pendingCorrection = '';
+  guidedFallbackActive = false;
   draft = emptyDraft();
   elements.chatMessages.replaceChildren();
   elements.attachmentList.replaceChildren();
