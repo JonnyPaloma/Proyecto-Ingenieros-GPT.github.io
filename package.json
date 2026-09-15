@@ -1,9 +1,0 @@
-{
-  "name": "elige-tu-vida",
-  "private": true,
-  "type": "module",
-  "scripts": {
-    "test": "node --test tests/*.test.js",
-    "check": "node --check assistant.js && node --check global-nav.js && node --check api/chat.js"
-  }
-}
