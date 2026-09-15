@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="es-CO">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Recupera de forma segura el acceso a tu cuenta de Elige Tu Vida.">
+  <meta name="theme-color" content="#071a3d">
+  <title>Recuperar contraseña | Elige Tu Vida</title>
+  <link rel="icon" href="assets/images/Favicon Hack.png" type="image/png">
+  <style>
+    :root{--navy:#071a3d;--blue:#0756a6;--ink:#15253d;--muted:#607087;--line:#dce6f1;--red:#b42318;--green:#087b5b}
+    *{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 15% 10%,#dcefff,transparent 28rem),#f6f9fc;color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+    main{display:grid;place-items:center;min-height:650px;padding:58px 18px 74px}.recovery-shell{display:grid;width:min(900px,100%);grid-template-columns:.9fr 1.1fr;overflow:hidden;border:1px solid var(--line);border-radius:22px;background:#fff;box-shadow:0 30px 80px -44px rgba(7,26,61,.45)}
+    .recovery-side{padding:48px 38px;background:linear-gradient(145deg,#071a3d,#0b4f93);color:#fff}.recovery-side svg{width:52px;height:52px;margin-bottom:25px;padding:12px;border-radius:15px;background:rgba(255,255,255,.12);fill:none;stroke:#fff;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}.recovery-side h1{margin:0;font-size:clamp(29px,5vw,40px);line-height:1.08;letter-spacing:-.035em}.recovery-side p{margin:17px 0 0;color:#c8dcf2;line-height:1.7}
+    .recovery-card{padding:48px 40px}.eyebrow{margin:0 0 8px;color:var(--blue);font-size:11px;font-weight:850;letter-spacing:.1em;text-transform:uppercase}.recovery-card h2{margin:0;color:var(--navy);font-size:26px;letter-spacing:-.025em}.intro{margin:11px 0 25px;color:var(--muted);font-size:14px;line-height:1.6}.field{display:grid;gap:7px;margin-bottom:16px}.field label{font-size:13px;font-weight:800}.field input{width:100%;min-height:48px;padding:11px 13px;border:1.5px solid var(--line);border-radius:11px;color:var(--ink);font:inherit}.field input:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 4px rgba(7,86,166,.12)}
+    .button{display:inline-flex;width:100%;min-height:46px;align-items:center;justify-content:center;padding:10px 16px;border:1px solid var(--blue);border-radius:10px;background:var(--blue);color:#fff;font:800 14px inherit;cursor:pointer}.button:hover{background:#06448a}.button:disabled{opacity:.55;cursor:not-allowed}.back-link{display:block;margin-top:20px;color:var(--blue);font-size:13px;font-weight:800;text-align:center;text-decoration:none}.back-link:hover{text-decoration:underline}.alert{margin:0 0 18px;padding:11px 13px;border:1px solid #f2c4bf;border-radius:10px;background:#fff3f2;color:var(--red);font-size:13px;line-height:1.5}.alert.ok{border-color:#bde4d6;background:#effbf6;color:var(--green)}.error{min-height:16px;color:var(--red);font-size:11px}.recovery-card section[hidden]{display:none}
+    @media(max-width:720px){.recovery-shell{grid-template-columns:1fr}.recovery-side{padding:34px 25px}.recovery-side svg{margin-bottom:17px}.recovery-card{padding:35px 25px}}@media(max-width:420px){main{padding:25px 0}.recovery-shell{border-right:0;border-left:0;border-radius:0}}
+  </style>
+  <script type="module" src="global-nav.js"></script>
+</head>
+<body>
+  <main>
+    <article class="recovery-shell">
+      <section class="recovery-side">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 10V8a5 5 0 0 1 10 0v2m-11 0h12v10H6V10Z"/><path d="M12 14v2"/></svg>
+        <h1>Recupera tu acceso con seguridad</h1>
+        <p>Supabase enviará un enlace de recuperación al correo asociado. El enlace es temporal y solo permite cambiar la contraseña de esa cuenta.</p>
+      </section>
+      <div class="recovery-card">
+        <section id="requestSection" aria-labelledby="requestTitle">
+          <p class="eyebrow">Primer paso</p>
+          <h2 id="requestTitle">Solicita el enlace</h2>
+          <p class="intro">Escribe tu correo. Por privacidad, verás la misma confirmación tanto si la cuenta existe como si no.</p>
+          <div id="requestAlert" class="alert" role="status" aria-live="polite" hidden></div>
+          <form id="requestForm" novalidate>
+            <div class="field">
+              <label for="recoveryEmail">Correo electrónico</label>
+              <input id="recoveryEmail" name="email" type="email" autocomplete="email" required placeholder="nombre@colegio.edu.co">
+              <small id="emailError" class="error"></small>
+            </div>
+            <button id="requestButton" class="button" type="submit">Enviar enlace de recuperación</button>
+          </form>
+          <a class="back-link" href="login.html">Volver a iniciar sesión</a>
+        </section>
+
+        <section id="updateSection" aria-labelledby="updateTitle" hidden>
+          <p class="eyebrow">Enlace validado</p>
+          <h2 id="updateTitle">Crea una nueva contraseña</h2>
+          <p class="intro">Usa una contraseña distinta de las anteriores y que no utilices en otros servicios.</p>
+          <div id="updateAlert" class="alert" role="status" aria-live="polite" hidden></div>
+          <form id="updateForm" novalidate>
+            <div class="field">
+              <label for="newPassword">Nueva contraseña</label>
+              <input id="newPassword" name="password" type="password" autocomplete="new-password" minlength="8" required placeholder="Mínimo 8 caracteres">
+              <small id="passwordError" class="error"></small>
+            </div>
+            <div class="field">
+              <label for="confirmPassword">Confirmar contraseña</label>
+              <input id="confirmPassword" name="confirmation" type="password" autocomplete="new-password" minlength="8" required placeholder="Repite la contraseña">
+              <small id="confirmationError" class="error"></small>
+            </div>
+            <button id="updateButton" class="button" type="submit">Actualizar contraseña</button>
+          </form>
+          <a class="back-link" href="login.html">Volver a iniciar sesión</a>
+        </section>
+      </div>
+    </article>
+  </main>
+
+  <script type="module">
+    import { supabase } from './conexion.js';
+
+    const requestSection = document.getElementById('requestSection');
+    const updateSection = document.getElementById('updateSection');
+
+    function showAlert(id, message, success = false) {
+      const element = document.getElementById(id);
+      element.hidden = !message;
+      element.textContent = message;
+      element.classList.toggle('ok', success);
+    }
+
+    function setBusy(button, value, busyText) {
+      if (!button.dataset.label) button.dataset.label = button.textContent;
+      button.disabled = value;
+      button.textContent = value ? busyText : button.dataset.label;
+    }
+
+    function showUpdateMode() {
+      requestSection.hidden = true;
+      updateSection.hidden = false;
+      document.getElementById('newPassword').focus();
+    }
+
+    document.getElementById('requestForm').addEventListener('submit', async event => {
+      event.preventDefault();
+      const email = document.getElementById('recoveryEmail').value.trim().toLowerCase();
+      const errorElement = document.getElementById('emailError');
+      const button = document.getElementById('requestButton');
+      errorElement.textContent = '';
+      showAlert('requestAlert', '');
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        errorElement.textContent = 'Escribe un correo válido.';
+        return;
+      }
+      setBusy(button, true, 'Enviando enlace');
+      const redirectTo = new URL('recuperar-contrasena.html', window.location.href).href;
+      const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo });
+      setBusy(button, false, '');
+      if (error) {
+        console.error('Error solicitando recuperación:', error);
+        showAlert('requestAlert', 'No fue posible enviar el enlace. Espera un momento e inténtalo otra vez.');
+        return;
+      }
+      showAlert('requestAlert', 'Si existe una cuenta con ese correo, recibirás un enlace de recuperación. Revisa también la carpeta de correo no deseado.', true);
+    });
+
+    document.getElementById('updateForm').addEventListener('submit', async event => {
+      event.preventDefault();
+      const password = document.getElementById('newPassword').value;
+      const confirmation = document.getElementById('confirmPassword').value;
+      const passwordError = document.getElementById('passwordError');
+      const confirmationError = document.getElementById('confirmationError');
+      const button = document.getElementById('updateButton');
+      passwordError.textContent = '';
+      confirmationError.textContent = '';
+      showAlert('updateAlert', '');
+      if (password.length < 8) {
+        passwordError.textContent = 'Usa al menos 8 caracteres.';
+        return;
+      }
+      if (password !== confirmation) {
+        confirmationError.textContent = 'Las contraseñas no coinciden.';
+        return;
+      }
+      setBusy(button, true, 'Actualizando contraseña');
+      const { error } = await supabase.auth.updateUser({ password });
+      setBusy(button, false, '');
+      if (error) {
+        console.error('Error actualizando contraseña:', error);
+        showAlert('updateAlert', 'El enlace venció o no pudo validarse. Solicita uno nuevo.');
+        return;
+      }
+      await supabase.auth.signOut();
+      document.getElementById('updateForm').hidden = true;
+      showAlert('updateAlert', 'Tu contraseña fue actualizada. Ya puedes iniciar sesión.', true);
+    });
+
+    supabase.auth.onAuthStateChange((event, session) => {
+      if (event === 'PASSWORD_RECOVERY' && session) showUpdateMode();
+    });
+
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session && (window.location.hash || new URLSearchParams(window.location.search).has('code'))) showUpdateMode();
+  </script>
+</body>
+</html>
