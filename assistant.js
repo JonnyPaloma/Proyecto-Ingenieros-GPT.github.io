@@ -3,6 +3,7 @@ import { supabase } from './conexion.js';
 const MAX_FILES = 5;
 const MAX_FILE_BYTES = 20 * 1024 * 1024;
 const MAX_TOTAL_BYTES = 50 * 1024 * 1024;
+const SESSION_CHECK_TIMEOUT_MS = 4000;
 const ALLOWED_EXTENSIONS = new Set(['jpg', 'jpeg', 'png', 'gif', 'webp', 'heic', 'mp4', 'mov', 'webm', 'mp3', 'wav', 'm4a', 'pdf', 'doc', 'docx', 'txt']);
 const CATEGORY_LABELS = {
   acoso_escolar: 'Acoso escolar o bullying',
@@ -328,14 +329,34 @@ function showWorkspace(activeSession) {
   if (firstActivation) resetConversation();
 }
 
+async function getSessionQuickly() {
+  let timeoutId;
+  try {
+    return await Promise.race([
+      supabase.auth.getSession(),
+      new Promise((_, reject) => {
+        timeoutId = window.setTimeout(() => reject(new Error('La comprobación de acceso tardó demasiado.')), SESSION_CHECK_TIMEOUT_MS);
+      })
+    ]);
+  } finally {
+    window.clearTimeout(timeoutId);
+  }
+}
+
 async function requireSession() {
-  const { data: { session: activeSession }, error } = await supabase.auth.getSession();
-  if (error || !activeSession) {
+  try {
+    const { data: { session: activeSession }, error } = await getSessionQuickly();
+    if (error || !activeSession) {
+      showLoginGate();
+      return null;
+    }
+    session = activeSession;
+    return activeSession;
+  } catch (error) {
+    console.warn('No fue posible obtener la sesión a tiempo:', error);
     showLoginGate();
     return null;
   }
-  session = activeSession;
-  return activeSession;
 }
 
 async function sendMessage(rawText) {
@@ -601,7 +622,7 @@ function resetConversation() {
 
 async function initialize() {
   try {
-    const { data: { session: activeSession }, error } = await supabase.auth.getSession();
+    const { data: { session: activeSession }, error } = await getSessionQuickly();
     if (error) throw error;
     if (activeSession) showWorkspace(activeSession);
     else showLoginGate();
@@ -637,7 +658,7 @@ elements.closeSuccess.addEventListener('click', () => elements.successDialog.clo
 
 supabase.auth.onAuthStateChange((event, activeSession) => {
   if (event === 'SIGNED_OUT' || !activeSession) showLoginGate();
-  else if (event === 'SIGNED_IN' && !session) showWorkspace(activeSession);
+  else if ((event === 'INITIAL_SESSION' || event === 'SIGNED_IN') && !session) showWorkspace(activeSession);
   else session = activeSession;
 });
 
