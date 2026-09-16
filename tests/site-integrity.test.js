@@ -13,6 +13,7 @@ test('todas las páginas usan la navegación y el pie globales', () => {
     const html = readFileSync(join(root, file), 'utf8');
     assert.match(html, /<html[^>]+lang="es-CO"/i, `${file} debe declarar el idioma`);
     assert.match(html, /src="global-nav\.js"/i, `${file} debe cargar global-nav.js`);
+    assert.match(html, /href="global-nav\.css"/i, `${file} debe cargar los estilos estables de navegación`);
     assert.match(html, /<meta[^>]+name="viewport"/i, `${file} debe ser responsive`);
   }
 });
@@ -44,6 +45,28 @@ test('el flujo de denuncias exige sesión y conserva la arquitectura estática',
   assert.match(assistant, /registrar_denuncia_segura/);
   assert.doesNotMatch(appSource, /\.(?:php|asp|aspx)\b/i);
   assert.doesNotMatch(appSource, /\b(?:mysql|xampp)\b/i);
+});
+
+test('la migración de reparación registra la RPC y soporta IDs UUID o bigint', () => {
+  const migration = readFileSync(join(root, 'supabase-chat-denuncias-v3.sql'), 'utf8');
+  assert.match(migration, /create or replace function public\.registrar_denuncia_segura/i);
+  assert.match(migration, /nuevo_reporte_id public\.reportes\.id%TYPE/i);
+  assert.match(migration, /reporte_id %s not null references public\.reportes\(id\)/i);
+  assert.match(migration, /insert into public\.perfiles \(id, nombre, rol\) values \(usuario_actual, '', 'User'\)/i);
+  assert.match(migration, /notify pgrst, 'reload schema'/i);
+  assert.match(migration, /EV-\[A-F0-9\]\{8\}/i);
+  assert.match(readFileSync(join(root, 'assistant.js'), 'utf8'), /`EV-\$\{crypto\.randomUUID\(\)/);
+});
+
+test('la migración v4 guarda el tipo de ayuda y contexto estructurado con acceso protegido', () => {
+  const migration = readFileSync(join(root, 'supabase-chat-apoyo-v4.sql'), 'utf8');
+  assert.match(migration, /add column if not exists tipo_atencion text/i);
+  assert.match(migration, /add column if not exists contexto_caso jsonb/i);
+  assert.match(migration, /security definer[\s\S]+set search_path = ''/i);
+  assert.match(migration, /auth\.uid\(\)/i);
+  assert.match(migration, /revoke all on function public\.registrar_denuncia_segura/i);
+  assert.match(migration, /to authenticated/i);
+  assert.match(readFileSync(join(root, 'assistant.js'), 'utf8'), /p_contexto_caso/);
 });
 
 test('la interfaz no contiene caracteres emoji', () => {
