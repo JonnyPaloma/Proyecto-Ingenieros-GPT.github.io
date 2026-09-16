@@ -26,13 +26,26 @@ const EDITABLE_FIELDS = {
   evidence: 'las evidencias',
   additional_info: 'la información adicional'
 };
+const STAGE_GUIDANCE = {
+  safety: ['1', 'Primero, tu seguridad', 'Antes de hablar del caso, confirmamos que puedas continuar sin exponerte.'],
+  description: ['2', 'Comprender lo ocurrido', 'Describe los hechos con tus palabras. No necesitas usar términos técnicos.'],
+  category: ['3', 'Clasificar la situación', 'Te ayudamos a ubicar el caso; tú confirmas la categoría final.'],
+  occurred_at: ['3', 'Ubicar el momento', 'Una fecha aproximada también es válida si no recuerdas el día exacto.'],
+  location: ['3', 'Ubicar el lugar', 'Indica el espacio donde ocurrió o señala que no lo sabes.'],
+  involved: ['4', 'Identificar involucrados', 'Incluye solo las personas que conozcas, sin completar datos por suposición.'],
+  witnesses: ['4', 'Posibles testigos', 'Puedes indicar que no hubo testigos o que no sabes si alguien observó lo ocurrido.'],
+  evidence: ['5', 'Evidencias opcionales', 'Adjunta archivos únicamente si ya los tienes y deseas incluirlos.'],
+  additional_info: ['5', 'Consecuencias y acciones previas', 'Puedes indicar cómo te afectó, si se informó a alguien o si ya se tomó alguna medida.'],
+  review: ['6', 'Revisión y confirmación', 'Comprueba cada dato antes de registrar la denuncia. Puedes corregir cualquier sección.']
+};
 const FILE_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h7l4 4v14H7V3Z"/><path d="M14 3v5h5M10 13h5M10 17h5"/></svg>';
 
 const elements = Object.fromEntries([
   'authGate', 'chatWorkspace', 'chatMessages', 'quickReplies', 'chatForm', 'chatInput', 'sendButton',
   'resetChat', 'attachmentPanel', 'evidenceInput', 'attachmentList', 'attachmentError', 'reportSummary',
   'summaryDetails', 'truthConfirmation', 'submitReport', 'editReport', 'saveStatus', 'sessionState',
-  'liveStatus', 'successDialog', 'ticketResult', 'closeSuccess'
+  'liveStatus', 'successDialog', 'ticketResult', 'closeSuccess', 'stageGuide', 'stageGuideNumber',
+  'stageGuideTitle', 'stageGuideHint'
 ].map(id => [id, document.getElementById(id)]));
 
 let history = [];
@@ -80,19 +93,19 @@ function inferCategoryLocally(text) {
 function guidedReply(step) {
   const replies = {
     safety: draft.safe_now === false
-      ? 'Tu seguridad es lo primero. Aléjate si puedes hacerlo sin exponerte y busca a un adulto de confianza o a los servicios de emergencia de tu localidad. ¿Ya estás acompañado o en un lugar seguro?'
-      : 'Antes de continuar, ¿te encuentras a salvo en este momento?',
-    description: 'Estoy aquí para escucharte. ¿Puedes contarme brevemente qué ocurrió?',
+      ? 'Lo más importante ahora es protegerte. Busca un lugar seguro y contacta a un adulto de confianza o a los servicios de emergencia de tu localidad. ¿Ya estás acompañado o fuera del peligro?'
+      : 'Podemos avanzar a tu ritmo. Antes de hablar de lo ocurrido, ¿te encuentras a salvo en este momento?',
+    description: 'Lamento que estés atravesando esta situación. Cuéntame, con el detalle que te resulte posible, ¿qué ocurrió?',
     category: draft.category
-      ? `Por lo que cuentas, la situación podría corresponder a “${CATEGORY_LABELS[draft.category]}”. ¿Es correcto o prefieres elegir otro tipo?`
-      : '¿Qué tipo de situación describe mejor lo ocurrido?',
-    occurred_at: '¿Cuándo ocurrió, aunque sea de forma aproximada?',
-    location: '¿Dónde ocurrió? Si no lo sabes, puedes indicarlo y continuar.',
-    involved: '¿Qué personas estuvieron involucradas? No necesitas dar información que no conozcas.',
-    witnesses: '¿Hubo testigos o alguien más que conozca lo sucedido?',
-    evidence: '¿Tienes alguna evidencia que quieras adjuntar? Es opcional y puedes usar el botón “Seleccionar archivos”.',
-    additional_info: '¿Hay algún otro dato importante que quieras incluir? Puedes continuar sin agregar más información.',
-    review: 'La información esencial está completa. Revisa el resumen, corrige lo que necesites y confirma solo cuando refleje lo que deseas denunciar.'
+      ? `Para organizar el caso, lo ubicaría como “${CATEGORY_LABELS[draft.category]}”. ¿Esa categoría representa bien lo ocurrido?`
+      : 'Para clasificar correctamente el caso, ¿qué tipo de situación describe mejor lo ocurrido?',
+    occurred_at: 'Quiero ubicar el hecho en el tiempo. ¿Cuándo ocurrió, aunque sea aproximadamente?',
+    location: 'Ahora necesito precisar el contexto. ¿Dónde ocurrió?',
+    involved: 'Para dejar un registro claro, ¿quiénes estuvieron involucrados? Incluye únicamente lo que conozcas.',
+    witnesses: '¿Alguien presenció lo ocurrido o podría aportar información sobre el caso?',
+    evidence: 'Si cuentas con archivos, mensajes o documentos relacionados, puedes adjuntarlos de forma opcional. ¿Deseas agregar alguna evidencia?',
+    additional_info: 'Para completar el contexto, ¿la situación tuvo alguna consecuencia o ya se informó a alguien? También puedes indicar que no hay más información.',
+    review: 'El borrador está completo. Revísalo con calma y corrige cualquier dato antes de confirmar el registro.'
   };
   return replies[step];
 }
@@ -239,6 +252,11 @@ function quickRepliesForStep(step) {
 function updateConversationControls(step = currentDetailStep()) {
   setQuickReplies(quickRepliesForStep(step));
   elements.attachmentPanel.hidden = !draft.evidence_answered && step !== 'evidence';
+  const guidance = STAGE_GUIDANCE[step] || STAGE_GUIDANCE.review;
+  elements.stageGuide.hidden = false;
+  elements.stageGuideNumber.textContent = guidance[0];
+  elements.stageGuideTitle.textContent = guidance[1];
+  elements.stageGuideHint.textContent = guidance[2];
   updateProgress();
   showSummary();
 }
@@ -275,7 +293,7 @@ function showSummary() {
     ['involved', 'Personas involucradas', draft.involved],
     ['witnesses', 'Testigos', draft.witnesses],
     ['evidence', 'Evidencias', evidenceLabel],
-    ['additional_info', 'Información adicional', draft.additional_info || 'Sin información adicional']
+    ['additional_info', 'Consecuencias o información adicional', draft.additional_info || 'Sin información adicional']
   ];
   elements.summaryDetails.replaceChildren(...rows.map(row => makeSummaryRow(...row)));
   elements.reportSummary.hidden = false;
@@ -561,7 +579,7 @@ async function submitReport() {
       throw new Error('La sesión no pudo validarse. Inicia sesión nuevamente.');
     }
 
-    const ticket = `DEN-${new Date().getFullYear()}-${crypto.randomUUID().slice(0, 8).toUpperCase()}`;
+    const ticket = `EV-${crypto.randomUUID().replaceAll('-', '').slice(0, 8).toUpperCase()}`;
     uploaded = await uploadFiles(activeSession.user.id, ticket);
     elements.saveStatus.textContent = 'Registrando denuncia y evidencias';
     const createdAt = new Date().toISOString();
@@ -616,7 +634,8 @@ function resetConversation() {
   elements.chatInput.value = '';
   elements.chatInput.placeholder = 'Escribe con tranquilidad';
   elements.saveStatus.textContent = 'Borrador temporal, aún no guardado';
-  addMessage('Hola. Estoy aquí para ayudarte a preparar una denuncia clara, paso a paso. Antes de comenzar, ¿te encuentras a salvo en este momento?', 'bot');
+  const firstName = session?.user?.user_metadata?.nombre?.trim()?.split(/\s+/)[0];
+  addMessage(`${firstName ? `Hola, ${firstName}. ` : 'Hola. '}Este es un espacio para organizar tu denuncia con cuidado y sin juicios. Puedes responder solo lo que conozcas y corregir cualquier dato antes de guardarlo. Para comenzar, ¿te encuentras a salvo en este momento?`, 'bot');
   updateConversationControls('safety');
 }
 
