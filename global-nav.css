@@ -9,9 +9,8 @@
 
 *, *::before, *::after { box-sizing: border-box; }
 
-/* Reserva el alto desde el primer render y evita el salto al inyectar la barra. */
-body:not(.etv-global-shell)::before { display: block; height: 76px; content: ""; }
-body > header { display: none !important; }
+/* La cabecera anterior solo se oculta después de que la navbar esté activa. */
+body.etv-global-shell > header { display: none !important; }
 body.etv-global-shell { min-height: 100vh; display: flex; flex-direction: column; color: var(--etv-nav-ink); }
 body.etv-global-shell > main { flex: 1 0 auto; }
 body.etv-menu-open { overflow: hidden; }
@@ -94,7 +93,7 @@ body.etv-global-shell :where(input:not([type="checkbox"]):not([type="radio"]), t
 }
 
 @media (max-width: 900px) {
-  body:not(.etv-global-shell)::before, .etv-global-nav, .etv-global-nav__inner { height: 68px; }
+  .etv-global-nav, .etv-global-nav__inner { height: 68px; }
   .etv-global-nav { flex-basis: 68px; }
   .etv-global-nav__inner { width: min(100% - 26px,1260px); }
   .etv-global-nav__menu { display: grid; }
