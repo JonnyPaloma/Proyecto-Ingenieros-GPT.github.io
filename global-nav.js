@@ -8,6 +8,38 @@ const icons = {
   exit: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 5H5v14h5M14 8l4 4-4 4M18 12H9"/></svg>'
 };
 
+// Estilos de seguridad integrados: evitan que una hoja CSS ausente o tardía
+// muestre el logo a tamaño original y desarme toda la página. Cuando
+// global-nav.css está disponible, sus estilos completos tienen prioridad.
+function installNavigationFallbackStyles() {
+  if (document.getElementById('etv-nav-fallback-styles')) return;
+  const style = document.createElement('style');
+  style.id = 'etv-nav-fallback-styles';
+  style.textContent = `@layer etv-nav-fallback {
+    body.etv-global-shell{min-height:100vh;display:flex;flex-direction:column}
+    body.etv-global-shell>main{flex:1 0 auto}
+    body.etv-global-shell>header,.etv-original-header-hidden,.etv-original-footer-hidden{display:none!important}
+    .etv-global-nav{position:sticky;top:0;z-index:1000;display:block;width:100%;height:76px;flex:0 0 76px;border-bottom:1px solid #dce6f1;background:#fff;color:#11223b;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;box-shadow:0 5px 18px rgba(7,26,61,.07)}
+    .etv-global-nav__inner{width:min(1260px,calc(100% - 36px));height:76px;margin:auto;display:flex;align-items:center;gap:22px}
+    .etv-global-nav__brand{display:flex;align-items:center;gap:10px;min-width:190px;color:#071a3d;text-decoration:none}
+    .etv-global-nav__brand img{display:block;width:44px!important;height:44px!important;max-width:44px!important;max-height:44px!important;object-fit:contain}
+    .etv-global-nav__brand strong,.etv-global-nav__brand small{display:block;white-space:nowrap}.etv-global-nav__brand strong{font-size:16px;line-height:1.15}.etv-global-nav__brand small{margin-top:3px;color:#63738a;font-size:10px}
+    .etv-global-nav__links{display:flex;align-items:center;min-width:0;flex:1;gap:12px}.etv-global-nav__primary{display:flex;align-items:center;gap:4px;margin:0 auto;padding:4px;border:1px solid #e5edf5;border-radius:13px;background:#f7fafc}
+    .etv-global-nav__primary a,.etv-session-link,.etv-session-primary{display:inline-flex;min-height:40px;align-items:center;justify-content:center;gap:7px;padding:8px 12px;border-radius:9px;color:#405168;text-decoration:none;font-size:12px;font-weight:800;white-space:nowrap}
+    .etv-global-nav__primary a[aria-current="page"]{background:#fff;color:#0756a6}.etv-global-nav__primary .etv-assistant-link,.etv-session-primary{background:#0756a6;color:#fff}
+    .etv-assistant-link svg,.etv-logout svg,.etv-global-nav__menu svg,.etv-global-footer__security svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+    .etv-global-nav__session{min-width:205px;min-height:48px;display:flex;align-items:center;justify-content:flex-end;gap:7px}.etv-account-skeleton{width:180px;height:42px;display:grid;place-items:center;border-radius:10px;background:#edf3f8;color:#63738a;font-size:10px}
+    .etv-account{min-width:140px;max-width:180px;min-height:46px;display:flex;align-items:center;gap:8px;padding:5px 8px;border:1px solid #dce8f3;border-radius:11px;color:#11223b;text-decoration:none}.etv-account__avatar{width:34px;height:34px;flex:0 0 34px;display:grid;place-items:center;border-radius:9px;background:#0756a6;color:#fff;font-size:11px;font-weight:800}.etv-account__copy{min-width:0}.etv-account__copy strong,.etv-account__copy small{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.etv-account__copy strong{font-size:11px}.etv-account__copy small{color:#63738a;font-size:9px}
+    .etv-logout{min-width:72px;height:40px;display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:0 10px;border:1px solid #e3eaf1;border-radius:999px;background:#fff;color:#64748b;font-size:11px;font-weight:800}.etv-logout span{display:inline}.etv-global-nav__menu{display:none;width:44px;height:44px;margin-left:auto;place-items:center;border:1px solid #dce6f1;border-radius:11px;background:#fff;color:#071a3d}.etv-sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+    .etv-global-footer{flex:0 0 auto;margin-top:auto;padding:34px max(18px,calc((100% - 1220px)/2));background:#071a3d;color:#dce9f8;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}.etv-global-footer__main{display:grid;grid-template-columns:1.5fr repeat(3,1fr);gap:32px}.etv-global-footer__brand{display:flex;align-items:center;gap:10px;color:#fff;font-weight:800}.etv-global-footer__brand img{width:42px!important;height:42px!important;object-fit:contain}.etv-global-footer__summary{color:#b9cbe0;font-size:13px;line-height:1.6}.etv-global-footer h2{color:#fff;font-size:12px}.etv-global-footer ul{display:grid;gap:8px;margin:0;padding:0;list-style:none}.etv-global-footer a{color:#c6d7e9;text-decoration:none;font-size:13px}.etv-global-footer__bottom-inner{display:flex;justify-content:space-between;gap:18px;margin-top:28px;padding-top:20px;border-top:1px solid rgba(255,255,255,.12);color:#9fb4cc;font-size:11px}.etv-global-footer__security{display:flex;align-items:center;gap:7px}
+    @media(max-width:900px){.etv-global-nav,.etv-global-nav__inner{height:68px}.etv-global-nav{flex-basis:68px}.etv-global-nav__menu{display:grid}.etv-global-nav__links{display:none;position:absolute;top:68px;right:0;left:0;flex-direction:column;align-items:stretch;padding:14px 18px 20px;background:#fff}.etv-global-nav__links.is-open{display:flex}.etv-global-nav__primary{display:grid;margin:0}.etv-global-nav__session{width:100%;min-width:0}.etv-global-footer__main{grid-template-columns:1fr 1fr}}
+    @media(max-width:600px){.etv-global-nav__inner{width:calc(100% - 24px)}.etv-global-nav__brand{min-width:0}.etv-global-nav__brand small{display:none}.etv-global-footer__main{grid-template-columns:1fr}.etv-global-footer__bottom-inner{flex-direction:column}}
+  }`;
+  document.head.append(style);
+}
+
+installNavigationFallbackStyles();
+
 function pageName() {
   return (location.pathname.split('/').pop() || 'index.html').toLowerCase();
 }
@@ -82,7 +114,7 @@ async function renderSessionActions(container) {
     logout.type = 'button';
     logout.className = 'etv-logout';
     logout.setAttribute('aria-label', 'Cerrar sesión');
-    logout.innerHTML = `${icons.exit}<span>Cerrar</span>`;
+    logout.innerHTML = `${icons.exit}<span>Salir</span>`;
     logout.addEventListener('click', async () => {
       logout.disabled = true;
       await supabase.auth.signOut();
