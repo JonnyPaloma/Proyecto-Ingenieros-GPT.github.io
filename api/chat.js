@@ -1,14 +1,17 @@
 const SYSTEM_INSTRUCTION = `Eres el Asistente de denuncias de Elige Tu Vida. Ayudas a una persona autenticada a preparar una denuncia formal de bienestar y convivencia escolar.
 
 ESTILO
-- Responde en español latino, con empatía, respeto y sin juzgar.
+- Responde en español latino, con empatía serena, respeto y sin juzgar.
 - Sé breve y natural: una a tres oraciones y una sola pregunta clara por turno.
 - No uses emojis, no presiones a la persona y no prometas resultados.
-- Reconoce brevemente lo difícil que puede ser contar una situación, sin repetir frases de apoyo de forma mecánica.
+- Reconoce el impacto concreto del relato cuando corresponda, pero no repitas “gracias por compartir”, “lamento lo ocurrido” ni otras fórmulas mecánicas en cada turno.
+- Alterna transiciones breves y profesionales. Evita sonar como un interrogatorio o enumerar campos pendientes.
+- No repitas ni parafrasees todo el relato. Usa solo una referencia corta que demuestre comprensión antes de formular la siguiente pregunta.
 
 FLUJO
 1. Confirma si la persona está a salvo. Ante peligro inmediato, prioriza ponerse a salvo, acudir a un adulto de confianza o contactar emergencias locales.
-2. Reúne, sin repetir lo ya respondido: qué ocurrió, tipo de situación, cuándo, dónde, personas involucradas, posibles testigos, evidencias e información adicional.
+2. Reúne, sin repetir lo ya respondido: qué ocurrió, tipo de situación, cuándo, dónde, personas involucradas, posibles testigos, evidencias, consecuencias o acciones previas e información adicional.
+   Haz una sola pregunta por turno. Si una respuesta es ambigua, pide únicamente la precisión imprescindible antes de avanzar.
 3. Puedes proponer una categoría a partir del relato, pero debes pedir confirmación antes de marcar category_confirmed=true.
 4. Si la persona no sabe, no recuerda o no desea responder un dato, registra esa respuesta sin inventar y continúa.
 5. Cuando preguntes por evidencias, indica que son opcionales y que puede usar “Seleccionar archivos”.
@@ -108,19 +111,19 @@ function fallback(draft) {
   const step = nextStep(draft);
   const replies = {
     safety: draft.safe_now === false
-      ? 'Tu seguridad es lo primero. Aléjate de la situación si puedes hacerlo sin exponerte y busca ahora a un adulto de confianza o a los servicios de emergencia de tu localidad. ¿Ya estás acompañado o en un lugar seguro?'
-      : 'Gracias por acercarte. Antes de continuar, ¿te encuentras a salvo en este momento?',
-    description: 'Estoy aquí para escucharte. ¿Puedes contarme brevemente qué ocurrió?',
+      ? 'Lo más importante ahora es protegerte. Busca un lugar seguro y contacta a un adulto de confianza o a los servicios de emergencia de tu localidad. ¿Ya estás acompañado o fuera del peligro?'
+      : 'Podemos avanzar a tu ritmo. Antes de hablar del caso, ¿te encuentras a salvo en este momento?',
+    description: 'Lamento que estés atravesando esta situación. Cuéntame, con el detalle que te resulte posible, ¿qué ocurrió?',
     category: draft.category
-      ? `Por lo que cuentas, la situación podría corresponder a “${CATEGORY_LABELS[draft.category]}”. ¿Es correcto o prefieres elegir otro tipo?`
-      : '¿Qué tipo de situación describe mejor lo ocurrido?',
-    occurred_at: 'Gracias por explicarlo. ¿Cuándo ocurrió, aunque sea de forma aproximada?',
-    location: '¿Dónde ocurrió? Si no lo sabes, puedes indicarlo y continuar.',
-    involved: '¿Qué personas estuvieron involucradas? No necesitas dar información que no conozcas.',
-    witnesses: '¿Hubo testigos o alguien más que conozca lo sucedido?',
-    evidence: '¿Tienes alguna evidencia que quieras adjuntar? Es opcional y puedes usar el botón “Seleccionar archivos”.',
-    additional_info: '¿Hay algún otro dato que consideres importante incluir? Puedes continuar sin agregar más información.',
-    review: 'La información esencial está completa. Revisa el resumen, corrige lo que necesites y confirma solo cuando refleje lo que deseas denunciar.'
+      ? `Para organizar el caso, lo ubicaría como “${CATEGORY_LABELS[draft.category]}”. ¿Esa categoría representa bien lo ocurrido?`
+      : 'Para clasificar correctamente el caso, ¿qué tipo de situación describe mejor lo ocurrido?',
+    occurred_at: 'Quiero ubicar el hecho en el tiempo. ¿Cuándo ocurrió, aunque sea aproximadamente?',
+    location: 'Ahora necesito precisar el contexto. ¿Dónde ocurrió?',
+    involved: 'Para dejar un registro claro, ¿quiénes estuvieron involucrados? Incluye únicamente lo que conozcas.',
+    witnesses: '¿Alguien presenció lo ocurrido o podría aportar información sobre el caso?',
+    evidence: 'Si cuentas con archivos, mensajes o documentos relacionados, puedes adjuntarlos de forma opcional. ¿Deseas agregar alguna evidencia?',
+    additional_info: 'Para completar el contexto, ¿la situación tuvo alguna consecuencia o ya se informó a alguien? También puedes indicar que no hay más información.',
+    review: 'El borrador está completo. Revísalo con calma y corrige cualquier dato antes de confirmar el registro.'
   };
   return {
     reply: replies[step],
