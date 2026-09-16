@@ -10,33 +10,51 @@ const CATEGORY_LABELS = {
   violencia_fisica: 'Violencia física',
   amenazas_intimidacion: 'Amenazas o intimidación',
   discriminacion: 'Discriminación o exclusión',
+  discriminacion_racial: 'Racismo o discriminación étnico-racial',
+  discriminacion_genero_orientacion: 'Discriminación por género u orientación sexual',
   violencia_sexual: 'Violencia sexual o abuso',
   salud_emocional: 'Salud emocional o riesgo de vida',
   conflicto_convivencia: 'Conflicto de convivencia',
   seguridad_digital: 'Seguridad digital',
+  problemas_familiares: 'Situación familiar o del hogar',
   otro: 'Otra situación'
+};
+const CASE_MODE_LABELS = {
+  denuncia: 'Denuncia formal',
+  apoyo: 'Apoyo emocional',
+  orientacion: 'Orientación'
 };
 const EDITABLE_FIELDS = {
   description: 'qué ocurrió',
+  case_mode: 'el tipo de ayuda',
   category: 'el tipo de situación',
   occurred_at: 'cuándo ocurrió',
   location: 'dónde ocurrió',
   involved: 'las personas involucradas',
   witnesses: 'los testigos',
   evidence: 'las evidencias',
+  impact: 'cómo te ha afectado',
+  support_goal: 'lo que necesitas',
+  support_network: 'tu red de apoyo',
+  desired_follow_up: 'el seguimiento deseado',
   additional_info: 'la información adicional'
 };
 const STAGE_GUIDANCE = {
   safety: ['1', 'Primero, tu seguridad', 'Antes de hablar del caso, confirmamos que puedas continuar sin exponerte.'],
   description: ['2', 'Comprender lo ocurrido', 'Describe los hechos con tus palabras. No necesitas usar términos técnicos.'],
+  intent: ['3', 'Elegir cómo ayudarte', 'Puedes conversar, pedir orientación o preparar una denuncia formal.'],
   category: ['3', 'Clasificar la situación', 'Te ayudamos a ubicar el caso; tú confirmas la categoría final.'],
   occurred_at: ['3', 'Ubicar el momento', 'Una fecha aproximada también es válida si no recuerdas el día exacto.'],
   location: ['3', 'Ubicar el lugar', 'Indica el espacio donde ocurrió o señala que no lo sabes.'],
   involved: ['4', 'Identificar involucrados', 'Incluye solo las personas que conozcas, sin completar datos por suposición.'],
   witnesses: ['4', 'Posibles testigos', 'Puedes indicar que no hubo testigos o que no sabes si alguien observó lo ocurrido.'],
   evidence: ['5', 'Evidencias opcionales', 'Adjunta archivos únicamente si ya los tienes y deseas incluirlos.'],
+  impact: ['4', 'Comprender el impacto', 'También importa cómo te está afectando la situación. Puedes responder a tu ritmo.'],
+  support_goal: ['4', 'Definir el apoyo', 'Indica qué necesitas ahora para que la orientación sea útil para ti.'],
+  support_network: ['5', 'Red de apoyo', 'Puedes mencionar una persona de confianza o indicar que todavía no cuentas con alguien.'],
   additional_info: ['5', 'Consecuencias y acciones previas', 'Puedes indicar cómo te afectó, si se informó a alguien o si ya se tomó alguna medida.'],
-  review: ['6', 'Revisión y confirmación', 'Comprueba cada dato antes de registrar la denuncia. Puedes corregir cualquier sección.']
+  follow_up: ['5', 'Próximo paso', 'Tú decides si quieres conservar el registro, orientación o seguimiento.'],
+  review: ['6', 'Revisión y confirmación', 'Comprueba cada dato antes de guardar el registro. Puedes corregir cualquier sección.']
 };
 const FILE_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h7l4 4v14H7V3Z"/><path d="M14 3v5h5M10 13h5M10 17h5"/></svg>';
 
@@ -60,13 +78,23 @@ function emptyDraft() {
   return {
     safe_now: null,
     description: '',
+    case_mode: '',
+    case_mode_confirmed: false,
     category: '',
     category_confirmed: false,
+    topic_tags: [],
     occurred_at: '',
     location: '',
     involved: '',
     witnesses: '',
     evidence_answered: false,
+    impact: '',
+    impact_answered: false,
+    support_goal: '',
+    support_network: '',
+    support_network_answered: false,
+    desired_follow_up: '',
+    follow_up_answered: false,
     additional_info: '',
     additional_answered: false,
     immediate_risk: false
@@ -82,20 +110,60 @@ function inferCategoryLocally(text) {
   if (/bullying|acoso escolar|se burl|hostig/.test(value)) return 'acoso_escolar';
   if (/golp|agred|pelea|violencia fisica/.test(value)) return 'violencia_fisica';
   if (/amenaz|intimid|chantaj/.test(value)) return 'amenazas_intimidacion';
-  if (/discrimin|exclu|racis|homofob/.test(value)) return 'discriminacion';
+  if (/racis|por ser negr|color de piel|etni|afro/.test(value)) return 'discriminacion_racial';
+  if (/homofob|transfob|orientacion sexual|identidad de genero|por ser gay|por ser lesbiana|por ser trans|genero sexual/.test(value)) return 'discriminacion_genero_orientacion';
+  if (/discrimin|exclu/.test(value)) return 'discriminacion';
   if (/abuso sexual|violacion|tocamiento|violencia sexual/.test(value)) return 'violencia_sexual';
   if (/suicid|autoles|ansiedad|depres|salud emocional/.test(value)) return 'salud_emocional';
   if (/internet|redes|cuenta|foto|mensaje|seguridad digital|ciber/.test(value)) return 'seguridad_digital';
   if (/conflicto|discusion|convivencia/.test(value)) return 'conflicto_convivencia';
+  if (/familia|casa|hogar|padres|madre|padre/.test(value)) return 'problemas_familiares';
   return '';
+}
+
+function inferCaseModeLocally(text) {
+  const value = normalizeText(text);
+  if (/denunciar|poner una denuncia|reportar|dejar constancia/.test(value)) return 'denuncia';
+  if (/solo quiero hablar|desahog|que me escuch|apoyo emocional|me siento/.test(value)) return 'apoyo';
+  if (/orientacion|que puedo hacer|necesito consejo|opciones tengo/.test(value)) return 'orientacion';
+  return Object.hasOwn(CASE_MODE_LABELS, value) ? value : '';
+}
+
+function inferTagsLocally(text) {
+  const value = normalizeText(text);
+  const matches = [
+    [/depres|deprim|sin ganas|tristeza profunda/, 'depresion'], [/ansiedad|panico|angustia/, 'ansiedad'],
+    [/autoles|hacerme dano|cortarme/, 'autolesion'], [/suicid|matarme|no quiero vivir/, 'riesgo_suicida'],
+    [/racis|por ser negr|color de piel|etni|afro/, 'racismo'], [/orientacion sexual|homofob|por ser gay|por ser lesbiana|bisexual/, 'orientacion_sexual'],
+    [/identidad de genero|transfob|por ser trans|genero sexual/, 'identidad_genero'], [/exclu|ignoran|aisla/, 'exclusion'],
+    [/bullying|acoso|hostig/, 'acoso'], [/golp|agred|violencia/, 'violencia'], [/amenaz|intimid|chantaj/, 'amenazas'],
+    [/familia|casa|hogar|padres/, 'conflicto_familiar'], [/duelo|fallec|murio|perdida/, 'duelo'], [/soledad|solo|sola/, 'soledad']
+  ];
+  return matches.filter(([pattern]) => pattern.test(value)).map(([, tag]) => tag);
+}
+
+function chooseReply(step, variants) {
+  const source = `${step}:${history.length}:${history.at(-1)?.text || ''}`;
+  let hash = 0;
+  for (const character of source) hash = ((hash * 31) + character.charCodeAt(0)) >>> 0;
+  return variants[hash % variants.length];
 }
 
 function guidedReply(step) {
   const replies = {
-    safety: draft.safe_now === false
-      ? 'Lo más importante ahora es protegerte. Busca un lugar seguro y contacta a un adulto de confianza o a los servicios de emergencia de tu localidad. ¿Ya estás acompañado o fuera del peligro?'
-      : 'Podemos avanzar a tu ritmo. Antes de hablar de lo ocurrido, ¿te encuentras a salvo en este momento?',
-    description: 'Lamento que estés atravesando esta situación. Cuéntame, con el detalle que te resulte posible, ¿qué ocurrió?',
+    safety: draft.immediate_risk
+      ? 'Tu seguridad importa más que completar este registro. Si podrías hacerte daño o alguien puede lastimarte ahora, aléjate de medios peligrosos, busca de inmediato a una persona adulta o de confianza y contacta emergencias de tu localidad. ¿Estás ahora en un lugar seguro y acompañado?'
+      : draft.safe_now === false
+        ? 'Lo más importante ahora es protegerte. Busca un lugar seguro y contacta a un adulto de confianza o a los servicios de emergencia de tu localidad. ¿Ya estás acompañado o fuera del peligro?'
+        : draft.description
+          ? 'Quiero tomar en serio lo que acabas de contar. Antes de seguir, necesito confirmar algo importante: ¿te encuentras a salvo en este momento?'
+          : 'Podemos avanzar a tu ritmo. Antes de hablar de lo ocurrido, ¿te encuentras a salvo en este momento?',
+    description: chooseReply('description', [
+      'Puedes contarlo con tus propias palabras y sin usar términos técnicos. ¿Qué está ocurriendo o qué te preocupa?',
+      'Este espacio también sirve para hablar de cómo te estás sintiendo. ¿Qué situación te llevó a buscar apoyo hoy?',
+      'No tienes que ordenar todo antes de escribirlo. ¿Qué te gustaría que comprendiera primero sobre lo que estás viviendo?'
+    ]),
+    intent: 'Podemos acompañarte de distintas maneras. ¿Quieres preparar una denuncia, recibir apoyo para hablar de lo que sientes o buscar orientación sobre qué hacer?',
     category: draft.category
       ? `Para organizar el caso, lo ubicaría como “${CATEGORY_LABELS[draft.category]}”. ¿Esa categoría representa bien lo ocurrido?`
       : 'Para clasificar correctamente el caso, ¿qué tipo de situación describe mejor lo ocurrido?',
@@ -104,8 +172,14 @@ function guidedReply(step) {
     involved: 'Para dejar un registro claro, ¿quiénes estuvieron involucrados? Incluye únicamente lo que conozcas.',
     witnesses: '¿Alguien presenció lo ocurrido o podría aportar información sobre el caso?',
     evidence: 'Si cuentas con archivos, mensajes o documentos relacionados, puedes adjuntarlos de forma opcional. ¿Deseas agregar alguna evidencia?',
-    additional_info: 'Para completar el contexto, ¿la situación tuvo alguna consecuencia o ya se informó a alguien? También puedes indicar que no hay más información.',
-    review: 'El borrador está completo. Revísalo con calma y corrige cualquier dato antes de confirmar el registro.'
+    impact: draft.category === 'salud_emocional'
+      ? 'Lo que sientes merece ser escuchado sin juicios. ¿Cómo está afectando esto tu ánimo, tus actividades o tus relaciones últimamente?'
+      : 'Quiero comprender también el efecto de la situación, no solo los hechos. ¿Cómo te ha afectado?',
+    support_goal: 'Para acompañarte de una forma útil, ¿qué necesitas principalmente en este momento: ser escuchado, pensar opciones, hablar con alguien de confianza o iniciar un seguimiento?',
+    support_network: 'No tienes que manejar esto en soledad. ¿Hay alguna persona adulta o de confianza con quien te sentirías seguro hablando?',
+    additional_info: '¿Hay algo más que consideres importante, como acciones que ya intentaste o una preocupación que no hayamos mencionado?',
+    follow_up: '¿Cómo te gustaría continuar después de guardar este registro: solo conservarlo, solicitar orientación o pedir seguimiento de una persona responsable?',
+    review: 'Organicé lo que compartiste respetando el tipo de ayuda que elegiste. Revisa el resumen y corrige cualquier dato antes de decidir si deseas guardarlo.'
   };
   return replies[step];
 }
@@ -117,16 +191,38 @@ function localGuidedResponse(message, correctionField = '') {
   const normalized = normalizeText(value);
   const step = correctionField || currentDetailStep();
 
+  if (/me quiero (matar|morir)|voy a (suicidarme|matarme|hacerme dano)|quiero suicidarme|no quiero seguir viviendo|me estan atacando ahora/.test(normalized) && step !== 'safety') {
+    draft.safe_now = null;
+    draft.immediate_risk = true;
+    draft.topic_tags = [...new Set([...(draft.topic_tags || []), 'riesgo_suicida'])];
+    return { reportDraft: draft, nextStep: 'safety', reply: guidedReply('safety') };
+  }
+
   if (step === 'safety') {
-    if (/\bno\b|peligro|riesgo|urgente|amenaza ahora|no estoy a salvo|necesito ayuda/.test(normalized)) {
+    if (/\bno\b|peligro|riesgo|urgente|amenaza ahora|no estoy a salvo|necesito ayuda|me quiero (matar|morir)|suicid|hacerme dano|no quiero vivir/.test(normalized)) {
       draft.safe_now = false;
       draft.immediate_risk = true;
     } else if (/\bsi\b|estoy a salvo|estoy bien|no hay peligro|lugar seguro|adulto de confianza/.test(normalized)) {
       draft.safe_now = true;
+    } else if (value.length >= 10) {
+      draft.description = value;
+      if (!draft.category) draft.category = inferCategoryLocally(value);
+      draft.topic_tags = [...new Set([...(draft.topic_tags || []), ...inferTagsLocally(value)])];
+      const inferredMode = inferCaseModeLocally(value);
+      if (inferredMode) draft.case_mode = inferredMode;
     }
   } else if (step === 'description') {
     draft.description = value;
     if (!draft.category) draft.category = inferCategoryLocally(value);
+    draft.topic_tags = [...new Set([...(draft.topic_tags || []), ...inferTagsLocally(value)])];
+    const inferredMode = inferCaseModeLocally(value);
+    if (inferredMode) draft.case_mode = inferredMode;
+  } else if (step === 'intent' || step === 'case_mode') {
+    const selected = inferCaseModeLocally(value);
+    if (selected) {
+      draft.case_mode = selected;
+      draft.case_mode_confirmed = true;
+    }
   } else if (step === 'category') {
     const selected = Object.hasOwn(CATEGORY_LABELS, value) ? value : inferCategoryLocally(value);
     if (selected) {
@@ -143,6 +239,18 @@ function localGuidedResponse(message, correctionField = '') {
   else if (step === 'involved') draft.involved = value;
   else if (step === 'witnesses') draft.witnesses = value;
   else if (step === 'evidence') draft.evidence_answered = true;
+  else if (step === 'impact') {
+    draft.impact = /no deseo|prefiero no|no quiero responder/.test(normalized) ? '' : value;
+    draft.impact_answered = true;
+    draft.topic_tags = [...new Set([...(draft.topic_tags || []), ...inferTagsLocally(value)])];
+  } else if (step === 'support_goal') draft.support_goal = value;
+  else if (step === 'support_network') {
+    draft.support_network = value;
+    draft.support_network_answered = true;
+  } else if (step === 'follow_up' || step === 'desired_follow_up') {
+    draft.desired_follow_up = value;
+    draft.follow_up_answered = true;
+  }
   else if (step === 'additional_info') {
     draft.additional_answered = true;
     draft.additional_info = /no deseo|nada mas|sin informacion|no tengo mas/.test(normalized) ? '' : value;
@@ -195,21 +303,28 @@ function setQuickReplies(items = []) {
 function currentDetailStep() {
   if (draft.safe_now !== true) return 'safety';
   if (draft.description.trim().length < 10) return 'description';
+  if (!draft.case_mode_confirmed) return 'intent';
   if (!draft.category_confirmed) return 'category';
-  if (!draft.occurred_at.trim()) return 'occurred_at';
-  if (!draft.location.trim()) return 'location';
-  if (!draft.involved.trim()) return 'involved';
-  if (!draft.witnesses.trim()) return 'witnesses';
-  if (!draft.evidence_answered) return 'evidence';
+  if (draft.case_mode === 'denuncia') {
+    if (!draft.occurred_at.trim()) return 'occurred_at';
+    if (!draft.location.trim()) return 'location';
+    if (!draft.involved.trim()) return 'involved';
+    if (!draft.witnesses.trim()) return 'witnesses';
+    if (!draft.evidence_answered) return 'evidence';
+  }
+  if (!draft.impact_answered) return 'impact';
+  if (!draft.support_goal.trim()) return 'support_goal';
+  if (!draft.support_network_answered) return 'support_network';
   if (!draft.additional_answered) return 'additional_info';
+  if (!draft.follow_up_answered) return 'follow_up';
   return 'review';
 }
 
 function progressStep() {
   const detail = currentDetailStep();
-  if (['category', 'occurred_at', 'location'].includes(detail)) return 'context';
-  if (['involved', 'witnesses'].includes(detail)) return 'people';
-  if (detail === 'additional_info') return 'evidence';
+  if (['intent', 'category', 'occurred_at', 'location'].includes(detail)) return 'context';
+  if (['involved', 'witnesses', 'impact', 'support_goal'].includes(detail)) return 'people';
+  if (['support_network', 'additional_info', 'follow_up'].includes(detail)) return 'evidence';
   return detail;
 }
 
@@ -228,7 +343,7 @@ function isReady() {
 
 function quickRepliesForStep(step) {
   if (step === 'safety') {
-    if (draft.safe_now === false) {
+    if (draft.safe_now === false || draft.immediate_risk) {
       return [
         { label: 'Ya estoy en un lugar seguro' },
         { label: 'Estoy con un adulto de confianza' },
@@ -236,6 +351,13 @@ function quickRepliesForStep(step) {
       ];
     }
     return [{ label: 'Sí, estoy a salvo' }, { label: 'No, hay peligro ahora' }];
+  }
+  if (step === 'intent') {
+    return [
+      { label: 'Quiero apoyo para hablar', value: 'apoyo' },
+      { label: 'Quiero orientación', value: 'orientacion' },
+      { label: 'Quiero preparar una denuncia', value: 'denuncia' }
+    ];
   }
   if (step === 'category') {
     return Object.entries(CATEGORY_LABELS).map(([value, label]) => ({ label, value }));
@@ -245,7 +367,11 @@ function quickRepliesForStep(step) {
   if (step === 'involved') return [{ label: 'No sé quiénes fueron' }];
   if (step === 'witnesses') return [{ label: 'No conozco testigos' }];
   if (step === 'evidence') return [{ label: 'No tengo evidencias' }];
+  if (step === 'impact') return [{ label: 'Prefiero no describirlo ahora' }];
+  if (step === 'support_goal') return [{ label: 'Necesito que me escuchen' }, { label: 'Quiero conocer mis opciones' }];
+  if (step === 'support_network') return [{ label: 'Tengo una persona de confianza' }, { label: 'No tengo a quién acudir todavía' }];
   if (step === 'additional_info') return [{ label: 'No deseo agregar más información' }];
+  if (step === 'follow_up') return [{ label: 'Solo guardar el registro' }, { label: 'Solicitar orientación' }, { label: 'Solicitar seguimiento' }];
   return [];
 }
 
@@ -286,15 +412,26 @@ function showSummary() {
     ? `${files.length} archivo${files.length === 1 ? '' : 's'} listo${files.length === 1 ? '' : 's'} para cargar`
     : 'Sin archivos adjuntos';
   const rows = [
-    ['description', 'Qué ocurrió', draft.description],
-    ['category', 'Tipo de situación', CATEGORY_LABELS[draft.category] || CATEGORY_LABELS.otro],
-    ['occurred_at', 'Cuándo ocurrió', draft.occurred_at],
-    ['location', 'Dónde ocurrió', draft.location],
-    ['involved', 'Personas involucradas', draft.involved],
-    ['witnesses', 'Testigos', draft.witnesses],
-    ['evidence', 'Evidencias', evidenceLabel],
-    ['additional_info', 'Consecuencias o información adicional', draft.additional_info || 'Sin información adicional']
+    ['case_mode', 'Tipo de ayuda', CASE_MODE_LABELS[draft.case_mode] || 'Por confirmar'],
+    ['description', 'Situación compartida', draft.description],
+    ['category', 'Tema principal', CATEGORY_LABELS[draft.category] || CATEGORY_LABELS.otro]
   ];
+  if (draft.case_mode === 'denuncia') {
+    rows.push(
+      ['occurred_at', 'Cuándo ocurrió', draft.occurred_at],
+      ['location', 'Dónde ocurrió', draft.location],
+      ['involved', 'Personas involucradas', draft.involved],
+      ['witnesses', 'Testigos', draft.witnesses],
+      ['evidence', 'Evidencias', evidenceLabel]
+    );
+  }
+  rows.push(
+    ['impact', 'Cómo te ha afectado', draft.impact || 'Prefirió no describirlo'],
+    ['support_goal', 'Qué necesitas', draft.support_goal],
+    ['support_network', 'Red de apoyo', draft.support_network || 'Sin una red identificada por ahora'],
+    ['additional_info', 'Información adicional', draft.additional_info || 'Sin información adicional'],
+    ['desired_follow_up', 'Seguimiento deseado', draft.desired_follow_up]
+  );
   elements.summaryDetails.replaceChildren(...rows.map(row => makeSummaryRow(...row)));
   elements.reportSummary.hidden = false;
   elements.reportSummary.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
@@ -333,7 +470,7 @@ function showLoginGate() {
   elements.authGate.hidden = false;
   elements.chatWorkspace.hidden = true;
   elements.resetChat.hidden = true;
-  elements.sessionState.textContent = 'Debes iniciar sesión para comenzar y registrar una denuncia.';
+  elements.sessionState.textContent = 'Debes iniciar sesión para comenzar y guardar un registro.';
   elements.saveStatus.textContent = 'Inicio de sesión requerido';
 }
 
@@ -343,7 +480,7 @@ function showWorkspace(activeSession) {
   elements.authGate.hidden = true;
   elements.chatWorkspace.hidden = false;
   elements.resetChat.hidden = false;
-  elements.sessionState.innerHTML = '<strong>Sesión protegida activa.</strong> La denuncia quedará asociada a tu cuenta.';
+  elements.sessionState.innerHTML = '<strong>Sesión protegida activa.</strong> El registro quedará asociado a tu cuenta únicamente después de confirmarlo.';
   if (firstActivation) resetConversation();
 }
 
@@ -528,7 +665,7 @@ function addSelectedFiles(fileList) {
   elements.evidenceInput.value = '';
   addMessage(
     files.length
-      ? `Hay ${files.length} archivo${files.length === 1 ? '' : 's'} preparado${files.length === 1 ? '' : 's'}. Solo se cargarán cuando confirmes la denuncia.`
+      ? `Hay ${files.length} archivo${files.length === 1 ? '' : 's'} preparado${files.length === 1 ? '' : 's'}. Solo se cargarán cuando confirmes el registro.`
       : 'No hay archivos seleccionados.',
     'system'
   );
@@ -539,10 +676,10 @@ function addSelectedFiles(fileList) {
 }
 
 function riskLevel() {
-  const text = `${draft.description} ${draft.involved} ${draft.additional_info}`
+  const text = `${draft.description} ${draft.involved} ${draft.impact} ${draft.additional_info} ${(draft.topic_tags || []).join(' ')}`
     .toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
   if (draft.immediate_risk || /suicid|arma|abuso sexual|violacion|matar|peligro inmediato/.test(text)) return 'Crítico';
-  if (/acoso|bullying|amenaza|violencia|chantaje|golpe|discriminacion/.test(text)) return 'Alto';
+  if (/acoso|bullying|amenaza|violencia|chantaje|golpe|discriminacion|racismo|autolesion/.test(text)) return 'Alto';
   return 'Medio';
 }
 
@@ -581,7 +718,7 @@ async function submitReport() {
 
     const ticket = `EV-${crypto.randomUUID().replaceAll('-', '').slice(0, 8).toUpperCase()}`;
     uploaded = await uploadFiles(activeSession.user.id, ticket);
-    elements.saveStatus.textContent = 'Registrando denuncia y evidencias';
+    elements.saveStatus.textContent = 'Guardando el registro y sus evidencias';
     const createdAt = new Date().toISOString();
     const conversation = history.map(item => ({ role: item.role, text: item.text, at: createdAt }));
     const { data, error } = await supabase.rpc('registrar_denuncia_segura', {
@@ -595,15 +732,24 @@ async function submitReport() {
       p_informacion_adicional: draft.additional_info || null,
       p_riesgo: riskLevel(),
       p_conversacion: conversation,
-      p_evidencias: uploaded
+      p_evidencias: uploaded,
+      p_tipo_atencion: draft.case_mode,
+      p_contexto_caso: {
+        etiquetas: draft.topic_tags,
+        impacto: draft.impact,
+        objetivo_apoyo: draft.support_goal,
+        red_apoyo: draft.support_network,
+        seguimiento_deseado: draft.desired_follow_up,
+        riesgo_inmediato: draft.immediate_risk
+      }
     });
     if (error) throw error;
 
     const result = Array.isArray(data) ? data[0] : data;
     const confirmedTicket = result?.ticket || ticket;
     elements.ticketResult.textContent = confirmedTicket;
-    elements.saveStatus.textContent = 'Denuncia registrada de forma segura';
-    addMessage(`La denuncia fue registrada. Tu código de seguimiento es ${confirmedTicket}.`, 'system');
+    elements.saveStatus.textContent = 'Registro guardado de forma segura';
+    addMessage(`El registro fue guardado. Tu código de seguimiento es ${confirmedTicket}.`, 'system');
     elements.successDialog.showModal();
   } catch (error) {
     if (uploaded.length) {
@@ -612,8 +758,8 @@ async function submitReport() {
         .remove(uploaded.map(item => item.storage_path));
       if (cleanupError) console.error('No fue posible limpiar los adjuntos no vinculados:', cleanupError);
     }
-    addMessage(`No se pudo registrar la denuncia: ${error.message || 'error de conexión'}. La información permanece en pantalla para que puedas reintentar.`, 'bot error');
-    console.error('Error al registrar la denuncia:', error);
+    addMessage(`No se pudo guardar el registro: ${error.message || 'error de conexión'}. La información permanece en pantalla para que puedas reintentar.`, 'bot error');
+    console.error('Error al guardar el registro:', error);
   } finally {
     setBusy(false);
   }
@@ -635,7 +781,7 @@ function resetConversation() {
   elements.chatInput.placeholder = 'Escribe con tranquilidad';
   elements.saveStatus.textContent = 'Borrador temporal, aún no guardado';
   const firstName = session?.user?.user_metadata?.nombre?.trim()?.split(/\s+/)[0];
-  addMessage(`${firstName ? `Hola, ${firstName}. ` : 'Hola. '}Este es un espacio para organizar tu denuncia con cuidado y sin juicios. Puedes responder solo lo que conozcas y corregir cualquier dato antes de guardarlo. Para comenzar, ¿te encuentras a salvo en este momento?`, 'bot');
+  addMessage(`${firstName ? `Hola, ${firstName}. ` : 'Hola. '}Este es un espacio para hablar, recibir orientación o preparar una denuncia, sin juicios y a tu ritmo. Nada se guardará sin que revises y confirmes el resumen. Para comenzar, ¿te encuentras a salvo en este momento?`, 'bot');
   updateConversationControls('safety');
 }
 
