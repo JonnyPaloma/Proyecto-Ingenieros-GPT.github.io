@@ -7,6 +7,7 @@
   <meta name="theme-color" content="#071a3d">
   <title>Asistente de denuncias | Elige Tu Vida</title>
   <link rel="icon" href="assets/images/Favicon Hack.png" type="image/png">
+  <link rel="stylesheet" href="global-nav.css">
   <link rel="stylesheet" href="assistant.css">
   <script type="module" src="global-auth.js"></script>
   <script type="module" src="global-nav.js"></script>
@@ -46,6 +47,11 @@
           </div>
           <button id="resetChat" class="secondary-button" type="button" hidden>Reiniciar</button>
         </header>
+
+        <div id="stageGuide" class="stage-guide" hidden aria-live="polite">
+          <span id="stageGuideNumber">1</span>
+          <div><strong id="stageGuideTitle">Primero, tu seguridad</strong><small id="stageGuideHint">Solo pediremos la información necesaria y puedes indicar cuando no conozcas un dato.</small></div>
+        </div>
 
         <section id="authGate" class="auth-gate" aria-labelledby="authGateTitle">
           <div class="auth-gate__icon" aria-hidden="true">
