@@ -106,7 +106,7 @@ async function renderSessionActions(container) {
     const accountName = document.createElement('strong');
     accountName.textContent = name;
     const accountRole = document.createElement('small');
-    accountRole.textContent = role === 'Admin' ? 'Administración' : role === 'Employee' ? 'Gestión institucional' : 'Mis denuncias';
+    accountRole.textContent = role === 'Admin' ? 'Administración' : role === 'Employee' ? 'Gestión institucional' : 'Mis casos';
     accountCopy.append(accountName, accountRole);
     account.append(avatar, accountCopy);
 
@@ -134,8 +134,8 @@ function createFooter() {
   footer.className = 'etv-global-footer';
   footer.innerHTML = `
     <div class="etv-global-footer__main">
-      <section aria-label="Acerca de Elige Tu Vida"><div class="etv-global-footer__brand"><img src="assets/images/Escudo Elige Tu Vida Hack.png" alt=""><span>Elige Tu Vida</span></div><p class="etv-global-footer__summary">Un espacio de orientación y denuncia diseñado para escuchar, organizar la información y facilitar un seguimiento seguro.</p></section>
-      <section><h2>Plataforma</h2><ul><li><a href="index.html">Inicio</a></li><li><a href="chat.html">Asistente de denuncias</a></li><li><a href="panel-usuario.html">Mis denuncias</a></li></ul></section>
+      <section aria-label="Acerca de Elige Tu Vida"><div class="etv-global-footer__brand"><img src="assets/images/Escudo Elige Tu Vida Hack.png" alt=""><span>Elige Tu Vida</span></div><p class="etv-global-footer__summary">Un espacio de apoyo, orientación y denuncia diseñado para escuchar, organizar la información y facilitar un seguimiento seguro.</p></section>
+      <section><h2>Plataforma</h2><ul><li><a href="index.html">Inicio</a></li><li><a href="chat.html">Asistente de apoyo</a></li><li><a href="panel-usuario.html">Mis casos</a></li></ul></section>
       <section><h2>Información</h2><ul><li><a href="privacidad.html">Privacidad</a></li><li><a href="terminos.html">Términos de uso</a></li><li><a href="contacto.html">Contacto</a></li></ul></section>
       <section><h2>Cuenta</h2><ul><li><a href="login.html">Iniciar sesión</a></li><li><a href="registro.html">Crear cuenta</a></li><li><a href="recuperar-contrasena.html">Recuperar contraseña</a></li></ul></section>
     </div>
@@ -172,7 +172,7 @@ async function initGlobalNavigation() {
   links.className = 'etv-global-nav__links';
   const primaryLinks = document.createElement('div');
   primaryLinks.className = 'etv-global-nav__primary';
-  const assistantLink = makeLink('chat.html', 'Crear denuncia', 'etv-assistant-link');
+  const assistantLink = makeLink('chat.html', 'Pedir apoyo', 'etv-assistant-link');
   assistantLink.insertAdjacentHTML('afterbegin', icons.shield);
   primaryLinks.append(makeLink('index.html', 'Inicio'), assistantLink, makeLink('panel-usuario.html', 'Seguimiento'), makeLink('contacto.html', 'Ayuda'));
   links.append(primaryLinks);
