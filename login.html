@@ -7,6 +7,7 @@
   <title>Ingresar | Elige Tu Vida</title>
 
   <link rel="icon" href="assets/images/Favicon Hack.png" type="image/png">
+  <link rel="stylesheet" href="global-nav.css">
   <link rel="icon" href="assets/images/Favicon Hack.png" sizes="32x32" type="image/png">
   <link rel="icon" href="assets/images/Favicon Hack.png" sizes="16x16" type="image/png">
   <link rel="shortcut icon" href="assets/images/Favicon Hack.png">
@@ -349,9 +350,10 @@
     function setAlert(id, message, success) {
         const element = document.getElementById(id);
         if (!element) return;
-        element.hidden = false;
-        element.textContent = message;
-        element.classList.toggle("ok", success);
+        const visibleMessage = String(message || '').trim();
+        element.textContent = visibleMessage;
+        element.classList.toggle("ok", Boolean(success));
+        element.hidden = !visibleMessage;
     }
 
     function setBusy(button, busy) {
