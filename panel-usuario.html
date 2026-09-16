@@ -3,9 +3,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Panel personal para consultar el seguimiento de tus denuncias en Elige Tu Vida.">
+  <meta name="description" content="Panel personal para consultar tus registros de apoyo, orientación y denuncias en Elige Tu Vida.">
   <meta name="theme-color" content="#0b1f48">
-  <title>Mis denuncias | Elige Tu Vida</title>
+  <title>Mis casos | Elige Tu Vida</title>
   <link rel="icon" href="assets/images/Favicon Hack.png" type="image/png">
   <link rel="stylesheet" href="global-nav.css">
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
@@ -52,7 +52,7 @@
     .ticket-dialog__head h2 { margin:0; color:var(--etv-navy); font-size:24px; }
     .ticket-close { width:38px; height:38px; border:1px solid var(--etv-line); border-radius:10px; background:#fff; color:var(--etv-navy); font-size:21px; cursor:pointer; }
     .ticket-dialog__body { padding:22px 24px 25px; }
-    .ticket-metadata { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:20px; }
+    .ticket-metadata { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-bottom:20px; }
     .ticket-metadata div { padding:12px; border:1px solid var(--etv-line); border-radius:11px; background:#fff; }
     .ticket-metadata small,.ticket-detail-grid dt { display:block; color:var(--etv-muted); font-size:10px; font-weight:850; letter-spacing:.06em; text-transform:uppercase; }
     .ticket-metadata strong { display:block; margin-top:5px; color:var(--etv-navy); font-size:13px; }
@@ -64,7 +64,7 @@
     @media(max-width:700px){ .container{width:min(100% - 28px,1180px)} .site-nav{min-height:70px}.brand img{width:40px;height:40px;flex-basis:40px}.brand strong{font-size:16px}.brand small{display:none}.summary-card{min-width:0;flex:1}.ticket-lookup{grid-template-columns:1fr}.ticket-lookup .btn-outline{width:100%}.ticket-metadata{grid-template-columns:1fr}.ticket-dialog__head,.ticket-dialog__body{padding:18px} }
   </style>
   <script type="module" src="global-auth.js"></script>
-  <script type="module" src="global-nav.js"></script>
+  <script defer src="global-nav.js"></script>
 </head>
 <body data-app-loading>
   <header class="site-header">
@@ -79,13 +79,13 @@
 
   <main class="container flex-1 py-8 sm:py-10">
     <section class="mb-8 flex flex-col justify-between gap-5 md:flex-row md:items-end">
-      <div><p class="mb-2 text-xs font-extrabold uppercase tracking-wider" style="color:var(--etv-blue);">Espacio personal protegido</p><h1 class="text-3xl font-extrabold tracking-tight sm:text-4xl" style="color:var(--etv-navy);">Hola, <span id="welcomeName">...</span></h1><p class="mt-2 max-w-2xl text-sm leading-6 text-gray-600">Consulta el estado y los detalles de las denuncias asociadas a tu cuenta.</p></div>
+      <div><p class="mb-2 text-xs font-extrabold uppercase tracking-wider" style="color:var(--etv-blue);">Espacio personal protegido</p><h1 class="text-3xl font-extrabold tracking-tight sm:text-4xl" style="color:var(--etv-navy);">Hola, <span id="welcomeName">...</span></h1><p class="mt-2 max-w-2xl text-sm leading-6 text-gray-600">Consulta tus registros de apoyo, orientación y denuncias asociados a tu cuenta.</p></div>
       <div class="flex gap-3"><div class="summary-card"><p class="text-xs font-extrabold uppercase tracking-wide text-gray-400">Total</p><p id="totalCount" class="mt-1 text-2xl font-extrabold" style="color:var(--etv-navy);">0</p></div><div class="summary-card"><p class="text-xs font-extrabold uppercase tracking-wide text-gray-400">Pendientes</p><p id="pendingCount" class="mt-1 text-2xl font-extrabold text-yellow-700">0</p></div></div>
     </section>
     <div id="pageAlert" class="mb-6 hidden rounded-xl border px-4 py-3 text-sm" role="status" aria-live="polite"></div>
     <section class="card p-5 sm:p-7">
-      <div class="mb-5 flex flex-col justify-between gap-3 sm:flex-row sm:items-center"><div><h2 class="text-xl font-extrabold" style="color:var(--etv-navy);">Mis denuncias</h2><p class="mt-1 text-sm text-gray-500">Cada caso muestra su información, nivel de atención y estado actual.</p></div><button id="refreshButton" type="button" class="btn-outline">Actualizar</button></div>
-      <div class="ticket-lookup"><label for="ticketSearch">Consultar un ticket<input id="ticketSearch" type="search" maxlength="24" placeholder="Ejemplo: EV-1A2B3C4D" autocomplete="off"></label><button id="ticketSearchButton" type="button" class="btn-outline">Ver detalles</button><p>Escribe el código recibido al registrar la denuncia. Solo puedes consultar tickets asociados a tu cuenta.</p></div>
+      <div class="mb-5 flex flex-col justify-between gap-3 sm:flex-row sm:items-center"><div><h2 class="text-xl font-extrabold" style="color:var(--etv-navy);">Mis casos</h2><p class="mt-1 text-sm text-gray-500">Cada registro muestra el tipo de ayuda, nivel de atención y estado actual.</p></div><button id="refreshButton" type="button" class="btn-outline">Actualizar</button></div>
+      <div class="ticket-lookup"><label for="ticketSearch">Consultar un ticket<input id="ticketSearch" type="search" maxlength="24" placeholder="Ejemplo: EV-1A2B3C4D" autocomplete="off"></label><button id="ticketSearchButton" type="button" class="btn-outline">Ver detalles</button><p>Escribe el código recibido al guardar el registro. Solo puedes consultar tickets asociados a tu cuenta.</p></div>
       <div class="table-wrap"><table class="reports-table"><thead><tr><th>Fecha</th><th>Ticket</th><th>Categoría</th><th>Riesgo</th><th>Estado</th><th>Detalles</th><th>Evidencias</th></tr></thead><tbody id="reportsBody"><tr><td colspan="7" class="text-center text-gray-500">Cargando reportes...</td></tr></tbody></table></div>
     </section>
   </main>
@@ -100,7 +100,8 @@
 
     let currentUser = null;
     let loadedReports = [];
-    const categoryLabels = { acoso_escolar:'Acoso escolar o bullying', violencia_fisica:'Violencia física', amenazas_intimidacion:'Amenazas o intimidación', discriminacion:'Discriminación o exclusión', violencia_sexual:'Violencia sexual o abuso', salud_emocional:'Salud emocional o riesgo de vida', conflicto_convivencia:'Conflicto de convivencia', seguridad_digital:'Seguridad digital', otro:'Otra situación' };
+    const categoryLabels = { acoso_escolar:'Acoso escolar o bullying', violencia_fisica:'Violencia física', amenazas_intimidacion:'Amenazas o intimidación', discriminacion:'Discriminación o exclusión', discriminacion_racial:'Racismo o discriminación étnico-racial', discriminacion_genero_orientacion:'Discriminación por género u orientación sexual', violencia_sexual:'Violencia sexual o abuso', salud_emocional:'Salud emocional o riesgo de vida', conflicto_convivencia:'Conflicto de convivencia', seguridad_digital:'Seguridad digital', problemas_familiares:'Situación familiar o del hogar', otro:'Otra situación' };
+    const attentionLabels = { denuncia:'Denuncia formal', apoyo:'Apoyo emocional', orientacion:'Orientación' };
     const statusLabels = { pendiente:'Pendiente', en_proceso:'En proceso', resuelto:'Resuelto', posible_denuncia_falsa:'Posible denuncia falsa' };
     const normalizeStatus = (value) => { const normalized = String(value || 'pendiente').toLowerCase().trim().replaceAll(' ','_'); return statusLabels[normalized] ? normalized : 'pendiente'; };
     const safeLegacyUrl = (value) => { try { const url=new URL(value,window.location.origin); return ['https:','http:'].includes(url.protocol) ? url.href : null; } catch { return null; } };
@@ -112,12 +113,43 @@
     function reportDetail(report){ return [`Qué ocurrió: ${report.descripcion || 'Sin información'}`,`Cuándo: ${report.momento_suceso || report.fecha_suceso || 'Sin información'}`,`Dónde: ${report.ubicacion || 'Sin información'}`,`Involucrados: ${report.involucrados || 'Sin información'}`,`Testigos: ${report.testigos || 'Sin información'}`,`Información adicional: ${report.informacion_adicional || 'Sin información adicional'}`].join('\n\n'); }
     function detailRow(label,value){ const wrapper=document.createElement('div'); const term=document.createElement('dt'); const description=document.createElement('dd'); term.textContent=label; description.textContent=value || 'Sin información'; wrapper.append(term,description); return wrapper; }
     function metadataItem(label,value){ const item=document.createElement('div'); const caption=document.createElement('small'); const content=document.createElement('strong'); caption.textContent=label; content.textContent=value; item.append(caption,content); return item; }
-    function openTicketDetails(report){ if(!report) return; const status=normalizeStatus(report.estado); document.getElementById('ticketDialogTitle').textContent=report.ticket || 'Ticket sin código'; document.getElementById('ticketMetadata').replaceChildren(metadataItem('Estado',statusLabels[status]),metadataItem('Nivel de atención',report.riesgo || 'Medio'),metadataItem('Registrada',formatDate(report.creado_en))); document.getElementById('ticketDetails').replaceChildren(detailRow('Tipo de situación',categoryLabels[report.categoria] || report.categoria),detailRow('Qué ocurrió',report.descripcion),detailRow('Cuándo ocurrió',report.momento_suceso || report.fecha_suceso),detailRow('Dónde ocurrió',report.ubicacion),detailRow('Personas involucradas',report.involucrados),detailRow('Testigos',report.testigos),detailRow('Consecuencias o información adicional',report.informacion_adicional || 'Sin información adicional')); document.getElementById('ticketDialog').showModal(); }
-    async function renderReports(reports){ const body=document.getElementById('reportsBody'); body.replaceChildren(); document.getElementById('totalCount').textContent=reports.length; document.getElementById('pendingCount').textContent=reports.filter(report=>normalizeStatus(report.estado)==='pendiente').length; if(!reports.length){ const row=document.createElement('tr'); const empty=document.createElement('td'); empty.colSpan=7; empty.className='px-4 py-10 text-center text-gray-500'; empty.textContent='Aún no has registrado denuncias.'; row.append(empty); body.append(row); return; } for(const report of reports){ const row=document.createElement('tr'); const status=normalizeStatus(report.estado); const risk=report.riesgo || 'Medio'; const statusBadge=document.createElement('span'); statusBadge.className=`status-badge status-${status}`; statusBadge.textContent=statusLabels[status]; const riskBadge=document.createElement('span'); riskBadge.className=`risk-badge risk-${risk}`; riskBadge.textContent=risk; const ticket=cell(report.ticket,'whitespace-nowrap font-bold text-blue-900'); const category=cell(categoryLabels[report.categoria] || report.categoria,'min-w-48 font-semibold text-gray-800'); const statusCell=document.createElement('td'); statusCell.className='px-4 py-3'; statusCell.append(statusBadge); const riskCell=document.createElement('td'); riskCell.className='px-4 py-3'; riskCell.append(riskBadge); const actionCell=document.createElement('td'); actionCell.className='px-4 py-3'; const detailButton=document.createElement('button'); detailButton.type='button'; detailButton.className='btn-outline'; detailButton.textContent='Abrir ficha'; detailButton.addEventListener('click',()=>openTicketDetails(report)); actionCell.append(detailButton); row.append(cell(formatDate(report.creado_en),'whitespace-nowrap text-xs'),ticket,category,riskCell,statusCell,actionCell,await evidenceCell(report)); body.append(row); } }
-    async function loadReports(){ const body=document.getElementById('reportsBody'); body.innerHTML='<tr><td colspan="7" class="px-4 py-8 text-center text-gray-500">Cargando denuncias...</td></tr>'; const {data,error}=await supabase.from('reportes').select('*').eq('usuario_id',currentUser.id).order('creado_en',{ascending:false}); if(error){ loadedReports=[]; await renderReports([]); showAlert(`No fue posible cargar tus denuncias: ${error.message}. Ejecuta supabase-chat-denuncias-v3.sql y vuelve a intentarlo.`); console.error('Error al cargar denuncias:',error); return; } const reports=data || []; const ids=reports.map(report=>report.id).filter(Boolean); if(ids.length){ const {data:evidence,error:evidenceError}=await supabase.from('reporte_evidencias').select('reporte_id,storage_path,nombre_original,tipo_mime').in('reporte_id',ids); if(!evidenceError){ const grouped=new Map(); (evidence || []).forEach(item=>grouped.set(item.reporte_id,[...(grouped.get(item.reporte_id) || []),item])); reports.forEach(report=>{ report.reporte_evidencias=grouped.get(report.id) || []; }); } else { console.warn('No fue posible cargar evidencias:',evidenceError.message); } } loadedReports=reports; await renderReports(reports); }
+    function openTicketDetails(report){
+      if(!report) return;
+      const status=normalizeStatus(report.estado);
+      const attention=report.tipo_atencion || 'denuncia';
+      const context=report.contexto_caso && typeof report.contexto_caso==='object' ? report.contexto_caso : {};
+      document.getElementById('ticketDialogTitle').textContent=report.ticket || 'Ticket sin código';
+      document.getElementById('ticketMetadata').replaceChildren(
+        metadataItem('Tipo de ayuda',attentionLabels[attention] || attention),
+        metadataItem('Estado',statusLabels[status]),
+        metadataItem('Nivel de atención',report.riesgo || 'Medio'),
+        metadataItem('Registrado',formatDate(report.creado_en))
+      );
+      const details=[
+        detailRow('Tema principal',categoryLabels[report.categoria] || report.categoria),
+        detailRow('Situación compartida',report.descripcion)
+      ];
+      if(attention==='denuncia') details.push(
+        detailRow('Cuándo ocurrió',report.momento_suceso || report.fecha_suceso),
+        detailRow('Dónde ocurrió',report.ubicacion),
+        detailRow('Personas involucradas',report.involucrados),
+        detailRow('Testigos',report.testigos)
+      );
+      details.push(
+        detailRow('Cómo le ha afectado',context.impacto),
+        detailRow('Qué necesita',context.objetivo_apoyo),
+        detailRow('Red de apoyo',context.red_apoyo),
+        detailRow('Seguimiento deseado',context.seguimiento_deseado),
+        detailRow('Información adicional',report.informacion_adicional || 'Sin información adicional')
+      );
+      document.getElementById('ticketDetails').replaceChildren(...details);
+      document.getElementById('ticketDialog').showModal();
+    }
+    async function renderReports(reports){ const body=document.getElementById('reportsBody'); body.replaceChildren(); document.getElementById('totalCount').textContent=reports.length; document.getElementById('pendingCount').textContent=reports.filter(report=>normalizeStatus(report.estado)==='pendiente').length; if(!reports.length){ const row=document.createElement('tr'); const empty=document.createElement('td'); empty.colSpan=7; empty.className='px-4 py-10 text-center text-gray-500'; empty.textContent='Aún no has guardado casos.'; row.append(empty); body.append(row); return; } for(const report of reports){ const row=document.createElement('tr'); const status=normalizeStatus(report.estado); const risk=report.riesgo || 'Medio'; const statusBadge=document.createElement('span'); statusBadge.className=`status-badge status-${status}`; statusBadge.textContent=statusLabels[status]; const riskBadge=document.createElement('span'); riskBadge.className=`risk-badge risk-${risk}`; riskBadge.textContent=risk; const ticket=cell(report.ticket,'whitespace-nowrap font-bold text-blue-900'); const attention=attentionLabels[report.tipo_atencion || 'denuncia']; const category=cell(`${attention} · ${categoryLabels[report.categoria] || report.categoria}`,'min-w-48 font-semibold text-gray-800'); const statusCell=document.createElement('td'); statusCell.className='px-4 py-3'; statusCell.append(statusBadge); const riskCell=document.createElement('td'); riskCell.className='px-4 py-3'; riskCell.append(riskBadge); const actionCell=document.createElement('td'); actionCell.className='px-4 py-3'; const detailButton=document.createElement('button'); detailButton.type='button'; detailButton.className='btn-outline'; detailButton.textContent='Abrir ficha'; detailButton.addEventListener('click',()=>openTicketDetails(report)); actionCell.append(detailButton); row.append(cell(formatDate(report.creado_en),'whitespace-nowrap text-xs'),ticket,category,riskCell,statusCell,actionCell,await evidenceCell(report)); body.append(row); } }
+    async function loadReports(){ const body=document.getElementById('reportsBody'); body.innerHTML='<tr><td colspan="7" class="px-4 py-8 text-center text-gray-500">Cargando casos...</td></tr>'; const {data,error}=await supabase.from('reportes').select('*').eq('usuario_id',currentUser.id).order('creado_en',{ascending:false}); if(error){ loadedReports=[]; await renderReports([]); showAlert(`No fue posible cargar tus casos: ${error.message}. Ejecuta supabase-chat-apoyo-v4.sql y vuelve a intentarlo.`); console.error('Error al cargar casos:',error); return; } const reports=data || []; const ids=reports.map(report=>report.id).filter(Boolean); if(ids.length){ const {data:evidence,error:evidenceError}=await supabase.from('reporte_evidencias').select('reporte_id,storage_path,nombre_original,tipo_mime').in('reporte_id',ids); if(!evidenceError){ const grouped=new Map(); (evidence || []).forEach(item=>grouped.set(item.reporte_id,[...(grouped.get(item.reporte_id) || []),item])); reports.forEach(report=>{ report.reporte_evidencias=grouped.get(report.id) || []; }); } else { console.warn('No fue posible cargar evidencias:',evidenceError.message); } } loadedReports=reports; await renderReports(reports); }
     async function bootstrap(){ const {data:{session},error}=await supabase.auth.getSession(); if(error || !session){ window.location.replace('login.html'); return; } currentUser=session.user; const {data:profile,error:profileError}=await supabase.from('perfiles').select('nombre,colegio').eq('id',currentUser.id).maybeSingle(); if(profileError) console.warn('No se pudo cargar el perfil:',profileError); const name=profile?.nombre || currentUser.user_metadata?.nombre || currentUser.email.split('@')[0]; document.getElementById('welcomeName').textContent=name; document.body.removeAttribute('data-app-loading'); await loadReports(); }
     document.getElementById('refreshButton').addEventListener('click',async()=>{ clearAlert(); await loadReports(); });
-    document.getElementById('ticketSearchButton').addEventListener('click',()=>{ const code=document.getElementById('ticketSearch').value.trim().toUpperCase(); const report=loadedReports.find(item=>String(item.ticket || '').toUpperCase()===code); if(!code){ showAlert('Escribe el código del ticket que deseas consultar.'); return; } if(!report){ showAlert('No encontramos ese ticket entre las denuncias asociadas a tu cuenta.'); return; } clearAlert(); openTicketDetails(report); });
+    document.getElementById('ticketSearchButton').addEventListener('click',()=>{ const code=document.getElementById('ticketSearch').value.trim().toUpperCase(); const report=loadedReports.find(item=>String(item.ticket || '').toUpperCase()===code); if(!code){ showAlert('Escribe el código del ticket que deseas consultar.'); return; } if(!report){ showAlert('No encontramos ese ticket entre los casos asociados a tu cuenta.'); return; } clearAlert(); openTicketDetails(report); });
     document.getElementById('ticketSearch').addEventListener('keydown',event=>{ if(event.key==='Enter'){ event.preventDefault(); document.getElementById('ticketSearchButton').click(); } });
     document.getElementById('ticketDialogClose').addEventListener('click',()=>document.getElementById('ticketDialog').close());
     document.getElementById('ticketDialog').addEventListener('click',event=>{ if(event.target===event.currentTarget) event.currentTarget.close(); });
